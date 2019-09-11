@@ -5,6 +5,7 @@ Eigen::ArrayXd pi(K);
 Eigen::ArrayXXd q(J,K);
 Eigen::ArrayXXd b(r.rows(),L);
 Eigen::ArrayXXd mu(L,K);
+Eigen::ArrayXXd tau(L,K);
 Eigen::ArrayXi iter_cluster_assignment(J);
 Eigen::ArrayXi iter_component_assignment(r.rows()); 
 Eigen::ArrayXi cluster_count(K);

@@ -18,8 +18,6 @@
 //' @param r vector of distances associatd with different BEFs
 //' @param n_j matrix of integers denoting the start and length of each observations associated BEF distances
 //' @param d a 1D grid of positive real values over which the differing intensities are evaluated
-//' @param mu_sd scale for mu proposal dist'n
-//' @param tau_sd scale for tau proposal dist'n
 //' @param L component truncation number
 //' @param K intensity cluster truncation number
 //' @param J number of rows in r matrix; number of groups
@@ -86,10 +84,8 @@ Rcpp::List nd_nhpp_fit(
     pi = stick_break_weights(v);
 
     mu = initialize_mu(L,K,mu_0,kappa_0,rng);
-    double tau = nu_0 * sigma_0 / R::rchisq(nu_0);
+    tau = initialize_tau(L,K,sigma_0,nu_0);
     beta = rnorm_vector(beta.rows(),rng);
-    double global_ybar = r.mean();
-    double global_yvar = (pow(r - r.mean(),2)).sum() / (r.size() - 1);
 
 
     Rcpp::Rcout << "Beginning Sampling" << std::endl;
@@ -110,19 +106,21 @@ Rcpp::List nd_nhpp_fit(
         b = dnorm(r,n_j,w,mu,tau,iter_cluster_assignment);
 
         // assign distances to components within clusters
+        component_count = Eigen::ArrayXXi::Zero(L,K);
         for(int j = 0 ; j < J; j ++){
             for(int i = 0 ; i < n_j(j,1) ; i++){
                 for(int l = 0 ; l< L; l++)
                     prob(l) = b(n_j(j,0) + i,l);
                 std::discrete_distribution<int> d(prob.data(),prob.data() + prob.size());
                 iter_component_assignment(n_j(j,0) +i) = d(rng);
+                component_count(iter_component_assignment(n_j(j,0)+i),iter_cluster_assignment(j)) += 1;
             }
         }
 
         // draw samples from intensity cluster parameters
 
         for(int k = 0; k < K; k++)
-            cluster_count(k) = (iter_cluster_assignment.array() == k).count();
+            cluster_count(k) = (iter_cluster_assignment == k).count();
 
         for(int k = 0; k < K; k++){
             v_posterior_beta_alpha(k) = 1 + cluster_count(k);
@@ -132,10 +130,7 @@ Rcpp::List nd_nhpp_fit(
         v = stick_break(K, v_posterior_beta_alpha,v_posterior_beta_beta,rng);
         pi = stick_break_weights(v);
 
-        for(int l = 0; l < L; l++){
-            for(int k = 0; k < K; k++)
-                component_count(l,k) = (iter_component_assignment.col(k).array() == l).count();
-        }
+        
 
         for(int l = 0; l < L; l ++){
             for(int k = 0; k < K; k++){
@@ -147,14 +142,11 @@ Rcpp::List nd_nhpp_fit(
         u = stick_break(u_posterior_beta_alpha,u_posterior_beta_beta,rng);
         w = stick_break_weights(u);
 
-        // sample tau
-        tau = (nu_0 * sigma_0 + global_yvar * (r.rows()-1) + kappa_0 *r.rows() / (kappa_0 + r.rows()) *pow((global_ybar - mu_0),2) ) /  R::rchisq(nu_0 + r.rows());
-
         // calculate mu hat (sq) sums
 
         ycount = Eigen::ArrayXXd::Zero(L,K);
         ycount_sq = Eigen::ArrayXXd::Zero(L,K);
-        for(int l =0 ; l < L; l ++){
+        for(int l = 0 ; l < L; l ++){
           for(int k = 0; k < K; k++){
             for(int j = 0; j < J; j++){
               for(int i = 0; i < n_j(j,1); i ++){
@@ -166,6 +158,7 @@ Rcpp::List nd_nhpp_fit(
             }
           }
         }
+        
 
 
 
@@ -173,11 +166,15 @@ Rcpp::List nd_nhpp_fit(
 
         for(int l = 0; l < L; l ++){
          for(int k = 0; k < K; k++){
-           if(component_count(l,k) == 0)
+           if(component_count(l,k) == 0){
              mu(l,k) = rnorm(rng)*sqrt(sigma_0) + mu_0;
+             tau(l,k) = nu_0 * sigma_0 / R::rchisq(nu_0);
+           }
            else{
-             mu_n = ( (kappa_0  / tau) * mu_0   + ycount(l,k) / tau  ) / ( kappa_0 / tau + component_count(l,k) / tau);
-             s_n = 1.0 /( (kappa_0 /tau) + (component_count(l,k) / tau) ) ;
+             s_n  = nu_0 * sigma_0 + (ycount_sq(l,k) - (pow( ycount(l,k),2) / component_count(l,k)) ) + (kappa_0 * component_count(l,k) / (kappa_0 + component_count(l,k))) * pow( (ycount(l,k) / component_count(l,k) -mu_0 ),2);
+             tau(l,k) = s_n / R::rchisq(nu_0 + component_count(l,k));
+             mu_n = ( (kappa_0  / tau(l,k)) * mu_0   + ycount(l,k) / tau(l,k)  ) / ( kappa_0 / tau(l,k) + component_count(l,k) / tau(l,k));
+             s_n = 1.0 /( (kappa_0 /tau(l,k)) + (component_count(l,k) / tau(l,k)) ) ;
              mu(l,k) =  rnorm(rng) * sqrt(s_n) + mu_n;
            }
          }
@@ -209,7 +206,7 @@ Rcpp::List nd_nhpp_fit(
           for(int k =0; k < K; k++){
              for(int d_ix = 0; d_ix < d_length; d_ix ++){
                for(int l = 0; l < L; l++)
-                 intensities(sample_ix, k*d_length + d_ix) += w(l,k) * R::dnorm(d(d_ix),mu(l,k),sqrt(tau),false);
+                 intensities(sample_ix, k*d_length + d_ix) += w(l,k) * R::dnorm(d(d_ix),mu(l,k),sqrt(tau(l,k)),false);
              }
           }
           cluster_assignment.row(sample_ix) = iter_cluster_assignment;
@@ -217,15 +214,18 @@ Rcpp::List nd_nhpp_fit(
           pi_samps.row(sample_ix) = pi;
           Eigen::Map<Eigen::RowVectorXd> mu_samp(mu.data(),mu.size());
           Eigen::Map<Eigen::RowVectorXd> w_samp(w.data(),w.size());
+          Eigen::Map<Eigen::RowVectorXd> tau_samp(tau.data(),tau.size());
           w_samps.row(sample_ix) = w_samp; // stored in column order
           mu_samps.row(sample_ix) = mu_samp;
-          tau_samps(sample_ix,0) = tau;
+          tau_samps.row(sample_ix) = tau;
           alpha_samps(sample_ix,0) = alpha;
           rho_samps(sample_ix,0) = rho;
           beta_samps.row(sample_ix) = beta;
           sample_ix += 1;
         }
     }
+
+    cluster_matrix = cluster_matrix / num_posterior_samples;
 
     return(Rcpp::List::create(Rcpp::Named("cluster_assignment") = cluster_assignment,
                               Rcpp::Named("component_assignment") =  cluster_component_assignment,

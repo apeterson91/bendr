@@ -7,8 +7,6 @@
 #' @param r vector of distances associatd with different BEFs
 #' @param n_j matrix of integers denoting the start and length of each observations associated BEF distances
 #' @param d a 1D grid of positive real values over which the differing intensities are evaluated
-#' @param mu_sd scale for mu proposal dist'n
-#' @param tau_sd scale for tau proposal dist'n
 #' @param L component truncation number
 #' @param K intensity cluster truncation number
 #' @param J number of rows in r matrix; number of groups

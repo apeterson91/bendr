@@ -9,7 +9,7 @@ Eigen::MatrixXi cluster_component_assignment(num_posterior_samples,r.rows());
 Eigen::MatrixXd cluster_matrix(J,J);
 Eigen::MatrixXd alpha_samps(num_posterior_samples,1);
 Eigen::MatrixXd rho_samps(num_posterior_samples,1);
-Eigen::MatrixXd tau_samps(num_posterior_samples,1);
+Eigen::MatrixXd tau_samps(num_posterior_samples,L*K);
 Eigen::MatrixXd intensities(num_posterior_samples,K * d.size());
 cluster_matrix = Eigen::MatrixXd::Zero(J,J);
 int sample_ix = 0;

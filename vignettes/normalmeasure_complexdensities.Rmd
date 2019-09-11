@@ -1,0 +1,95 @@
+---
+title: "Introduction"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(rndpp)
+library(tidyverse)
+```
+
+
+# Simulation Set-up
+
+Distances are simulated from the following 3 mixture densities:
+$$
+f_1(d) = 3\times(\frac{1}{2}\text{beta}(d|1,8) + \frac{1}{2}\text{beta}(d|6,1)), \\
+f_2(d) = 3\times(\frac{1}{5}\text{beta}(d|3,2) + \frac{2}{3}\text{beta}(d|3,1) + \frac{2}{15}\text{beta}(d|1,1))\\
+f_3(d) = 3\times(\frac{1}{2}\text{beta}(d|8,2) + \frac{1}{2}\text{dbeta}(d,30,50))
+$$
+
+
+```{r intensity_plots,echo=F}
+set.seed(3431)
+R <- 5
+d <- seq(from=0,to=R,by=0.01)
+f_1 <- function(x) 3*((1/2)*dbeta(x/R,1,8) + (1/2)*dbeta(x/R,6,1))
+f_2 <- function(x) 3*((1/5)*dbeta(x/R,3,2) + (2/3)*dbeta(x/R,3,1) + (2/15)*dbeta(x/R,1,1))
+f_3 <- function(x) 3*((1/2)*dbeta(x/R,8,2) + (1/2)*dbeta(x/R,30,50))
+pltdf <- tibble(Distance = d,
+       Intensity = f_1(d),
+       Cluster = 1) %>% 
+    rbind(.,tibble(Distance = d,
+                   Intensity = f_2(d),
+                   Cluster = 2)) %>% 
+    rbind(.,tibble(Distance = d,
+                   Intensity = f_3(d),
+                   Cluster = 3))
+pltdf %>% ggplot(aes(x=Distance,y=Intensity)) + geom_line() + 
+    facet_wrap(~Cluster) + theme_bw() + 
+    theme(strip.background = element_blank()) + 
+    ggtitle("Intensity Functions")
+
+```
+
+```{r density_estimates,echo=F}
+num_schools <- 50
+schools_1 <- rnhpp(nsim = num_schools,lambda = f_1,
+                   interval = c(0,R),seed = 3431,
+                   max =max(f_1(d)))
+schools_2 <- rnhpp(nsim = num_schools,lambda = f_2,interval = c(0,R),seed = 3431,max = max(f_2(d)))
+schools_3 <- rnhpp(nsim = num_schools,lambda = f_3 ,interval = c(0,R),seed = 3431,max = max(f_3(d)))
+school_df <- as_tibble(schools_1)
+school_df <- rbind(school_df,as_tibble(schools_2) %>% mutate(sim_id = sim_id + num_schools)) %>% 
+    mutate(density = ifelse(sim_id<=num_schools,1,2) )
+school_df <- rbind(school_df,schools_3 %>% mutate(sim_id = sim_id + 2*num_schools, density=3))
+school_df %>% ggplot(aes(x=event_times)) + geom_density() + facet_wrap(~density) + 
+    theme_bw() + theme(strip.background = element_blank()) + xlab("Distance")
+```
+
+```{r,echo=F}
+r <- school_df %>% arrange(sim_id) %>% 
+    select(event_times) %>% pull()
+
+n_j <- school_df %>% group_by(sim_id) %>% count() %>% 
+    ungroup() %>% mutate(start = (cumsum(n) ) ) %>% 
+    mutate(start_ = replace_na(dplyr::lag(start),0) ) %>% select(-start) %>% 
+    rename(start=start_,go =n) %>% 
+    select(start,go) %>% as.matrix()
+```
+
+
+```{r modelfit1}
+fit <- nd_nhpp(X=matrix(1,ncol=1,nrow=nrow(n_j)),
+               r = r, n_j = n_j,
+               L = 3,K = 4,
+               mu_0 = 0, kappa_0 = 1, ## Normal Mean Base Measure Hyperparameters
+               sigma_0 = 2, nu_0 = 2, ## Inverse Chi square prior Hyperparameters
+               a_alpha = 1, b_alpha = 1, ## alpha Gamma prior hyperparameters
+               a_rho = 2, b_rho = 2, ## rho Gamma prior hyperparameters
+               iter_max = 10,
+               warm_up = 5,
+               thin = 1,
+               seed = 34143)
+```

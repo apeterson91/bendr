@@ -53,7 +53,7 @@ nd_nhpp <- function(X, r, n_j,
 
     r_ <- qnorm(r_)
     d <- seq(from = floor(min(r_)), to = ceiling(max(r_)), by = 0.01) ## distance grid
-    num_posterior_samples <- length(seq(from=warm_up,to = iter_max,by=thin))
+    num_posterior_samples <- sum(seq(from=warm_up+1,to = iter_max,by=1) %% thin == 0 )
     fit <- list(nd_nhpp_fit(X = X, r= r_, n_j = n_j, d = d,
                           L = L, K = K, J = J,
                           mu_0 = mu_0, kappa_0 = kappa_0,
