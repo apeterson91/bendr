@@ -41,6 +41,7 @@ plot_map <- function(x,coords,p)
   UseMethod("plot_map")
 
 #' plots pairwise probability clustering plot
+#' @export
 #' @method plot_pairs ndp
 #' @param x ndp object
 #' @importFrom ggplot2 ggplot aes geom_tile scale_fill_gradientn
@@ -59,6 +60,7 @@ plot_pairs.ndp <- function(x){
 }
 
 #' Plots cluster intensity function densities
+#' @export
 #' @method plot_cluster_densities ndp
 #' @param x ndp object
 #' @param p the probability for the credible interval
@@ -88,7 +90,8 @@ plot_cluster_densities.ndp <- function(x, p = .9,pi_threshold = .1){
 
 
 #' Traceplots of various NDP-NHPP parameters
-#'
+#' 
+#' @export
 #' @method plot_traceplots ndp
 #' @param x ndp object
 #' @param par character vector of parameter names, defaults to c("alpha")
@@ -104,6 +107,7 @@ plot_traceplots.ndp <- function(x,par="alpha"){
 
 #' Network Cluster Plot
 #'
+#' @export 
 #' @method plot_network ndp
 #' @param x ndp object
 #' @param sample boolean indicating random subsample will be taken for plot
@@ -124,6 +128,7 @@ plot_network.ndp <- function(x,sample=TRUE){
 #' Plots clusters of a given observation with other observations around them within certain
 #' probability of co-clustering
 #'
+#' @export
 #' @method plot_map ndp
 #' @param x ndp object
 #' @param coords dataframe of observation geo coordinates
@@ -145,6 +150,7 @@ plot_map.ndp <- function(x,coords,p=c(0.025,0.5,0.90)){
 
 #' Plots global density function - for monitoring convergence
 #'
+#' @export
 #' @method plot_global_density ndp
 #' @param x ndp object
 #' @param p probability mass contained in uncertainty interval
