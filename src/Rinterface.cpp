@@ -160,18 +160,16 @@ Rcpp::List nd_nhpp_fit(
         }
         
 
-
-
         //sample mu via conjugacy
 
         for(int l = 0; l < L; l ++){
          for(int k = 0; k < K; k++){
            if(component_count(l,k) == 0){
-             mu(l,k) = rnorm(rng)*sqrt(sigma_0) + mu_0;
              tau(l,k) = nu_0 * sigma_0 / R::rchisq(nu_0);
+             mu(l,k) = rnorm(rng) * sqrt(tau(l,k) / kappa_0 ) + mu_0;
            }
            else{
-             s_n  = nu_0 * sigma_0 + (ycount_sq(l,k) - (pow( ycount(l,k),2) / component_count(l,k)) ) + (kappa_0 * component_count(l,k) / (kappa_0 + component_count(l,k))) * pow( (ycount(l,k) / component_count(l,k) -mu_0 ),2);
+             s_n  = nu_0 * sigma_0 + (ycount_sq(l,k) - (pow(ycount(l,k),2) / component_count(l,k) ) ) + (kappa_0 * component_count(l,k) / (kappa_0 + component_count(l,k))) * pow( (ycount(l,k) / component_count(l,k) - mu_0 ),2);
              tau(l,k) = s_n / R::rchisq(nu_0 + component_count(l,k));
              mu_n = ( (kappa_0  / tau(l,k)) * mu_0   + ycount(l,k) / tau(l,k)  ) / ( kappa_0 / tau(l,k) + component_count(l,k) / tau(l,k));
              s_n = 1.0 /( (kappa_0 /tau(l,k)) + (component_count(l,k) / tau(l,k)) ) ;
@@ -205,10 +203,13 @@ Rcpp::List nd_nhpp_fit(
           }
           for(int k =0; k < K; k++){
              for(int d_ix = 0; d_ix < d_length; d_ix ++){
-               for(int l = 0; l < L; l++)
+               for(int l = 0; l < L; l++){
                  intensities(sample_ix, k*d_length + d_ix) += w(l,k) * R::dnorm(d(d_ix),mu(l,k),sqrt(tau(l,k)),false);
+			   }
+				 global_intensity(sample_ix,d_ix) = pi(k) *  intensities(sample_ix,k*d_length+d_ix);
              }
           }
+
           cluster_assignment.row(sample_ix) = iter_cluster_assignment;
           cluster_component_assignment.row(sample_ix) = iter_component_assignment;
           pi_samps.row(sample_ix) = pi;
@@ -217,7 +218,7 @@ Rcpp::List nd_nhpp_fit(
           Eigen::Map<Eigen::RowVectorXd> tau_samp(tau.data(),tau.size());
           w_samps.row(sample_ix) = w_samp; // stored in column order
           mu_samps.row(sample_ix) = mu_samp;
-          tau_samps.row(sample_ix) = tau;
+          tau_samps.row(sample_ix) = tau_samp;
           alpha_samps(sample_ix,0) = alpha;
           rho_samps(sample_ix,0) = rho;
           beta_samps.row(sample_ix) = beta;
@@ -233,6 +234,7 @@ Rcpp::List nd_nhpp_fit(
                               Rcpp::Named("pi_samples") = pi_samps,
                               Rcpp::Named("w_samples") =  w_samps,
                               Rcpp::Named("intensities") = intensities,
+							  Rcpp::Named("global_intensity") = global_intensity,
                               Rcpp::Named("mu_samples") =  mu_samps,
                               Rcpp::Named("tau_samples") = tau_samps,
                               Rcpp::Named("alpha_samples") = alpha_samps,

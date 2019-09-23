@@ -12,7 +12,7 @@ ndp <- function(object,chains){
     if_df = purrr::map_dfr(1:chains,function(y){
                                 purrr::map_dfr(1:object$K,function(x){ 
                                  dplyr::as_tibble(object[[offset+y]]$intensities[,((x-1)*length(d)+x):(x*length(d)),drop=F ]) %>%
-                                 dplyr::mutate(sample_ix = 1:dplyr::n()) %>%
+                                 dplyr::mutate(Chain = y, sample_ix = 1:dplyr::n()) %>%
                                  tidyr::gather(dplyr::contains("V"), 
                                                key = "column_names",value = "Density") %>% 
                                  dplyr::left_join(dplyr::tibble(column_names = paste0("V",1:length(d)),
@@ -20,9 +20,20 @@ ndp <- function(object,chains){
                                                   by = "column_names") %>%
                                  dplyr::select(-column_names) %>%
                                  dplyr::mutate(Intensity_Function = x,
-                                               chain = y)
+                                               Chain = y)
                                 }) } )
-    
+
+	gd_df <- purrr::map_dfr(1:chains,function(y){
+								   dplyr::as_tibble(object[[offset+y]]$global_intensity) %>% 
+								dplyr::mutate(Chain = y, sample_ix = 1 :dplyr::n()) %>%
+								tidyr::gather(dplyr::contains("V"),
+											  key = "column_names",value = "Global_Density") %>%
+								dplyr::left_join(dplyr::tibble(column_names = paste0("V",1:length(d)),
+																  Distance = d),
+								by = "column_names") %>%
+								dplyr::select(-column_names)  
+								})
+
     vls <- expand.grid(l = 1:object$L,k = 1:object$K)
     nms <- paste0("k: ", vls$k,", l: ", vls$l)
     mus <- purrr::map(1:chains,function(x){
@@ -43,6 +54,9 @@ ndp <- function(object,chains){
     pmat <- Reduce("+",lapply(1:chains,function(x) object[[offset+x]]$cluster_pair_probability ))
     
     num_clusters <- purrr::map(1:chains,function(x) coda::as.mcmc(apply(object[[offset+x]]$cluster_assignment,1,function(z) c("Num_Clusters" = length(unique(z))))))
+
+	cluster_assignment  <- purrr::map(1:chains,function(x) object[[offset+x]]$cluster_assignment)
+
     beta <- purrr::map(1:chains,function(x){
                           betas <- object[[offset+x]]$beta_samples
                           colnames(betas) <- colnames(object$X) 
@@ -61,8 +75,10 @@ ndp <- function(object,chains){
                 n = object$n,
                 J = nrow(object$X),
                 if_df = if_df,
+				global_density = gd_df,
                 beta = coda::as.mcmc.list(beta),
                 pmat = pmat / chains,
+				cluster_assignment = cluster_assignment,
                 num_clusters = coda::as.mcmc.list(num_clusters),
                 pi = coda::as.mcmc.list(pis),
                 w = coda::as.mcmc.list(ws),
@@ -81,4 +97,3 @@ ndp <- function(object,chains){
 
     structure(out, class = c("ndp"))
 }
-

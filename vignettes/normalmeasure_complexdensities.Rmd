@@ -53,6 +53,8 @@ pltdf %>% ggplot(aes(x=Distance,y=Intensity)) + geom_line() +
 
 ```
 
+
+Looking at the empirical density estimates...
 ```{r density_estimates,echo=F}
 num_schools <- 50
 schools_1 <- rnhpp(nsim = num_schools,lambda = f_1,
@@ -86,10 +88,36 @@ fit <- nd_nhpp(X=matrix(1,ncol=1,nrow=nrow(n_j)),
                L = 3,K = 4,
                mu_0 = 0, kappa_0 = 1, ## Normal Mean Base Measure Hyperparameters
                sigma_0 = 2, nu_0 = 2, ## Inverse Chi square prior Hyperparameters
-               a_alpha = 1, b_alpha = 1, ## alpha Gamma prior hyperparameters
+               a_alpha = 2, b_alpha = 2, ## alpha Gamma prior hyperparameters
                a_rho = 2, b_rho = 2, ## rho Gamma prior hyperparameters
-               iter_max = 10,
-               warm_up = 5,
-               thin = 1,
+               iter_max = 2E4,
+               warm_up = 1E4,
+               thin = 3,
                seed = 34143)
 ```
+
+```{r}
+plot_global_density(fit,r=r)
+```
+
+
+```{r}
+plot(fit)
+```
+
+
+
+
+```{r}
+plot_pairs(fit)
+```
+
+
+
+
+```{r}
+plot_network(fit)
+```
+
+
+

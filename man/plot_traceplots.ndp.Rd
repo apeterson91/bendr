@@ -2,13 +2,18 @@
 % Please edit documentation in R/plots.R
 \name{plot_traceplots.ndp}
 \alias{plot_traceplots.ndp}
-\title{Plots traceplots of various groups of parameters}
+\title{Traceplots of various NDP-NHPP parameters}
 \usage{
 \method{plot_traceplots}{ndp}(x, par = "alpha")
 }
 \arguments{
 \item{x}{ndp object}
+
+\item{par}{character vector of parameter names, defaults to c("alpha")}
+}
+\value{
+ggplot plot object
 }
 \description{
-Plots traceplots of various groups of parameters
+Traceplots of various NDP-NHPP parameters
 }

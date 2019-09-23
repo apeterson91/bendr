@@ -9,6 +9,9 @@
 \arguments{
 \item{x}{ndp object}
 }
+\value{
+ggplot plot object
+}
 \description{
 plots pairwise probability clustering plot
 }

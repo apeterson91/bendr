@@ -4,14 +4,15 @@
 \alias{plot.ndp}
 \title{Plot method for ndp objects}
 \usage{
-\method{plot}{ndp}(x, plotfun = "intervals", pars = NULL,
-  regex_pars = NULL, ...)
+\method{plot}{ndp}(x, plotfun = "cluster")
 }
 \arguments{
 \item{x}{an ndp object}
+
+\item{plotfun}{one of "cluster","global", or "network"}
 }
 \description{
-The \code{plot} method for \link{ndp-objects} provides convenient 
+The \code{plot} method for \link{ndp-objects} provides convenient
 access to several types of plots useful for visualizing
-ndp models
+ndp models using the default settings.
 }

@@ -159,7 +159,7 @@ summary.ndp <- function(object,probs,digits = 1, ...) {
     # alpha and rho
     out <- rbind(alpha = summ(object,"alpha"),
                  rho = summ(object,"rho"))
-    out <- rbind(out,summ(object,"pi"),summ(object,"w"),summ(object,"mu"))
+    out <- rbind(out,summ(object,"pi"),summ(object,"w"),summ(object,"mu"),summ(object,"tau"))
 
 
   structure(
@@ -203,6 +203,7 @@ print.summary.ndp <- function(x, digits = max(1, attr(x, "print.digits")),
 #' 
 to_latex <- function(object, digits = 1, caption = "") UseMethod("to_latex")
 
+#' @export
 to_latex.ndp <- function(object, digits = 1, caption =""){
 
     summ <- function(x,y){ 
@@ -215,7 +216,7 @@ to_latex.ndp <- function(object, digits = 1, caption =""){
     # alpha and rho
     out <- rbind(alpha = summ(object,"alpha"),
                  rho = summ(object,"rho"))
-    out <- rbind(out,summ(object,"pi"),summ(object,"w"),summ(object,"mu"))
+    out <- rbind(out,summ(object,"pi"),summ(object,"w"),summ(object,"mu"),summ(object,"tau"))
 
     s <- xtable::xtable(out, digits = digits, caption = caption)
 

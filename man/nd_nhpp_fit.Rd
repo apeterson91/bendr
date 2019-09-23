@@ -41,10 +41,6 @@ nd_nhpp_fit(X, r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, a_alpha,
 
 \item{chain}{integer chain label}
 
-\item{mu_sd}{scale for mu proposal dist'n}
-
-\item{tau_sd}{scale for tau proposal dist'n}
-
 \item{a_0}{hyperparameter for mu base measure}
 
 \item{b_0}{hyperparameter for mu base measure}
