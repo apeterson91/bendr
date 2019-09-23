@@ -39,7 +39,7 @@ plot_traceplots <- function(x, par="alpha")
     UseMethod("plot_traceplots")
 
 #' @export
-plot_network <- function(x,sample=TRUE)
+plot_network <- function(x,sample=NULL)
   UseMethod("plot_network")
 
 #' @export
