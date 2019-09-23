@@ -16,7 +16,13 @@ plot.ndp <- function(x, plotfun = "cluster") {
 		plot_cluster_densities(x)
 }
 
+#' plots pairwise probability clustering plot
 #' @export
+#' @method plot_pairs ndp
+#' @param x ndp object
+#' @importFrom ggplot2 ggplot aes geom_tile scale_fill_gradientn
+#' @return ggplot plot object
+#'
 plot_pairs <- function(x)
     UseMethod("plot_pairs")
 
@@ -40,13 +46,7 @@ plot_network <- function(x,sample=TRUE)
 plot_map <- function(x,coords,p)
   UseMethod("plot_map")
 
-#' plots pairwise probability clustering plot
 #' @export
-#' @method plot_pairs ndp
-#' @param x ndp object
-#' @importFrom ggplot2 ggplot aes geom_tile scale_fill_gradientn
-#' @return ggplot plot object
-#'
 plot_pairs.ndp <- function(x){
 
     p <- dplyr::as_tibble(x$pmat) %>% dplyr::mutate(Group_1 = 1:dplyr::n()) %>%
@@ -110,16 +110,28 @@ plot_traceplots.ndp <- function(x,par="alpha"){
 #' @export 
 #' @method plot_network ndp
 #' @param x ndp object
-#' @param sample boolean indicating random subsample will be taken for plot
+#' @param sample number samples to draw
+#' @param mode_label boolean value to indicate that the network graph should be colored with the Mode cluster label assignments
 #' @return ggplot plot object
 #'
-plot_network.ndp <- function(x,sample=TRUE){
+plot_network.ndp <- function(x,sample=NULL,mode_label = TRUE){
 
-	ics  <- sample(1:nrow(x$pmat),50)
+	if(is.null(sample))
+		ics <- 1:nrow(x$pmat)
+	else
+		ics  <- sample(1:nrow(x$pmat),50)
+
     t <- tidygraph::as_tbl_graph(x$pmat[ics,ics],directed=FALSE)
+	mode <- assign_mode(x,ics)
+	if(mode_label)
+		t <- t %>% tidygraph::activate(nodes) %>% tidygraph::mutate(`Mode Labels` = factor(mode) )
     p <- t %>% ggraph::ggraph(layout='nicely') +
         ggraph::geom_edge_link(alpha=0.3) +
-         ggraph::geom_node_point()
+		 ggplot2::ggtitle("Network Plot") + ggplot2::theme_void() 
+	if(mode_label)
+		p <- p + ggraph::geom_node_point(aes(color=`Mode Labels`))
+	else
+		p <- p + ggraph::geom_node_point()
 
     return(p)
 }
@@ -142,7 +154,7 @@ plot_map.ndp <- function(x,coords,p=c(0.025,0.5,0.90)){
           dplyr::mutate("Group_2" = as.numeric(stringr::str_replace(Group_2,"V",""))) %>%
           dplyr::filter(Group_1 >= Group_2) %>% select(-Group_2)
       df <- cbind(df,coords) ## should be able to join exactly
-      p <- qmplot(lon,lat,color= Probability,maptyype= 'toner-light')
+      p <- qmplot(lon,lat,color= Probability,maptyype= 'toner-light',data = df %>% filter(Group_1 == 1 ))
 
       return(p)
 

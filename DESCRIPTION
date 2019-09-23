@@ -1,6 +1,6 @@
 Package: rndpp
 Type: Package
-Title: Nested Dirichlet Process Mixture Models for Non Homgeonous Poisson Process Models
+Title: Nested Dirichlet Process Mixture Models for Non Homgeonous Poisson Processes 
 Version: 0.1.0
 Authors@R: person("Adam", "Peterson", , "atpvyc@umich.edu", c("aut", "cre"))
 Maintainer: The package maintainer <yourself@somewhere.net>
@@ -17,7 +17,7 @@ Imports:
     Rcpp,
     tidygraph,
     ggraph,
-    gridExtra
+    gridExtra,
 LinkingTo: 
     Rcpp (>= 0.12.16),
     RcppEigen(>= 0.3.3.3.0)
