@@ -206,7 +206,7 @@ Rcpp::List nd_nhpp_fit(
                for(int l = 0; l < L; l++){
                  intensities(sample_ix, k*d_length + d_ix) += w(l,k) * R::dnorm(d(d_ix),mu(l,k),sqrt(tau(l,k)),false);
 			   }
-				 global_intensity(sample_ix,d_ix) = pi(k) *  intensities(sample_ix,k*d_length+d_ix);
+				 global_intensity(sample_ix,d_ix) += pi(k) *  intensities(sample_ix,k*d_length+d_ix);
              }
           }
 
