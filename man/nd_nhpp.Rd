@@ -7,7 +7,7 @@
 nd_nhpp(X, r, n_j, mu_0 = 0, kappa_0 = 1, nu_0 = 1, sigma_0 = 1,
   L = 4, K = 4, a_0 = 1, b_0 = 1, a_alpha = 1, b_alpha = 1,
   a_rho = 1, b_rho = 1, iter_max, warm_up, thin = 1,
-  multiple_taus = FALSE, include_warmup = FALSE, seed = NULL)
+  include_warmup = FALSE, probit = TRUE, seed = NULL)
 }
 \arguments{
 \item{r}{vector of distances  associated with differing groups}
@@ -39,6 +39,9 @@ nd_nhpp(X, r, n_j, mu_0 = 0, kappa_0 = 1, nu_0 = 1, sigma_0 = 1,
 \item{warm_up}{number of iterations for which to burn-in or "warm-up" sampler}
 
 \item{thin}{number of iterations to thin by}
+
+\item{probit}{boolean value to indicate the transformation function.
+If TRUE then the probit is used if FALSE then the logit transformation.}
 
 \item{seed}{integer with which to initialize random number generator}
 }

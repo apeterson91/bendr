@@ -201,9 +201,12 @@ print.summary.ndp <- function(x, digits = max(1, attr(x, "print.digits")),
 #' @param digits number of digits to round to
 #' @param caption self-explanatory
 #' 
-to_latex <- function(object, digits = 1, caption = "") UseMethod("to_latex")
+to_latex <- function(object, digits = 1, caption = "")
+	UseMethod("to_latex")
 
+#' converts summary output to latex table
 #' @export
+#' 
 to_latex.ndp <- function(object, digits = 1, caption =""){
 
     summ <- function(x,y){ 

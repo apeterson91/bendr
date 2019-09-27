@@ -15,6 +15,8 @@
 #' @param iter_max total number of iterations for which to run sampler
 #' @param warm_up number of iterations for which to burn-in or "warm-up" sampler
 #' @param thin number of iterations to thin by
+#' @param probit boolean value to indicate the transformation function.
+#'       If TRUE then the probit is used if FALSE then the logit transformation.
 #' @param seed integer with which to initialize random number generator
 #'
 #' @export
@@ -27,8 +29,8 @@ nd_nhpp <- function(X, r, n_j,
                     a_rho = 1, b_rho = 1,
                     iter_max, warm_up,
                     thin = 1,
-                    multiple_taus = FALSE,
                     include_warmup = FALSE,
+					probit = TRUE,
                     seed = NULL) {
 
     call <- match.call(expand.dots=TRUE)
@@ -51,7 +53,11 @@ nd_nhpp <- function(X, r, n_j,
     if(is.null(seed))
         seed <- 1L
 
-    r_ <- qnorm(r_)
+	if(probit)
+		r_  <-  qnorm(r_)
+	else
+		r_  <-  qlogis(r_)
+
     d <- seq(from = floor(min(r_)), to = ceiling(max(r_)), by = 0.01) ## distance grid
     num_posterior_samples <- sum(seq(from=warm_up+1,to = iter_max,by=1) %% thin == 0 )
     fit <- list(nd_nhpp_fit(X = X, r= r_, n_j = n_j, d = d,
@@ -63,7 +69,10 @@ nd_nhpp <- function(X, r, n_j,
                           iter_max = iter_max, warm_up = warm_up,
                           thin = thin, seed = seed, chain = 1,
                           num_posterior_samples = num_posterior_samples))
-    d <- pnorm(d)
+    if(probit)
+        d <- pnorm(d)
+    else
+        d <- plogis(d)
 
     out <- ndp(c(list(K = K, L = L, d = R*d, X = X,
                       n = sum(n_j[,2]), call = call),fit),1)

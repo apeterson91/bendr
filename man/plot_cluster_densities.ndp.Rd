@@ -4,7 +4,8 @@
 \alias{plot_cluster_densities.ndp}
 \title{Plots cluster intensity function densities}
 \usage{
-\method{plot_cluster_densities}{ndp}(x, p = 0.9, pi_threshold = 0.1)
+\method{plot_cluster_densities}{ndp}(x, p = 0.9, pi_threshold = 0.1,
+  switch = "facet")
 }
 \arguments{
 \item{x}{ndp object}
@@ -13,6 +14,8 @@
 
 \item{pi_threshold}{intensities with probability of assignment greater than pi_threshold are plotted
 default is zero}
+
+\item{switch}{one of two character values "facet" or "color" denoting whether to separate clusters by facet or by color}
 }
 \value{
 ggplot plot object

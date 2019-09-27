@@ -1,10 +1,10 @@
-#' Estimates Posterior Mode Cluster Assignment 
+#' Estimates Posterior Mode Cluster Assignment
 #'
 #' @export
 #' @method assign_mode ndp
 #' @param x ndp object
 #' @return vector of cluster assignments
-#' 
+#'
 assign_mode <- function(x,ics = NULL)
 	UseMethod("assign_mode")
 
@@ -27,7 +27,7 @@ assign_mode.ndp <- function(x,ics = NULL){
 #' @method get_error ndp
 #' @param x ndp object
 #' @return vector of error corresponding to specific iteration's cluster configuration
-#' 
+#'
 get_error <- function(x,ics = NULL)
 	UseMethod("get_error")
 
@@ -36,7 +36,7 @@ get_error <- function(x,ics = NULL)
 #'
 get_error.ndp <- function(x, ics = NULL){
 
-	A <- x$pmat 
+	A <- x$pmat
 
 	A[upper.tri(A)] <- A[lower.tri(A)]
 

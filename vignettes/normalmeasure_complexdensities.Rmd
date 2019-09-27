@@ -95,6 +95,12 @@ fit <- nd_nhpp(X=matrix(1,ncol=1,nrow=nrow(n_j)),
                thin = 3,
                seed = 34143)
 ```
+```{r}
+plot(fit$rho)
+```
+```{r}
+plot(fit$alpha)
+```
 
 ```{r}
 plot_global_density(fit,r=r)
@@ -116,7 +122,7 @@ plot_pairs(fit)
 
 
 ```{r}
-plot_network(fit)
+plot_network(fit,sample = 50)
 ```
 
 

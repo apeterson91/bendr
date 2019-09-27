@@ -16,18 +16,12 @@ plot.ndp <- function(x, plotfun = "cluster") {
 		plot_cluster_densities(x)
 }
 
-#' plots pairwise probability clustering plot
 #' @export
-#' @method plot_pairs ndp
-#' @param x ndp object
-#' @importFrom ggplot2 ggplot aes geom_tile scale_fill_gradientn
-#' @return ggplot plot object
-#'
 plot_pairs <- function(x)
     UseMethod("plot_pairs")
 
 #' @export
-plot_cluster_densities <- function(x, p = .9, pi_threshold = .1)
+plot_cluster_densities <- function(x, p = .9, pi_threshold = .1, switch = "facet")
     UseMethod("plot_cluster_densities")
 
 #' @export
@@ -46,7 +40,14 @@ plot_network <- function(x,sample=NULL)
 plot_map <- function(x,coords,p)
   UseMethod("plot_map")
 
+#' plots pairwise probability clustering plot
+#' 
 #' @export
+#' @method plot_pairs ndp
+#' @param x ndp object
+#' @importFrom ggplot2 ggplot aes geom_tile scale_fill_gradientn
+#' @return ggplot plot object
+#' 
 plot_pairs.ndp <- function(x){
 
     p <- dplyr::as_tibble(x$pmat) %>% dplyr::mutate(Group_1 = 1:dplyr::n()) %>%
@@ -66,25 +67,33 @@ plot_pairs.ndp <- function(x){
 #' @param p the probability for the credible interval
 #' @param pi_threshold intensities with probability of assignment greater than pi_threshold are plotted
 #' default is zero
+#' @param switch one of two character values "facet" or "color" denoting whether to separate clusters by facet or by color
 #' @return ggplot plot object
 #'
-plot_cluster_densities.ndp <- function(x, p = .9,pi_threshold = .1){
+plot_cluster_densities.ndp <- function(x, p = .9,pi_threshold = .1, switch = "facet"){
 
     ks_to_keep <- which(apply(as.matrix(x$pi),2,median)>pi_threshold)
 
-    p <- x$if_df %>% dplyr::group_by(Chain,Intensity_Function,Distance) %>%
+    p <- x$if_df %>% 
+		dplyr::mutate(Intensity_Function = factor(Intensity_Function)) %>%
+		dplyr::group_by(Chain,Intensity_Function,Distance) %>%
         dplyr::summarise(lower = quantile(Density,.5 + p/2,na.rm=T),
                          med = median(Density,na.rm=T),
                          upper = quantile(Density,.5 + p /2,na.rm=T)) %>%
     dplyr::filter(Intensity_Function %in% ks_to_keep) %>%
-    ggplot(aes(x=Distance,y=med)) + ggplot2::geom_line() +
+    ggplot(aes(x=Distance,y=med)) + 
     ggplot2::geom_ribbon(aes(ymin= lower,ymax=upper),alpha=0.3) +
     ggplot2::theme_bw() +
-    ggplot2::facet_wrap(Chain~Intensity_Function) +
     ggplot2::theme(strip.background = ggplot2::element_blank()) +
     ggplot2::labs(title = "Cluster Normalized Intensity Functions",
          subtitle = paste0("Shaded area indicates ",p,"% Credible Interval"),
          y = "Density")
+
+	if(switch == "color")
+		p <- p + ggplot2::geom_line(aes(color=Intensity_Function)) + ggplot2::facet_wrap(~Chain)
+	else 
+		p <-  p + ggplot2::geom_line() + ggplot2::facet_wrap(Chain ~ Intensity_Function) 
+
     return(p)
 }
 
@@ -122,16 +131,19 @@ plot_network.ndp <- function(x,sample=NULL,mode_label = TRUE){
 		ics  <- sample(1:nrow(x$pmat),50)
 
     t <- tidygraph::as_tbl_graph(x$pmat[ics,ics],directed=FALSE)
-	mode <- assign_mode(x,ics)
-	if(mode_label)
+	if(mode_label){
+		mode <- assign_mode(x,ics)
+		if(any(mode==0))
+			mode  <- mode + 1
 		t <- t %>% tidygraph::activate(nodes) %>% tidygraph::mutate(`Mode Labels` = factor(mode) )
+	}
     p <- t %>% ggraph::ggraph(layout='nicely') +
-        ggraph::geom_edge_link(alpha=0.3) +
+        ggraph::geom_edge_link(aes(alpha=weight)) +
 		 ggplot2::ggtitle("Network Plot") + ggplot2::theme_void() 
 	if(mode_label)
-		p <- p + ggraph::geom_node_point(aes(color=`Mode Labels`))
+		p <- p + ggraph::geom_node_point(aes(color=`Mode Labels`)) 
 	else
-		p <- p + ggraph::geom_node_point()
+		p <- p + ggraph::geom_node_point() 
 
     return(p)
 }
@@ -174,7 +186,7 @@ plot_global_density.ndp <- function(x, p = 0.9, r = NULL){
 		stop("p must be in (0,1)")
 
     p <- x$global_density %>% dplyr::group_by(Chain,Distance) %>%
-        dplyr::summarise(lower = quantile(Global_Density,.5 + p / 2,na.rm=T),
+        dplyr::summarise(lower = quantile(Global_Density,.5 - p / 2,na.rm=T),
                          med = median(Global_Density,na.rm=T),
                          upper = quantile(Global_Density,.5 + p /2,na.rm=T)) %>%
     ggplot(aes(x=Distance,y=med)) + ggplot2::geom_line() +

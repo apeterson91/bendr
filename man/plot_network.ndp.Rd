@@ -4,12 +4,14 @@
 \alias{plot_network.ndp}
 \title{Network Cluster Plot}
 \usage{
-\method{plot_network}{ndp}(x, sample = TRUE)
+\method{plot_network}{ndp}(x, sample = NULL, mode_label = TRUE)
 }
 \arguments{
 \item{x}{ndp object}
 
-\item{sample}{boolean indicating random subsample will be taken for plot}
+\item{sample}{number samples to draw}
+
+\item{mode_label}{boolean value to indicate that the network graph should be colored with the Mode cluster label assignments}
 }
 \value{
 ggplot plot object
