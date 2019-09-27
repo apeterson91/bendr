@@ -21,7 +21,7 @@ plot_pairs <- function(x)
     UseMethod("plot_pairs")
 
 #' @export
-plot_cluster_densities <- function(x, p = .9, pi_threshold = .1, switch = "facet")
+plot_cluster_densities <- function(x, p = .9, pi_threshold = .1, switch = "facet",transform = TRUE)
     UseMethod("plot_cluster_densities")
 
 #' @export
@@ -70,30 +70,36 @@ plot_pairs.ndp <- function(x){
 #' @param switch one of two character values "facet" or "color" denoting whether to separate clusters by facet or by color
 #' @return ggplot plot object
 #'
-plot_cluster_densities.ndp <- function(x, p = .9,pi_threshold = .1, switch = "facet"){
+plot_cluster_densities.ndp <- function(x, p = .9,pi_threshold = .1, switch = "facet",transform=TRUE){
 
     ks_to_keep <- which(apply(as.matrix(x$pi),2,median)>pi_threshold)
+	if(transform)
+		xlabel  <- "Distance"
+	else
+		xlabel  <- "Distance (Transformed)"
+
 
     p <- x$if_df %>% 
-		dplyr::mutate(Intensity_Function = factor(Intensity_Function)) %>%
+		dplyr::mutate(Intensity_Function = factor(Intensity_Function),
+					  Distance = (transform==TRUE)*Distance + (transform==FALSE)*qnorm(Distance / ceiling(max(x$if_df$Distance)))) %>% 
+		dplyr::filter(Intensity_Function %in% ks_to_keep) %>%
 		dplyr::group_by(Chain,Intensity_Function,Distance) %>%
         dplyr::summarise(lower = quantile(Density,.5 + p/2,na.rm=T),
                          med = median(Density,na.rm=T),
                          upper = quantile(Density,.5 + p /2,na.rm=T)) %>%
-    dplyr::filter(Intensity_Function %in% ks_to_keep) %>%
     ggplot(aes(x=Distance,y=med)) + 
-    ggplot2::geom_ribbon(aes(ymin= lower,ymax=upper),alpha=0.3) +
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank()) +
     ggplot2::labs(title = "Cluster Normalized Intensity Functions",
          subtitle = paste0("Shaded area indicates ",p,"% Credible Interval"),
-         y = "Density")
+         y = "Density", x = xlabel)
 
 	if(switch == "color")
 		p <- p + ggplot2::geom_line(aes(color=Intensity_Function)) + ggplot2::facet_wrap(~Chain)
 	else 
-		p <-  p + ggplot2::geom_line() + ggplot2::facet_wrap(Chain ~ Intensity_Function) 
-
+		p <-  p + ggplot2::geom_line() + ggplot2::geom_ribbon(aes(ymin= lower,ymax=upper),alpha=0.3) +
+			ggplot2::facet_wrap(Chain ~ Intensity_Function) 
+    
     return(p)
 }
 

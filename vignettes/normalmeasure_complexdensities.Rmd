@@ -108,11 +108,14 @@ plot_global_density(fit,r=r)
 
 
 ```{r}
-plot(fit)
+plot_cluster_densities(fit)
 ```
 
 
 
+```{r}
+plot_cluster_densities(fit,switch='color')
+```
 
 ```{r}
 plot_pairs(fit)
