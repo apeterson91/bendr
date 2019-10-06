@@ -90,8 +90,8 @@ fit <- nd_nhpp(X=matrix(1,ncol=1,nrow=nrow(n_j)),
                sigma_0 = 2, nu_0 = 2, ## Inverse Chi square prior Hyperparameters
                a_alpha = 2, b_alpha = 2, ## alpha Gamma prior hyperparameters
                a_rho = 2, b_rho = 2, ## rho Gamma prior hyperparameters
-               iter_max = 2E4,
-               warm_up = 1E4,
+               iter_max = 10,
+               warm_up = 5,
                thin = 3,
                seed = 34143)
 ```

@@ -33,8 +33,8 @@ Eigen::ArrayXd stick_break(const int& n, const double& alpha, const double& beta
     Eigen::ArrayXd v(n);
     sftrabbit::beta_distribution<> rbeta(alpha,beta);
     for(int i = 0; i < (n-1); i++)
-        v(i) = rbeta(rng);
-    v(n-1) = 1;
+        v(i) = rbeta_log_const(alpha,beta,rng);
+    v(n-1) = 0.0;
     return(v);
 }
 
@@ -45,10 +45,10 @@ Eigen::ArrayXd stick_break(const int& n, const double& alpha, const double& beta
 Eigen::ArrayXd stick_break(const int n,const double beta, std::mt19937& rng){
 
     Eigen::ArrayXd v(n);
-    sftrabbit::beta_distribution<> rbeta(1,beta);
+	const double alpha = 1.0;
     for(int i = 0; i < (n-1); i++)
-        v(i) = rbeta(rng);
-    v(n-1) = 1;
+        v(i) = rbeta_log_const(alpha, beta, rng);
+    v(n-1) = 0;
     return(v);
 }
 
@@ -63,10 +63,9 @@ Eigen::ArrayXd stick_break(const int n, Eigen::ArrayXd& alpha,Eigen::ArrayXd& be
     Eigen::ArrayXd w(n);
     w = Eigen::ArrayXd::Zero(n);
     for(int i = 0; i < (n-1); i++){
-        sftrabbit::beta_distribution<> rbeta(alpha(i),beta(i));
-        v(i) = rbeta(rng);
+        v(i) = rbeta_log(alpha(i),beta(i),rng);
     }
-    v(n-1) = 1;
+    v(n-1) = 0.0;
 
     return(v);
 }
@@ -77,10 +76,10 @@ Eigen::ArrayXXd stick_break(const int& rows, const int& cols, const double& beta
 
     Eigen::ArrayXXd out(rows,cols);
 
-    sftrabbit::beta_distribution<> rbeta(1,beta);
+	const double alpha = 1;
     for(int row_ix = 0; row_ix < rows; row_ix ++){
         for(int col_ix = 0; col_ix < cols; col_ix ++)
-            out(row_ix,col_ix) = row_ix == (rows-1) ? 1.0 : rbeta(rng);
+            out(row_ix,col_ix) = row_ix == (rows-1) ? 0 : rbeta_log_const(alpha,beta,rng);
     }
 
     return(out);
@@ -94,8 +93,7 @@ Eigen::ArrayXXd stick_break(Eigen::ArrayXXd& alpha, Eigen::ArrayXXd& beta, std::
 
     for(int row_ix = 0; row_ix < rows; row_ix ++){
         for(int col_ix = 0; col_ix < cols; col_ix ++){
-            sftrabbit::beta_distribution<> rbeta(alpha(row_ix,col_ix),beta(row_ix,col_ix));
-            out(row_ix,col_ix) = row_ix == (rows-1) ? 1.0 : rbeta(rng);
+            out(row_ix,col_ix) = row_ix == (rows-1) ? 0.0 : rbeta_log(alpha(row_ix,col_ix), beta(row_ix,col_ix), rng);
         }
     }
 
@@ -107,9 +105,9 @@ Eigen::ArrayXd stick_break_weights(const int n, Eigen::ArrayXd& v){
 
     Eigen::ArrayXd w(n);
     for(int i = 0; i < (n-1); i++)
-        w(i) = i == 0 ? v(i) : v(i) * (Eigen::ArrayXd::Ones(i) - v.head(i)).prod();
+        w(i) = i == 0 ? exp(v(i)) : exp(v(i)) * ( 1 - exp(v.head(i)) ).prod();
 
-    w(n-1) =  v(n-1) * (1 - v.head(n-1)).prod();
+    w(n-1) =  exp(v(n-1)) * (1 - exp(v.head(n-1))  ).prod();
     return(w);
 }
 
@@ -118,9 +116,9 @@ Eigen::ArrayXd stick_break_weights(Eigen::ArrayXd& v){
     const int n = v.rows();
     Eigen::ArrayXd w(n);
     for(int i = 0; i < (n-1); i++)
-        w(i) = i == 0 ? v(i) : v(i) * (1 - v.head(i)).prod();
+        w(i) = i == 0 ? exp(v(i)) : exp(v(i)) * (1 - exp(v.head(i)) ).prod();
 
-    w(n-1) =  v(n-1) * (1 - v.head(n-1)).prod();
+    w(n-1) =  exp(v(n-1)) * (1 - exp(v.head(n-1)) ).prod();
     return(w);
 }
 
@@ -130,10 +128,9 @@ Eigen::ArrayXXd stick_break_weights(Eigen::ArrayXXd& u){
     const int cols = u.cols();
     Eigen::ArrayXXd w(rows,cols);
 
-
     for(int col_ix = 0; col_ix < cols; col_ix ++){
         for(int row_ix = 0; row_ix < rows ; row_ix ++)
-            w(row_ix,col_ix) =  row_ix == 0 ? u(row_ix,col_ix) : u(row_ix,col_ix) * (1 - u.block(0,col_ix,row_ix,1)).prod();
+            w(row_ix,col_ix) =  row_ix == 0 ? exp(u(row_ix,col_ix)) : exp(u(row_ix,col_ix)) * (1 - exp(u.block(0,col_ix,row_ix,1)) ).prod();
     }
 
     return(w);
