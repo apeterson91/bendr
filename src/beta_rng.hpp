@@ -126,25 +126,3 @@ namespace sftrabbit {
   }
 
 }
-
-double rbeta_log(double &alpha, double &beta, std::mt19937 &rng){
-
-	std::uniform_real_distribution<double> runif(0,1);
-	double out = lgamma(alpha) + log(alpha) + log(runif(rng)) / alpha;
-	double out_2 = lgamma(beta) + log(beta) + log(runif(rng)) / beta;
-	double max_val = out > out_2 ? out : out_2;
-	double denom = max_val + log(exp(out - max_val) + exp(out_2 - max_val) );
-
-	return ( out - denom );
-}
-
-double rbeta_log_const(const double &alpha, const double &beta, std::mt19937 &rng){
-
-	std::uniform_real_distribution<double> runif(0,1);
-	double out = lgamma(alpha) + log(alpha) + log(runif(rng)) / alpha;
-	double out_2 = lgamma(beta) + log(beta) + log(runif(rng)) / beta;
-	double max_val = out > out_2 ? out : out_2;
-	double denom = max_val + log(exp(out - max_val) + exp(out_2 - max_val));
-
-	return ( out - denom );
-}

@@ -10,6 +10,7 @@ assign_mode <- function(x,ics = NULL)
 
 
 #' @export
+#'
 assign_mode.ndp <- function(x,ics = NULL){
 
 
@@ -17,7 +18,7 @@ assign_mode.ndp <- function(x,ics = NULL){
 	if(!is.null(ics))
 		return(x$cluster_assignment[[1]][which.min(error),ics])
 	else
-		return(x$cluster_assignment[[1]][which.min(error),])
+		return(x$cluster_assignment[[1]][which.min(error),ics])
 }
 
 #' Calculates Error Distribution

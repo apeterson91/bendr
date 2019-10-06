@@ -77,28 +77,24 @@ Rcpp::List nd_nhpp_fit(
     alpha = rgam_alpha(rng);
     rho = rgam_rho(rng);
 
-	double transformed_v;
-
     // initialize component weights
     u = stick_break(L,K,alpha,rng);
     v = stick_break(K,rho,rng);
-	Rcpp::Rcout << " initial v " << v << std::endl;
     w = stick_break_weights(u);
     pi = stick_break_weights(v);
-	Rcpp::Rcout << " initial pi " << pi << std::endl;
-	Rcpp::Rcout << " initial w " << w << std::endl;
 
     mu = initialize_mu(L,K,mu_0,kappa_0,rng);
     tau = initialize_tau(L,K,sigma_0,nu_0);
     beta = rnorm_vector(beta.rows(),rng);
 
+
     Rcpp::Rcout << "Beginning Sampling" << std::endl;
     Rcpp::Rcout << "----------------------------------------------------------------------" << std::endl;
     for(int iter_ix = 1; iter_ix <= iter_max; iter_ix ++){
       print_progress(iter_ix,warm_up,iter_max,chain);
+
       //calculate cluster probabilities
       q = dnorm(J,r,n_j,pi,w,mu,tau);
-
 
       for(int j = 0; j < J; j ++){
             probs = q.row(j);
@@ -130,12 +126,11 @@ Rcpp::List nd_nhpp_fit(
             v_posterior_beta_alpha(k) = 1 + cluster_count(k);
             v_posterior_beta_beta(k) = alpha + cluster_count.tail(K-k-1).sum();
         }
-		Rcpp::Rcout << " v_posterior alpha" << v_posterior_beta_alpha << std::endl;
-		Rcpp::Rcout << " v_posterior beta" << v_posterior_beta_beta << std::endl;
 
         v = stick_break(K, v_posterior_beta_alpha,v_posterior_beta_beta,rng);
         pi = stick_break_weights(v);
 
+        
 
         for(int l = 0; l < L; l ++){
             for(int k = 0; k < K; k++){
@@ -163,7 +158,7 @@ Rcpp::List nd_nhpp_fit(
             }
           }
         }
-
+        
 
         //sample mu via conjugacy
 
@@ -184,15 +179,8 @@ Rcpp::List nd_nhpp_fit(
        }
 
         // sample concentration parameters
-		transformed_v = 0.0;
-		Rcpp::Rcout << "v " << v <<  std::endl;
-		for(int k = 0; k < K ; k ++){
-			transformed_v += log(-std::expm1(v(k)));
-		}
-		Rcpp::Rcout << "transformed v: " << transformed_v << std::endl;
-
-        posterior_b_alpha = 1.0 / b_alpha - transformed_v;
-        posterior_b_rho =  1.0 / b_rho - log(1-u.block(0,0,L-1,K).array() ).matrix().colwise().sum().sum();
+        posterior_b_alpha = 1.0 / b_alpha - (log(1-v.array())).head(K-1).sum();
+        posterior_b_rho =  1.0 / b_rho - log(1-u.block(0,0,L-1,K).array()).matrix().colwise().sum().sum();
         std::gamma_distribution<double> rgam_alpha(posterior_a_alpha, 1.0 / posterior_b_alpha);
         std::gamma_distribution<double> rgam_rho(posterior_a_rho, 1.0 / posterior_b_rho);
         alpha = rgam_alpha(rng);
@@ -254,4 +242,3 @@ Rcpp::List nd_nhpp_fit(
                               Rcpp::Named("beta_samples") = beta_samps
     ));
 }
-
