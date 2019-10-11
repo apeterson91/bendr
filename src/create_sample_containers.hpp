@@ -12,8 +12,6 @@ Eigen::MatrixXd rho_samps(num_posterior_samples,1);
 Eigen::MatrixXd tau_samps(num_posterior_samples,L*K);
 Eigen::MatrixXd intensities(num_posterior_samples,K * d.size());
 Eigen::MatrixXd global_intensity(num_posterior_samples,d.size());
-Eigen::ArrayXd alpha_prior(num_posterior_samples);
-Eigen::ArrayXd rho_prior(num_posterior_samples);
 cluster_matrix = Eigen::MatrixXd::Zero(J,J);
 int sample_ix = 0;
 intensities = Eigen::MatrixXd::Zero(num_posterior_samples,K * d.size());

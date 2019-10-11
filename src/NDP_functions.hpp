@@ -13,7 +13,7 @@ Eigen::ArrayXXd dnorm(const int &J, const Eigen::ArrayXd &r, const Eigen::ArrayX
       for(int l = 0; l < L; l ++){
         tmp = tmp + w(l,k) * pow(2 * M_PI * tau,-.5) * exp(- 1.0 / ( 2.0 * tau) * pow(r.segment(n_j(j,0),n_j(j,1)) - mu(l,k),2 ));
       }
-      q(j,k) = pi(k) + (tmp).prod();
+      q(j,k) = pi(k) * tmp.prod();
     }
   }
 
@@ -36,7 +36,7 @@ Eigen::ArrayXXd dnorm(const int &J, const Eigen::ArrayXd &r, const Eigen::ArrayX
       for(int l = 0; l < L; l ++){
         tmp = tmp + w(l,k) * pow(2 * M_PI * tau(l,k),-.5) * exp(- 1.0 / ( 2.0 * tau(l,k)) * pow(r.segment(n_j(j,0),n_j(j,1)) - mu(l,k),2 ));
       }
-      q(j,k) = pi(k) + tmp.prod();
+      q(j,k) = pi(k) * tmp.prod();
     }
   }
 
@@ -54,7 +54,7 @@ Eigen::ArrayXXd dnorm(const Eigen::ArrayXd &r, const Eigen::ArrayXXi &n_j, Eigen
   for(int l = 0; l < L; l++){
     for (int j = 0; j < J; j ++){
       for(int i = 0; i < n_j(j,1) ; i ++)
-        b(n_j(j,0) +i, l) = log(w(l,zeta(j))) + R::dnorm(r(n_j(j,0) +i),mu(l,zeta(j)), sqrt(tau), true );
+        b(n_j(j,0) +i, l) = w(l,zeta(j)) * R::dnorm(r(n_j(j,0) +i),mu(l,zeta(j)), sqrt(tau), false );
     }
   }
 
@@ -72,7 +72,7 @@ Eigen::ArrayXXd dnorm(const Eigen::ArrayXd &r, const Eigen::ArrayXXi &n_j, Eigen
   for(int l = 0; l < L; l++){
     for (int j = 0; j < J; j ++){
       for(int i = 0; i < n_j(j,1) ; i ++)
-        b(n_j(j,0) +i, l) = log(w(l,zeta(j))) + R::dnorm(r(n_j(j,0) +i),mu(l,zeta(j)), sqrt(tau(l,zeta(j))), true );
+        b(n_j(j,0) +i, l) = w(l,zeta(j)) * R::dnorm(r(n_j(j,0) +i),mu(l,zeta(j)), sqrt(tau(l,zeta(j))), false );
     }
   }
 
