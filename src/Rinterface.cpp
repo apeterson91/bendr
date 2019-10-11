@@ -24,9 +24,9 @@
 //' @param a_0 hyperparameter for mu base measure
 //' @param b_0 hyperparameter for mu base measure
 //' @param a_alpha hyperparameter for alpha gamma prior
-//' @param b_alpha hyperparameter for alpha gamma prior
+//' @param b_alpha scale hyperparameter for alpha gamma prior
 //' @param a_rho hyperparameter for rho gamma prior
-//' @param b_rho hyperparameter for rho gamma prior
+//' @param b_rho scale hyperparameter for rho gamma prior
 //' @param iter_max total number of iterations for which to run sampler
 //' @param warm_up number of iterations for which to burn-in or "warm-up" sampler
 //' @param thin number of iterations to thin by
@@ -46,10 +46,10 @@ Rcpp::List nd_nhpp_fit(
         const double& kappa_0,
         const int& nu_0,
         const double& sigma_0,
-        const int& a_alpha,
-        const int& b_alpha,
-        const int& a_rho,
-        const int& b_rho,
+        const double& a_alpha,
+        const double& b_alpha,
+        const double& a_rho,
+        const double& b_rho,
         const int& iter_max,
         const int& warm_up,
         const int& thin,
@@ -76,6 +76,8 @@ Rcpp::List nd_nhpp_fit(
     //initialize concentration parameters
     alpha = rgam_alpha(rng);
     rho = rgam_rho(rng);
+	// sample priors
+#include "sample_concentration_priors.hpp"
 
     // initialize component weights
     u = stick_break(L,K,alpha,rng);
@@ -239,6 +241,8 @@ Rcpp::List nd_nhpp_fit(
                               Rcpp::Named("tau_samples") = tau_samps,
                               Rcpp::Named("alpha_samples") = alpha_samps,
                               Rcpp::Named("rho_samples") = rho_samps,
+							  Rcpp::Named("alpha_prior") = alpha_prior,
+							  Rcpp::Named("rho_prior") = rho_prior,
                               Rcpp::Named("beta_samples") = beta_samps
     ));
 }

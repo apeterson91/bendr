@@ -13,9 +13,9 @@
 #' @param a_0 hyperparameter for mu base measure
 #' @param b_0 hyperparameter for mu base measure
 #' @param a_alpha hyperparameter for alpha gamma prior
-#' @param b_alpha hyperparameter for alpha gamma prior
+#' @param b_alpha scale hyperparameter for alpha gamma prior
 #' @param a_rho hyperparameter for rho gamma prior
-#' @param b_rho hyperparameter for rho gamma prior
+#' @param b_rho scale hyperparameter for rho gamma prior
 #' @param iter_max total number of iterations for which to run sampler
 #' @param warm_up number of iterations for which to burn-in or "warm-up" sampler
 #' @param thin number of iterations to thin by

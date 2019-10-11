@@ -8,15 +8,13 @@
 #' @param kappa_0 variance hyperparameter for mu normal base measure. Default is 1; Normal(0,1).
 #' @param nu_0 df hyperparameter for sigma inv chisq base measure. Default is 1; InvChisq(1,1);
 #' @param sigma_0 scale hyperparameter for sigma inv chisq base measure. Default is 1; InvChisq(1,1);
-#' @param a_alpha hyperparameter for alpha gamma prior
-#' @param b_alpha hyperparameter for alpha gamma prior
-#' @param a_rho hyperparameter for rho gamma prior
-#' @param b_rho hyperparameter for rho gamma prior
+#' @param a_alpha shape hyperparameter for alpha gamma prior
+#' @param b_alpha scale hyperparameter for alpha gamma prior
+#' @param a_rho shape hyperparameter for rho gamma prior
+#' @param b_rho scale hyperparameter for rho gamma prior
 #' @param iter_max total number of iterations for which to run sampler
 #' @param warm_up number of iterations for which to burn-in or "warm-up" sampler
 #' @param thin number of iterations to thin by
-#' @param probit boolean value to indicate the transformation function.
-#'       If TRUE then the probit is used if FALSE then the logit transformation.
 #' @param seed integer with which to initialize random number generator
 #'
 #' @export
@@ -29,8 +27,6 @@ nd_nhpp <- function(X, r, n_j,
                     a_rho = 1, b_rho = 1,
                     iter_max, warm_up,
                     thin = 1,
-                    include_warmup = FALSE,
-					probit = TRUE,
                     seed = NULL) {
 
     call <- match.call(expand.dots=TRUE)
@@ -53,10 +49,7 @@ nd_nhpp <- function(X, r, n_j,
     if(is.null(seed))
         seed <- 1L
 
-	if(probit)
-		r_  <-  qnorm(r_)
-	else
-		r_  <-  qlogis(r_)
+	r_  <-  qnorm(r_)
 
     d <- seq(from = floor(min(r_)), to = ceiling(max(r_)), by = 0.01) ## distance grid
     num_posterior_samples <- sum(seq(from=warm_up+1,to = iter_max,by=1) %% thin == 0 )
@@ -69,10 +62,7 @@ nd_nhpp <- function(X, r, n_j,
                           iter_max = iter_max, warm_up = warm_up,
                           thin = thin, seed = seed, chain = 1,
                           num_posterior_samples = num_posterior_samples))
-    if(probit)
-        d <- pnorm(d)
-    else
-        d <- plogis(d)
+	d <- pnorm(d)
 
     out <- ndp(c(list(K = K, L = L, d = R*d, X = X,
                       n = sum(n_j[,2]), call = call),fit),1)

@@ -7,7 +7,7 @@
 using namespace Rcpp;
 
 // nd_nhpp_fit
-Rcpp::List nd_nhpp_fit(const Eigen::MatrixXd& X, const Eigen::ArrayXd& r, const Eigen::MatrixXi& n_j, const Eigen::ArrayXd& d, const int& L, const int& K, const int& J, const double& mu_0, const double& kappa_0, const int& nu_0, const double& sigma_0, const int& a_alpha, const int& b_alpha, const int& a_rho, const int& b_rho, const int& iter_max, const int& warm_up, const int& thin, const int& seed, const int& chain, const int& num_posterior_samples);
+Rcpp::List nd_nhpp_fit(const Eigen::MatrixXd& X, const Eigen::ArrayXd& r, const Eigen::MatrixXi& n_j, const Eigen::ArrayXd& d, const int& L, const int& K, const int& J, const double& mu_0, const double& kappa_0, const int& nu_0, const double& sigma_0, const double& a_alpha, const double& b_alpha, const double& a_rho, const double& b_rho, const int& iter_max, const int& warm_up, const int& thin, const int& seed, const int& chain, const int& num_posterior_samples);
 RcppExport SEXP _rndpp_nd_nhpp_fit(SEXP XSEXP, SEXP rSEXP, SEXP n_jSEXP, SEXP dSEXP, SEXP LSEXP, SEXP KSEXP, SEXP JSEXP, SEXP mu_0SEXP, SEXP kappa_0SEXP, SEXP nu_0SEXP, SEXP sigma_0SEXP, SEXP a_alphaSEXP, SEXP b_alphaSEXP, SEXP a_rhoSEXP, SEXP b_rhoSEXP, SEXP iter_maxSEXP, SEXP warm_upSEXP, SEXP thinSEXP, SEXP seedSEXP, SEXP chainSEXP, SEXP num_posterior_samplesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -23,10 +23,10 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double& >::type kappa_0(kappa_0SEXP);
     Rcpp::traits::input_parameter< const int& >::type nu_0(nu_0SEXP);
     Rcpp::traits::input_parameter< const double& >::type sigma_0(sigma_0SEXP);
-    Rcpp::traits::input_parameter< const int& >::type a_alpha(a_alphaSEXP);
-    Rcpp::traits::input_parameter< const int& >::type b_alpha(b_alphaSEXP);
-    Rcpp::traits::input_parameter< const int& >::type a_rho(a_rhoSEXP);
-    Rcpp::traits::input_parameter< const int& >::type b_rho(b_rhoSEXP);
+    Rcpp::traits::input_parameter< const double& >::type a_alpha(a_alphaSEXP);
+    Rcpp::traits::input_parameter< const double& >::type b_alpha(b_alphaSEXP);
+    Rcpp::traits::input_parameter< const double& >::type a_rho(a_rhoSEXP);
+    Rcpp::traits::input_parameter< const double& >::type b_rho(b_rhoSEXP);
     Rcpp::traits::input_parameter< const int& >::type iter_max(iter_maxSEXP);
     Rcpp::traits::input_parameter< const int& >::type warm_up(warm_upSEXP);
     Rcpp::traits::input_parameter< const int& >::type thin(thinSEXP);

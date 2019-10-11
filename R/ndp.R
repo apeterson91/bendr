@@ -78,6 +78,8 @@ ndp <- function(object,chains){
 				global_density = gd_df,
                 beta = coda::as.mcmc.list(beta),
                 pmat = pmat / chains,
+				alpha_prior = coda::as.mcmc(object[[offset+1]]$alpha_prior),
+				rho_prior = coda::as.mcmc(object[[offset+1]]$rho_prior),
 				cluster_assignment = cluster_assignment,
                 num_clusters = coda::as.mcmc.list(num_clusters),
                 pi = coda::as.mcmc.list(pis),
