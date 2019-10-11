@@ -126,3 +126,50 @@ namespace sftrabbit {
   }
 
 }
+
+
+double rbeta_log(double alpha, double beta, std::mt19937 &rng){
+
+	std::gamma_distribution<double> rgamma(alpha + 1,1);
+	std::gamma_distribution<double> rgamma2(beta + 1,1);
+	std::uniform_real_distribution<double> runif(0,1);
+	double out = log(rgamma(rng)) + log( runif(rng)) / alpha;
+	double out2 = log(rgamma2(rng)) + log(runif(rng))/ beta;
+	double max_val = out > out2 ? out : out2;
+	double denom = max_val + log(exp(out - max_val) + exp(out2 - max_val)) ;
+
+	return( out - denom  );
+}
+
+
+double rbeta_log_const(const double alpha,const double beta, std::mt19937 &rng){
+
+	std::gamma_distribution<double> rgamma(alpha + 1,1);
+	std::gamma_distribution<double> rgamma2(beta + 1,1);
+	std::uniform_real_distribution<double> runif(0,1);
+	double out = log(rgamma(rng)) + log( runif(rng)) / alpha;
+	double out2 = log(rgamma2(rng)) + log(runif(rng))/ beta;
+	double max_val = out > out2 ? out : out2;
+	double denom = max_val + log(exp(out - max_val) + exp(out2 - max_val)) ;
+
+	return( out - denom  );
+}
+
+double rbeta_log_print(double alpha, double beta, std::mt19937 &rng){
+
+	std::gamma_distribution<double> rgamma(alpha + 1,1);
+	std::gamma_distribution<double> rgamma2(beta + 1,1);
+	std::uniform_real_distribution<double> runif(0,1);
+	double out = log(rgamma(rng)) + log(runif(rng)) / alpha;
+	double out2 = log(rgamma2(rng)) + log(runif(rng))/ beta;
+	double max_val = out > out2 ? out : out2;
+	double denom = max_val + log(exp(out - max_val) + exp(out2 - max_val)) ;
+
+	Rcpp::Rcout << "max_val" << max_val << std::endl;
+	Rcpp::Rcout << "gamma numerator" << out << std::endl;
+	Rcpp::Rcout << "gamma 2: " << out2 << std::endl;
+	Rcpp::Rcout << "denom" << denom << std::endl;
+	Rcpp::Rcout << " result " << out - denom << std::endl;
+
+	return( out - denom  );
+}

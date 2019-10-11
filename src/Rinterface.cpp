@@ -68,24 +68,37 @@ Rcpp::List nd_nhpp_fit(
     #include "during_sampling_containers.hpp"
 
     // create rng's
-    std::gamma_distribution<double> rgam_alpha(a_alpha,b_alpha);
-    std::gamma_distribution<double> rgam_rho(a_rho,b_rho);
+    std::gamma_distribution<double> rgam_alpha(a_alpha,1.0 / b_alpha);
+    std::gamma_distribution<double> rgam_rho(a_rho,1.0 / b_rho);
     std::uniform_real_distribution<double> runif(0,1);
     std::normal_distribution<double> rnorm(0,1);
 
     //initialize concentration parameters
     alpha = rgam_alpha(rng);
     rho = rgam_rho(rng);
+	Eigen::ArrayXd log_v(K);
+	Eigen::ArrayXXd log_u(L,K);
+	for(int i = 0; i < num_posterior_samples; i ++){
+		alpha_prior(i) = rgam_alpha(rng);
+		rho_prior(i) = rgam_rho(rng);
+	}
 
     // initialize component weights
-    u = stick_break(L,K,alpha,rng);
-    v = stick_break(K,rho,rng);
+    log_u = stick_break(L,K,alpha,rng);
+	u = exp(log_u);
+    log_v = stick_break(K,rho,rng);
+	v = exp(log_v);
     w = stick_break_weights(u);
     pi = stick_break_weights(v);
 
     mu = initialize_mu(L,K,mu_0,kappa_0,rng);
     tau = initialize_tau(L,K,sigma_0,nu_0);
+	tau = Eigen::MatrixXd::Ones(L,K);
     beta = rnorm_vector(beta.rows(),rng);
+
+	double transformed_v = 0;
+	double transformed_u = 0;
+	double log_factor = log(pow(10,-16)) - log(r.size());
 
 
     Rcpp::Rcout << "Beginning Sampling" << std::endl;
@@ -110,7 +123,7 @@ Rcpp::List nd_nhpp_fit(
         for(int j = 0 ; j < J; j ++){
             for(int i = 0 ; i < n_j(j,1) ; i++){
                 for(int l = 0 ; l< L; l++)
-                    prob(l) = b(n_j(j,0) + i,l);
+                    prob(l) = b(n_j(j,0) + i,l); 
                 std::discrete_distribution<int> d(prob.data(),prob.data() + prob.size());
                 iter_component_assignment(n_j(j,0) +i) = d(rng);
                 component_count(iter_component_assignment(n_j(j,0)+i),iter_cluster_assignment(j)) += 1;
@@ -127,10 +140,11 @@ Rcpp::List nd_nhpp_fit(
             v_posterior_beta_beta(k) = alpha + cluster_count.tail(K-k-1).sum();
         }
 
-        v = stick_break(K, v_posterior_beta_alpha,v_posterior_beta_beta,rng);
+        v  = stick_break(K, v_posterior_beta_alpha,v_posterior_beta_beta,rng);
+		v = exp(log_v);
         pi = stick_break_weights(v);
 
-        
+
 
         for(int l = 0; l < L; l ++){
             for(int k = 0; k < K; k++){
@@ -139,7 +153,8 @@ Rcpp::List nd_nhpp_fit(
             }
         }
 
-        u = stick_break(u_posterior_beta_alpha,u_posterior_beta_beta,rng);
+        log_u = stick_break(u_posterior_beta_alpha,u_posterior_beta_beta,rng);
+		u = exp(log_u);
         w = stick_break_weights(u);
 
         // calculate mu hat (sq) sums
@@ -158,7 +173,7 @@ Rcpp::List nd_nhpp_fit(
             }
           }
         }
-        
+
 
         //sample mu via conjugacy
 
@@ -178,9 +193,19 @@ Rcpp::List nd_nhpp_fit(
          }
        }
 
+		transformed_v = 0.0;
+		transformed_u = 0.0;
+//		check_v = (log(1-v.array())).head(K-1).sum();
+		for(int k = 0; k < K-1 ; k ++){
+			transformed_v += log(- expm1(log_v(k)) );
+		}
+		for(int l =0 ; l < L-1; l++){
+			for(int k = 0 ; k < K; k ++)
+				transformed_u += log(- expm1( log_u(l,k) ));
+		}
         // sample concentration parameters
-        posterior_b_alpha = 1.0 / b_alpha - (log(1-v.array())).head(K-1).sum();
-        posterior_b_rho =  1.0 / b_rho - log(1-u.block(0,0,L-1,K).array()).matrix().colwise().sum().sum();
+        posterior_b_alpha = 1.0 / b_alpha - transformed_v; //  (log(1-v.array())).head(K-1).sum();
+        posterior_b_rho =  1.0 / b_rho - transformed_u ;//log(1-u.block(0,0,L-1,K).array()).matrix().colwise().sum().sum();
         std::gamma_distribution<double> rgam_alpha(posterior_a_alpha, 1.0 / posterior_b_alpha);
         std::gamma_distribution<double> rgam_rho(posterior_a_rho, 1.0 / posterior_b_rho);
         alpha = rgam_alpha(rng);
@@ -196,7 +221,7 @@ Rcpp::List nd_nhpp_fit(
 
 
         // calculate adjacency matrix and store samples
-        if((iter_ix > warm_up) && (iter_ix % thin ==0)){
+        if((iter_ix > warm_up) && (iter_ix % thin == 0)){
           for(int j = 0; j < J; j++){
             for(int j_ = 0; j_ < j; j_++)
               cluster_matrix(j,j_) += (iter_cluster_assignment(j) == iter_cluster_assignment(j_)) ? 1: 0;
@@ -239,6 +264,9 @@ Rcpp::List nd_nhpp_fit(
                               Rcpp::Named("tau_samples") = tau_samps,
                               Rcpp::Named("alpha_samples") = alpha_samps,
                               Rcpp::Named("rho_samples") = rho_samps,
-                              Rcpp::Named("beta_samples") = beta_samps
+                              Rcpp::Named("beta_samples") = beta_samps,
+							  Rcpp::Named("alpha_prior") = alpha_prior,
+							  Rcpp::Named("rho_prior") = rho_prior
     ));
 }
+

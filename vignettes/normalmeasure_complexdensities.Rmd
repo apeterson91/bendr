@@ -85,22 +85,29 @@ n_j <- school_df %>% group_by(sim_id) %>% count() %>%
 ```{r modelfit1}
 fit <- nd_nhpp(X=matrix(1,ncol=1,nrow=nrow(n_j)),
                r = r, n_j = n_j,
-               L = 3,K = 4,
+               L = 4,K = 4,
                mu_0 = 0, kappa_0 = 1, ## Normal Mean Base Measure Hyperparameters
-               sigma_0 = 2, nu_0 = 2, ## Inverse Chi square prior Hyperparameters
-               a_alpha = 2, b_alpha = 2, ## alpha Gamma prior hyperparameters
-               a_rho = 2, b_rho = 2, ## rho Gamma prior hyperparameters
-               iter_max = 2E4,
-               warm_up = 1E4,
-               thin = 3,
+               sigma_0 = 1, nu_0 = 1, ## Inverse Chi square prior Hyperparameters
+               a_alpha = 3, b_alpha = 3, ## alpha Gamma prior hyperparameters
+               a_rho = 3, b_rho = 3, ## rho Gamma prior hyperparameters
+               iter_max = 5E4,
+               warm_up = 4E4,
+               thin = 1,
                seed = 34143)
 ```
-```{r}
-plot(fit$rho)
-```
+
+
 ```{r}
 plot(fit$alpha)
 ```
+
+
+```{r}
+plot(fit$rho)
+```
+
+
+
 
 ```{r}
 plot_global_density(fit,r=r)
@@ -116,6 +123,12 @@ plot_cluster_densities(fit)
 ```{r}
 plot_cluster_densities(fit,switch='color')
 ```
+
+```{r}
+plot_cluster_densities(fit,switch='color',transform = FALSE)
+```
+
+
 
 ```{r}
 plot_pairs(fit)

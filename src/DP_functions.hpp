@@ -33,8 +33,8 @@ Eigen::ArrayXd stick_break(const int& n, const double& alpha, const double& beta
     Eigen::ArrayXd v(n);
     sftrabbit::beta_distribution<> rbeta(alpha,beta);
     for(int i = 0; i < (n-1); i++)
-        v(i) = rbeta(rng);
-    v(n-1) = 1;
+        v(i) = rbeta_log(alpha,beta,rng);
+    v(n-1) = 0;
     return(v);
 }
 
@@ -45,10 +45,9 @@ Eigen::ArrayXd stick_break(const int& n, const double& alpha, const double& beta
 Eigen::ArrayXd stick_break(const int n,const double beta, std::mt19937& rng){
 
     Eigen::ArrayXd v(n);
-    sftrabbit::beta_distribution<> rbeta(1,beta);
     for(int i = 0; i < (n-1); i++)
-        v(i) = rbeta(rng);
-    v(n-1) = 1;
+        v(i) = rbeta_log_const(1,beta,rng);
+    v(n-1) = 0.0;
     return(v);
 }
 
@@ -60,13 +59,23 @@ Eigen::ArrayXd stick_break(const int n, Eigen::ArrayXd& alpha,Eigen::ArrayXd& be
 
     Eigen::ArrayXd v(n);
     v = Eigen::ArrayXd::Zero(n);
-    Eigen::ArrayXd w(n);
-    w = Eigen::ArrayXd::Zero(n);
     for(int i = 0; i < (n-1); i++){
-        sftrabbit::beta_distribution<> rbeta(alpha(i),beta(i));
-        v(i) = rbeta(rng);
+        v(i) = rbeta_log(alpha(i),beta(i),rng);
     }
-    v(n-1) = 1;
+    v(n-1) = 0.0;
+
+    return(v);
+}
+
+Eigen::ArrayXd stick_break_print(const int n, Eigen::ArrayXd& alpha,Eigen::ArrayXd& beta, std::mt19937& rng){
+
+    Eigen::ArrayXd v(n);
+    v = Eigen::ArrayXd::Zero(n);
+    for(int i = 0; i < (n-1); i++){
+        v(i) = rbeta_log_print(alpha(i),beta(i),rng);
+		Rcpp::Rcout << "v(i): " << v(i) << std::endl;
+    }
+    v(n-1) = 0.0;
 
     return(v);
 }
@@ -80,11 +89,12 @@ Eigen::ArrayXXd stick_break(const int& rows, const int& cols, const double& beta
     sftrabbit::beta_distribution<> rbeta(1,beta);
     for(int row_ix = 0; row_ix < rows; row_ix ++){
         for(int col_ix = 0; col_ix < cols; col_ix ++)
-            out(row_ix,col_ix) = row_ix == (rows-1) ? 1.0 : rbeta(rng);
+            out(row_ix,col_ix) = row_ix == (rows-1) ? 0.0 : rbeta_log(1,beta,rng);
     }
 
     return(out);
 }
+
 //' stick breaking
 Eigen::ArrayXXd stick_break(Eigen::ArrayXXd& alpha, Eigen::ArrayXXd& beta, std::mt19937& rng){
 
@@ -94,8 +104,7 @@ Eigen::ArrayXXd stick_break(Eigen::ArrayXXd& alpha, Eigen::ArrayXXd& beta, std::
 
     for(int row_ix = 0; row_ix < rows; row_ix ++){
         for(int col_ix = 0; col_ix < cols; col_ix ++){
-            sftrabbit::beta_distribution<> rbeta(alpha(row_ix,col_ix),beta(row_ix,col_ix));
-            out(row_ix,col_ix) = row_ix == (rows-1) ? 1.0 : rbeta(rng);
+            out(row_ix,col_ix) = row_ix == (rows-1) ? 0.0 : rbeta_log(alpha(row_ix,col_ix),beta(row_ix,col_ix), rng);
         }
     }
 
