@@ -246,3 +246,5 @@ Rcpp::List nd_nhpp_fit(
                               Rcpp::Named("beta_samples") = beta_samps
     ));
 }
+
+#include "green_loss.hpp"

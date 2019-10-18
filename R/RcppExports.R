@@ -26,3 +26,11 @@ nd_nhpp_fit <- function(X, r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, a_a
     .Call(`_rndpp_nd_nhpp_fit`, X, r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, a_alpha, b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed, chain, num_posterior_samples)
 }
 
+#' computes green loss function
+#' @param cluster_assignment iter_total x J cluster assignment matrix
+#' @param pmat J x J pairwise probability of co-clustering matrix
+#' @param chain
+green_loss_engine <- function(cluster_assignment, pmat, tau) {
+    .Call(`_rndpp_green_loss_engine`, cluster_assignment, pmat, tau)
+}
+

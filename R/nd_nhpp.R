@@ -62,7 +62,7 @@ nd_nhpp <- function(X, r, n_j,
                           iter_max = iter_max, warm_up = warm_up,
                           thin = thin, seed = seed, chain = 1,
                           num_posterior_samples = num_posterior_samples))
-	d <- pnorm(d)
+    d <- pnorm(d)
 
     out <- ndp(c(list(K = K, L = L, d = R*d, X = X,
                       n = sum(n_j[,2]), call = call),fit),1)

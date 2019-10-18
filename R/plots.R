@@ -25,7 +25,7 @@ plot_cluster_densities <- function(x, p = .9, pi_threshold = .1, switch = "facet
     UseMethod("plot_cluster_densities")
 
 #' @export
-plot_global_density <- function(x, p = .9,r = NULL)
+plot_global_density <- function(x, p = .9,r = NULL, transform = TRUE)
 	UseMethod("plot_global_density")
 
 #' @export
@@ -84,7 +84,7 @@ plot_cluster_densities.ndp <- function(x, p = .9,pi_threshold = .1, switch = "fa
 					  Distance = (transform==TRUE)*Distance + (transform==FALSE)*qnorm(Distance / ceiling(max(x$if_df$Distance)))) %>% 
 		dplyr::filter(Intensity_Function %in% ks_to_keep) %>%
 		dplyr::group_by(Chain,Intensity_Function,Distance) %>%
-        dplyr::summarise(lower = quantile(Density,.5 + p/2,na.rm=T),
+        dplyr::summarise(lower = quantile(Density,.5 - p/2,na.rm=T),
                          med = median(Density,na.rm=T),
                          upper = quantile(Density,.5 + p /2,na.rm=T)) %>%
     ggplot(aes(x=Distance,y=med)) + 
@@ -186,12 +186,14 @@ plot_map.ndp <- function(x,coords,p=c(0.025,0.5,0.90)){
 #' @param p probability mass contained in uncertainty interval
 #' @return ggplot plot object
 #'
-plot_global_density.ndp <- function(x, p = 0.9, r = NULL){
+plot_global_density.ndp <- function(x, p = 0.9, r = NULL,transform = TRUE ){
 
 	if(p >= 1 || p <= 0 )
 		stop("p must be in (0,1)")
 
-    p <- x$global_density %>% dplyr::group_by(Chain,Distance) %>%
+    p <- x$global_density %>% 
+		dplyr::mutate(Distance = (transform==TRUE)*Distance + (transform==FALSE)*qnorm(Distance / ceiling(max(x$if_df$Distance)))) %>% 
+		dplyr::group_by(Chain,Distance) %>%
         dplyr::summarise(lower = quantile(Global_Density,.5 - p / 2,na.rm=T),
                          med = median(Global_Density,na.rm=T),
                          upper = quantile(Global_Density,.5 + p /2,na.rm=T)) %>%
