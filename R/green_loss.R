@@ -12,7 +12,7 @@ green_loss <- function(object, tau = 0.5)
 #' (2) the loss value itself
 #'
 #'@export
-green_loss.hmm <- function(object, tau = 0.5){
+green_loss.ndp <- function(object, tau = 0.5){
 
 	loss <- green_loss_engine(object$cluster_assignment[[1]],object$pmat,tau)
 

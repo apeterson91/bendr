@@ -25,11 +25,11 @@ nd_nhpp_fit(X, r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, a_alpha,
 
 \item{a_alpha}{hyperparameter for alpha gamma prior}
 
-\item{b_alpha}{hyperparameter for alpha gamma prior}
+\item{b_alpha}{scale hyperparameter for alpha gamma prior}
 
 \item{a_rho}{hyperparameter for rho gamma prior}
 
-\item{b_rho}{hyperparameter for rho gamma prior}
+\item{b_rho}{scale hyperparameter for rho gamma prior}
 
 \item{iter_max}{total number of iterations for which to run sampler}
 

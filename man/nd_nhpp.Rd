@@ -5,9 +5,8 @@
 \title{Estimate the nonhomgogenous poisson process intensity function from grouped data using a normal kernel}
 \usage{
 nd_nhpp(X, r, n_j, mu_0 = 0, kappa_0 = 1, nu_0 = 1, sigma_0 = 1,
-  L = 4, K = 4, a_0 = 1, b_0 = 1, a_alpha = 1, b_alpha = 1,
-  a_rho = 1, b_rho = 1, iter_max, warm_up, thin = 1,
-  include_warmup = FALSE, probit = TRUE, seed = NULL)
+  L = 4, K = 4, a_alpha = 1, b_alpha = 1, a_rho = 1, b_rho = 1,
+  iter_max, warm_up, thin = 1, seed = NULL)
 }
 \arguments{
 \item{r}{vector of distances  associated with differing groups}
@@ -26,22 +25,19 @@ nd_nhpp(X, r, n_j, mu_0 = 0, kappa_0 = 1, nu_0 = 1, sigma_0 = 1,
 
 \item{K}{intensity cluster truncation number}
 
-\item{a_alpha}{hyperparameter for alpha gamma prior}
+\item{a_alpha}{shape hyperparameter for alpha gamma prior}
 
-\item{b_alpha}{hyperparameter for alpha gamma prior}
+\item{b_alpha}{scale hyperparameter for alpha gamma prior}
 
-\item{a_rho}{hyperparameter for rho gamma prior}
+\item{a_rho}{shape hyperparameter for rho gamma prior}
 
-\item{b_rho}{hyperparameter for rho gamma prior}
+\item{b_rho}{scale hyperparameter for rho gamma prior}
 
 \item{iter_max}{total number of iterations for which to run sampler}
 
 \item{warm_up}{number of iterations for which to burn-in or "warm-up" sampler}
 
 \item{thin}{number of iterations to thin by}
-
-\item{probit}{boolean value to indicate the transformation function.
-If TRUE then the probit is used if FALSE then the logit transformation.}
 
 \item{seed}{integer with which to initialize random number generator}
 }

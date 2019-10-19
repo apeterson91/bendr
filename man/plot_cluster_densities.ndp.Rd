@@ -5,7 +5,7 @@
 \title{Plots cluster intensity function densities}
 \usage{
 \method{plot_cluster_densities}{ndp}(x, p = 0.9, pi_threshold = 0.1,
-  switch = "facet")
+  switch = "facet", transform = TRUE)
 }
 \arguments{
 \item{x}{ndp object}
