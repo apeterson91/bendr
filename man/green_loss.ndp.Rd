@@ -4,10 +4,21 @@
 \alias{green_loss.ndp}
 \title{Lau and Green posterior loss function}
 \usage{
-\method{green_loss}{ndp}(object, tau = 0.5)
+\method{green_loss}{ndp}(object, truth = NULL, tau = 0.5, a = 1,
+  b = 1)
 }
 \arguments{
+\item{truth}{True adjacency matrix}
+
 \item{tau}{loss function tuning parameter}
+
+\item{a}{misclassification penalty parameter}
+
+\item{b}{misclassification penalty parameter - see Green and Lau for details}
+}
+\value{
+list of two objects (1) the partition corresponding to the minimal loss and
+(2) the loss value itself
 }
 \description{
 Lau and Green posterior loss function

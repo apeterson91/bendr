@@ -10,8 +10,6 @@
 #' @param L component truncation number
 #' @param K intensity cluster truncation number
 #' @param J number of rows in r matrix; number of groups
-#' @param a_0 hyperparameter for mu base measure
-#' @param b_0 hyperparameter for mu base measure
 #' @param a_alpha hyperparameter for alpha gamma prior
 #' @param b_alpha scale hyperparameter for alpha gamma prior
 #' @param a_rho hyperparameter for rho gamma prior
@@ -26,11 +24,44 @@ nd_nhpp_fit <- function(X, r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, a_a
     .Call(`_rndpp_nd_nhpp_fit`, X, r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, a_alpha, b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed, chain, num_posterior_samples)
 }
 
-#' computes green loss function
+#' Computes Green and Lau loss function with unknown classification
+#'
 #' @param cluster_assignment iter_total x J cluster assignment matrix
 #' @param pmat J x J pairwise probability of co-clustering matrix
-#' @param chain
-green_loss_engine <- function(cluster_assignment, pmat, tau) {
-    .Call(`_rndpp_green_loss_engine`, cluster_assignment, pmat, tau)
+#' @param tau penalty parameter 
+green_loss_unknown <- function(cluster_assignment, pmat, tau) {
+    .Call(`_rndpp_green_loss_unknown`, cluster_assignment, pmat, tau)
+}
+
+#' Computes Green and Lau Loss function with known classification
+#'
+#' @param cluster_assignment iter_total x J cluster assignment matrix
+#' @param pmat J x J pairwise probability of co-clustering matrix
+#' @param true_cluster_assignment J x J true Adjacency Matrix
+#' @param a mis-classification penalty parameter
+#' @param b classification penalty parameter
+green_loss_known <- function(cluster_assignment, pmat, true_cluster_assignment, a, b) {
+    .Call(`_rndpp_green_loss_known`, cluster_assignment, pmat, true_cluster_assignment, a, b)
+}
+
+#' Estimate the nonhomgogenous poisson process intensity function from grouped data with fixed concentration parameters
+#' 
+#' 
+#'
+#' @param X coefficient matrix for estimating mean number of BEFs in interval
+#' @param r vector of distances associatd with different BEFs
+#' @param n_j matrix of integers denoting the start and length of each observations associated BEF distances
+#' @param d a 1D grid of positive real values over which the differing intensities are evaluated
+#' @param L component truncation number
+#' @param K intensity cluster truncation number
+#' @param J number of rows in r matrix; number of groups
+#' @param iter_max total number of iterations for which to run sampler
+#' @param warm_up number of iterations for which to burn-in or "warm-up" sampler
+#' @param thin number of iterations to thin by
+#' @param seed integer with which to initialize random number generator
+#' @param chain integer chain label
+#'
+nd_nhpp_fixed_fit <- function(X, r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, alpha, rho, iter_max, warm_up, thin, seed, chain, num_posterior_samples) {
+    .Call(`_rndpp_nd_nhpp_fixed_fit`, X, r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, alpha, rho, iter_max, warm_up, thin, seed, chain, num_posterior_samples)
 }
 

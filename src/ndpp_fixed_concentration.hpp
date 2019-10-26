@@ -1,18 +1,6 @@
-// -*- mode: C++; c-indent-level: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
-//
-// we only include RcppEigen.h which pulls Rcpp.h in for us
-#include <RcppEigen.h>
-#include <random>
-#include "auxiliary_functions.hpp"
-#include "DP_functions.hpp"
-#include "NDP_functions.hpp"
-#include<vector>
-// via the depends attribute we tell Rcpp to create hooks for
-// RcppEigen so that the build process will know what to do
-//
-// [[Rcpp::depends(RcppEigen)]]
-
-//' Estimate the nonhomgogenous poisson process intensity function from grouped data
+//' Estimate the nonhomgogenous poisson process intensity function from grouped data with fixed concentration parameters
+//' 
+//' 
 //'
 //' @param X coefficient matrix for estimating mean number of BEFs in interval
 //' @param r vector of distances associatd with different BEFs
@@ -21,10 +9,6 @@
 //' @param L component truncation number
 //' @param K intensity cluster truncation number
 //' @param J number of rows in r matrix; number of groups
-//' @param a_alpha hyperparameter for alpha gamma prior
-//' @param b_alpha scale hyperparameter for alpha gamma prior
-//' @param a_rho hyperparameter for rho gamma prior
-//' @param b_rho scale hyperparameter for rho gamma prior
 //' @param iter_max total number of iterations for which to run sampler
 //' @param warm_up number of iterations for which to burn-in or "warm-up" sampler
 //' @param thin number of iterations to thin by
@@ -32,7 +16,7 @@
 //' @param chain integer chain label
 //'
 // [[Rcpp::export]]
-Rcpp::List nd_nhpp_fit(
+Rcpp::List nd_nhpp_fixed_fit(
         const Eigen::MatrixXd& X,
         const Eigen::ArrayXd& r,
         const Eigen::MatrixXi& n_j,
@@ -44,10 +28,8 @@ Rcpp::List nd_nhpp_fit(
         const double& kappa_0,
         const int& nu_0,
         const double& sigma_0,
-        const double& a_alpha,
-        const double& b_alpha,
-        const double& a_rho,
-        const double& b_rho,
+		const double& alpha,
+		const double& rho,
         const int& iter_max,
         const int& warm_up,
         const int& thin,
@@ -63,19 +45,12 @@ Rcpp::List nd_nhpp_fit(
     //create sample containers
     #include "create_sample_containers.hpp"
 
-    #include "during_sampling_containers.hpp"
+    #include "during_sampling_fixed.hpp"
 
     // create rng's
-    std::gamma_distribution<double> rgam_alpha(a_alpha,b_alpha);
-    std::gamma_distribution<double> rgam_rho(a_rho,b_rho);
     std::uniform_real_distribution<double> runif(0,1);
     std::normal_distribution<double> rnorm(0,1);
 
-    //initialize concentration parameters
-    alpha = rgam_alpha(rng);
-    rho = rgam_rho(rng);
-	// sample priors
-#include "sample_concentration_priors.hpp"
 
     // initialize component weights
     u = stick_break(L,K,alpha,rng);
@@ -178,14 +153,6 @@ Rcpp::List nd_nhpp_fit(
          }
        }
 
-        // sample concentration parameters
-        posterior_b_alpha = 1.0 / b_alpha - (log(1-v.array())).head(K-1).sum();
-        posterior_b_rho =  1.0 / b_rho - log(1-u.block(0,0,L-1,K).array()).matrix().colwise().sum().sum();
-        std::gamma_distribution<double> rgam_alpha(posterior_a_alpha, 1.0 / posterior_b_alpha);
-        std::gamma_distribution<double> rgam_rho(posterior_a_rho, 1.0 / posterior_b_rho);
-        alpha = rgam_alpha(rng);
-        rho = rgam_rho(rng);
-
         // sample beta
         beta_prop = rnorm_vector(beta.rows(),rng)*2.4 /sqrt(beta.rows()) + beta;
         eta_prop = X * beta_prop;
@@ -237,13 +204,6 @@ Rcpp::List nd_nhpp_fit(
 							  Rcpp::Named("global_intensity") = global_intensity,
                               Rcpp::Named("mu_samples") =  mu_samps,
                               Rcpp::Named("tau_samples") = tau_samps,
-                              Rcpp::Named("alpha_samples") = alpha_samps,
-                              Rcpp::Named("rho_samples") = rho_samps,
-							  Rcpp::Named("alpha_prior") = alpha_prior,
-							  Rcpp::Named("rho_prior") = rho_prior,
                               Rcpp::Named("beta_samples") = beta_samps
     ));
 }
-
-#include "green_loss.hpp"
-#include "ndpp_fixed_concentration.hpp"

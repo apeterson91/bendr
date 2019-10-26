@@ -37,23 +37,69 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// green_loss_engine
-Eigen::ArrayXd green_loss_engine(const Eigen::ArrayXXi& cluster_assignment, const Eigen::ArrayXXd& pmat, const double& tau);
-RcppExport SEXP _rndpp_green_loss_engine(SEXP cluster_assignmentSEXP, SEXP pmatSEXP, SEXP tauSEXP) {
+// green_loss_unknown
+Eigen::ArrayXd green_loss_unknown(const Eigen::ArrayXXi& cluster_assignment, const Eigen::ArrayXXd& pmat, const double& tau);
+RcppExport SEXP _rndpp_green_loss_unknown(SEXP cluster_assignmentSEXP, SEXP pmatSEXP, SEXP tauSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Eigen::ArrayXXi& >::type cluster_assignment(cluster_assignmentSEXP);
     Rcpp::traits::input_parameter< const Eigen::ArrayXXd& >::type pmat(pmatSEXP);
     Rcpp::traits::input_parameter< const double& >::type tau(tauSEXP);
-    rcpp_result_gen = Rcpp::wrap(green_loss_engine(cluster_assignment, pmat, tau));
+    rcpp_result_gen = Rcpp::wrap(green_loss_unknown(cluster_assignment, pmat, tau));
+    return rcpp_result_gen;
+END_RCPP
+}
+// green_loss_known
+Eigen::ArrayXd green_loss_known(const Eigen::ArrayXXi& cluster_assignment, const Eigen::ArrayXXd& pmat, const Eigen::ArrayXXi& true_cluster_assignment, const double& a, const double& b);
+RcppExport SEXP _rndpp_green_loss_known(SEXP cluster_assignmentSEXP, SEXP pmatSEXP, SEXP true_cluster_assignmentSEXP, SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::ArrayXXi& >::type cluster_assignment(cluster_assignmentSEXP);
+    Rcpp::traits::input_parameter< const Eigen::ArrayXXd& >::type pmat(pmatSEXP);
+    Rcpp::traits::input_parameter< const Eigen::ArrayXXi& >::type true_cluster_assignment(true_cluster_assignmentSEXP);
+    Rcpp::traits::input_parameter< const double& >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const double& >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(green_loss_known(cluster_assignment, pmat, true_cluster_assignment, a, b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// nd_nhpp_fixed_fit
+Rcpp::List nd_nhpp_fixed_fit(const Eigen::MatrixXd& X, const Eigen::ArrayXd& r, const Eigen::MatrixXi& n_j, const Eigen::ArrayXd& d, const int& L, const int& K, const int& J, const double& mu_0, const double& kappa_0, const int& nu_0, const double& sigma_0, const double& alpha, const double& rho, const int& iter_max, const int& warm_up, const int& thin, const int& seed, const int& chain, const int& num_posterior_samples);
+RcppExport SEXP _rndpp_nd_nhpp_fixed_fit(SEXP XSEXP, SEXP rSEXP, SEXP n_jSEXP, SEXP dSEXP, SEXP LSEXP, SEXP KSEXP, SEXP JSEXP, SEXP mu_0SEXP, SEXP kappa_0SEXP, SEXP nu_0SEXP, SEXP sigma_0SEXP, SEXP alphaSEXP, SEXP rhoSEXP, SEXP iter_maxSEXP, SEXP warm_upSEXP, SEXP thinSEXP, SEXP seedSEXP, SEXP chainSEXP, SEXP num_posterior_samplesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const Eigen::ArrayXd& >::type r(rSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXi& >::type n_j(n_jSEXP);
+    Rcpp::traits::input_parameter< const Eigen::ArrayXd& >::type d(dSEXP);
+    Rcpp::traits::input_parameter< const int& >::type L(LSEXP);
+    Rcpp::traits::input_parameter< const int& >::type K(KSEXP);
+    Rcpp::traits::input_parameter< const int& >::type J(JSEXP);
+    Rcpp::traits::input_parameter< const double& >::type mu_0(mu_0SEXP);
+    Rcpp::traits::input_parameter< const double& >::type kappa_0(kappa_0SEXP);
+    Rcpp::traits::input_parameter< const int& >::type nu_0(nu_0SEXP);
+    Rcpp::traits::input_parameter< const double& >::type sigma_0(sigma_0SEXP);
+    Rcpp::traits::input_parameter< const double& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const double& >::type rho(rhoSEXP);
+    Rcpp::traits::input_parameter< const int& >::type iter_max(iter_maxSEXP);
+    Rcpp::traits::input_parameter< const int& >::type warm_up(warm_upSEXP);
+    Rcpp::traits::input_parameter< const int& >::type thin(thinSEXP);
+    Rcpp::traits::input_parameter< const int& >::type seed(seedSEXP);
+    Rcpp::traits::input_parameter< const int& >::type chain(chainSEXP);
+    Rcpp::traits::input_parameter< const int& >::type num_posterior_samples(num_posterior_samplesSEXP);
+    rcpp_result_gen = Rcpp::wrap(nd_nhpp_fixed_fit(X, r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, alpha, rho, iter_max, warm_up, thin, seed, chain, num_posterior_samples));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
     {"_rndpp_nd_nhpp_fit", (DL_FUNC) &_rndpp_nd_nhpp_fit, 21},
-    {"_rndpp_green_loss_engine", (DL_FUNC) &_rndpp_green_loss_engine, 3},
+    {"_rndpp_green_loss_unknown", (DL_FUNC) &_rndpp_green_loss_unknown, 3},
+    {"_rndpp_green_loss_known", (DL_FUNC) &_rndpp_green_loss_known, 5},
+    {"_rndpp_nd_nhpp_fixed_fit", (DL_FUNC) &_rndpp_nd_nhpp_fixed_fit, 19},
     {NULL, NULL, 0}
 };
 
