@@ -17,7 +17,7 @@ plot.ndp <- function(x, plotfun = "cluster") {
 }
 
 #' @export
-plot_pairs <- function(x)
+plot_pairs <- function(x,sort = FALSE)
     UseMethod("plot_pairs")
 
 #' @export
@@ -48,14 +48,40 @@ plot_map <- function(x,coords,p)
 #' @importFrom ggplot2 ggplot aes geom_tile scale_fill_gradientn
 #' @return ggplot plot object
 #' 
-plot_pairs.ndp <- function(x){
+plot_pairs.ndp <- function(x,sort = FALSE){
 
-    p <- dplyr::as_tibble(x$pmat) %>% dplyr::mutate(Group_1 = 1:dplyr::n()) %>%
-        tidyr::gather(dplyr::contains("V"), key = "Group_2", value = "Probability") %>%
-        dplyr::mutate("Group_2" = as.numeric(stringr::str_replace(Group_2,"V",""))) %>%
-        dplyr::filter(Group_1 > Group_2) %>%
-        ggplot(aes(x=Group_1,y=Group_2,fill=Probability)) +
-        geom_tile() + scale_fill_gradientn(colours=rainbow(10),limits=c(0,1)) + ggplot2::theme_bw() + ggplot2::labs(title = "Pairwise Probability of Function Clustering")
+	P <- x$pmat
+	P[upper.tri(P)] <- P[lower.tri(P)]
+	if(sort){
+
+		i <- which(P == max(P),arr.ind = T)[1]
+		j <- which(P == max(P),arr.ind = T)[2]
+
+		A <- c(i,j)
+		Omega <- 1:nrow(P)
+		A_c <- setdiff(Omega,A)
+		while(length(A_c)){
+		  probs <- sapply(A_c,function(x) max(P[x,A]))
+		  j <- A_c[which.max(probs)]
+		  A <- c(A,j)
+		  A_c <- setdiff(Omega,A)
+		}
+	}
+	else{
+		A <- 1:nrow(P)
+	}
+
+
+	p <- dplyr::as_tibble(P[A,A]) %>% dplyr::mutate(Group_1 = 1:dplyr::n()) %>%
+	  tidyr::gather(dplyr::contains("V"), key = "Group_2", value = "Probability") %>%
+	  dplyr::mutate("Group_2" = as.numeric(stringr::str_replace(Group_2,"V",""))) %>%
+	  ggplot(aes(x=Group_1,y=Group_2,fill=Probability)) +
+	  geom_tile() + scale_fill_gradientn(colours=rainbow(20),limits=c(0,1)) + 
+	  ggplot2::theme_bw() + ggplot2::labs(title = "Pairwise Probability of Function Clustering",
+										  x="Group 1", y = "Group 2") +
+	  ggplot2::theme(panel.grid.major = element_blank(),
+			panel.grid.minor = element_blank())
+
 
     return(p)
 }

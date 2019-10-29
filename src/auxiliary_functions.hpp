@@ -1,3 +1,5 @@
+#ifndef AUX_FUN
+#define AUX_FUN 
 void print_progress(const int &iter_ix, const int &warm_up, const int &iter_max, const int &chain){
 
   if(iter_max > 20){
@@ -62,3 +64,4 @@ double dnhpp(Eigen::VectorXd& n_j, Eigen::VectorXd& eta){
     out += - (exp( eta.array())).sum()  ;
     return(out); 
 }
+#endif

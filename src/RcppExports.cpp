@@ -6,6 +6,21 @@
 
 using namespace Rcpp;
 
+// nhpp_gamma
+Rcpp::List nhpp_gamma(const int& warm_up, const int& iter_max, Eigen::VectorXd& input_X, Eigen::VectorXd& input_n_j, const int& seed);
+RcppExport SEXP _rndpp_nhpp_gamma(SEXP warm_upSEXP, SEXP iter_maxSEXP, SEXP input_XSEXP, SEXP input_n_jSEXP, SEXP seedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int& >::type warm_up(warm_upSEXP);
+    Rcpp::traits::input_parameter< const int& >::type iter_max(iter_maxSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd& >::type input_X(input_XSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd& >::type input_n_j(input_n_jSEXP);
+    Rcpp::traits::input_parameter< const int& >::type seed(seedSEXP);
+    rcpp_result_gen = Rcpp::wrap(nhpp_gamma(warm_up, iter_max, input_X, input_n_j, seed));
+    return rcpp_result_gen;
+END_RCPP
+}
 // nd_nhpp_fit
 Rcpp::List nd_nhpp_fit(const Eigen::MatrixXd& X, const Eigen::ArrayXd& r, const Eigen::MatrixXi& n_j, const Eigen::ArrayXd& d, const int& L, const int& K, const int& J, const double& mu_0, const double& kappa_0, const int& nu_0, const double& sigma_0, const double& a_alpha, const double& b_alpha, const double& a_rho, const double& b_rho, const int& iter_max, const int& warm_up, const int& thin, const int& seed, const int& chain, const int& num_posterior_samples);
 RcppExport SEXP _rndpp_nd_nhpp_fit(SEXP XSEXP, SEXP rSEXP, SEXP n_jSEXP, SEXP dSEXP, SEXP LSEXP, SEXP KSEXP, SEXP JSEXP, SEXP mu_0SEXP, SEXP kappa_0SEXP, SEXP nu_0SEXP, SEXP sigma_0SEXP, SEXP a_alphaSEXP, SEXP b_alphaSEXP, SEXP a_rhoSEXP, SEXP b_rhoSEXP, SEXP iter_maxSEXP, SEXP warm_upSEXP, SEXP thinSEXP, SEXP seedSEXP, SEXP chainSEXP, SEXP num_posterior_samplesSEXP) {
@@ -96,6 +111,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_rndpp_nhpp_gamma", (DL_FUNC) &_rndpp_nhpp_gamma, 5},
     {"_rndpp_nd_nhpp_fit", (DL_FUNC) &_rndpp_nd_nhpp_fit, 21},
     {"_rndpp_green_loss_unknown", (DL_FUNC) &_rndpp_green_loss_unknown, 3},
     {"_rndpp_green_loss_known", (DL_FUNC) &_rndpp_green_loss_known, 5},

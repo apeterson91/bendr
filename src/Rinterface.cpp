@@ -247,3 +247,4 @@ Rcpp::List nd_nhpp_fit(
 
 #include "green_loss.hpp"
 #include "ndpp_fixed_concentration.hpp"
+#include "HMC.hpp"
