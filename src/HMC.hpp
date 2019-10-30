@@ -29,6 +29,7 @@ class NHPP
 		double out = 0;
 		eta = X.matrix() * beta;
 		out = (n_j * eta).sum()  - (exp(eta)).sum();
+		out -=  beta.dot(beta) / (2.0 * 9.0) ;
 		out -= momenta.dot(momenta) / 2.0 ;
 
 		return(out);
@@ -45,6 +46,7 @@ class NHPP
 	Eigen::VectorXd calculate_gradient(Eigen::VectorXd &beta){
 
 		beta_grad = (X.colwise() * n_j).colwise().sum() - (X.colwise() * exp( (X.matrix() * beta).array()) ).colwise().sum();
+		beta_grad = beta_grad - beta / 9.0 ;
 
 		return(beta_grad);
 
