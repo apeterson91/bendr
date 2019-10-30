@@ -168,7 +168,6 @@ Rcpp::List nhpp_gamma(
 			}
 			n += tree.get_n_prime();
 			s = tree.get_s_prime() * ((beta_right - beta_left).dot(momenta_left) >=0 )  * ((beta_right - beta_left).dot(momenta_right) >= 0) ;
-			s = 0;
 			j++;
 			if(j>10)
 				break;
