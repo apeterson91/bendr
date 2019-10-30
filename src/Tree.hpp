@@ -14,11 +14,13 @@ class Tree
 		double energy_init;
 		double energy_new;
         int s_prime;
+		int p;
         double alpha_prime;
         double n_alpha;
 
     public:
-		Tree(int p,std::mt19937 &rng){
+		Tree(int &input_p,std::mt19937 &rng){
+			p = input_p;
 			momenta_new = rnorm_draw(p,rng);
 			momenta_left = momenta_new;
 			momenta_right = momenta_new;
@@ -74,6 +76,10 @@ class Tree
 		Eigen::VectorXd get_bn() const{
             return(beta_new);
         }
+
+		Eigen::VectorXd get_mn() const{
+			return(momenta_new);
+		}
 
 };
 

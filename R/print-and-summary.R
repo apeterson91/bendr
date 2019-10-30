@@ -228,6 +228,43 @@ to_latex.ndp <- function(object, digits = 1, caption =""){
     return(s)
 }
 
+#' @export
+print.hmc <- function(x, digits = 2, ...) {
+  cat("\n groups:", x$J)
+
+  cat("\n------\n")
+  cat("Regression Statistics")
+  cat("\n------\n")
+
+
+  if(dim(x$beta)[2]==1){
+      meds <- summary(x$beta)$quantile["50%"]
+      sd <- summary(x$beta)$statistics["SD"]
+    }
+  if(dim(x$beta)[2]>1){
+      meds <- summary(x$beta)$quantile[,"50%"]
+      sd <- summary(x$beta)$statistics[,"SD"]
+    }
+
+  mat <- cbind(Median = meds, SD = sd)
+  rownames(mat) <- colnames(x$X)
+
+    .printfr(mat, digits, ...)
+
+  cat("--- \n") 
+
+  ppd <- coda::as.mcmc(apply(x$beta,1,function(beta) mean(exp((x$X %*% beta) )) ))
+  mat <- cbind(Median = summary(ppd)$quantile["50%"],
+               SD = summary(ppd)$statistics["SD"])
+  rownames(mat) <- "mean_PPD"
+  cat("\nSample avg. posterior predictive distribution of y:\n")
+  .printfr(mat,digits,...)
+  
+  cat("\n------\n")
+  
+  invisible(x)
+}
+
 
 # internal ----------------------------------------------------------------
 .printfr <- function(x, digits, ...) {

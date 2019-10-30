@@ -9,6 +9,12 @@ nhpp_hmc(formula, data, warm_up, iter_max, seed = NULL)
 \arguments{
 \item{formula}{}
 
+\item{data}{data.frame from which to extract outcome and covariates}
+
+\item{warm_up}{number of iterations in which to tune HMC step-size, these will be discarded}
+
+\item{iter_max}{total number of samples for which to run sampler}
+
 \item{seed}{}
 }
 \description{

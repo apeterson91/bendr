@@ -1,4 +1,4 @@
-Eigen::VectorXd rnorm_draw(int n, std::mt19937 &rng){
+Eigen::VectorXd rnorm_draw(int &n, std::mt19937 &rng){
 
 	Eigen::VectorXd out(n);
 	std::normal_distribution<double> rnorm(0.0,1.0);
@@ -13,11 +13,11 @@ Eigen::VectorXd rnorm_draw(int n, std::mt19937 &rng){
 class NHPP
 {
 	public:
-		Eigen::MatrixXd X;
+		Eigen::ArrayXXd X;
 		Eigen::ArrayXd n_j;
 		Eigen::ArrayXd eta;
 		Eigen::VectorXd beta_grad;
-  	    NHPP(Eigen::VectorXd &input_X,
+  	    NHPP(Eigen::ArrayXXd &input_X,
 			 Eigen::ArrayXd &input_n_j){
 			X = input_X;
 			n_j = input_n_j;
@@ -27,7 +27,7 @@ class NHPP
 							Eigen::VectorXd &momenta){
 
 		double out = 0;
-		eta = X * beta;
+		eta = X.matrix() * beta;
 		out = (n_j * eta).sum()  - (exp(eta)).sum();
 		out -= momenta.dot(momenta) / 2.0 ;
 
@@ -44,23 +44,24 @@ class NHPP
 
 	Eigen::VectorXd calculate_gradient(Eigen::VectorXd &beta){
 
-		beta_grad = (n_j * X.array()).colwise().sum() - (X.array() * exp(  (X * beta).array() )).colwise().sum();
+		beta_grad = (X.colwise() * n_j).colwise().sum() - (X.colwise() * exp( (X.matrix() * beta).array()) ).colwise().sum();
 
 		return(beta_grad);
 
 	}
 
-	double FindReasonableEpsilon(Eigen::VectorXd &beta,std::mt19937 &rng){
+	double FindReasonableEpsilon(int &p, Eigen::VectorXd &beta,std::mt19937 &rng){
 
 		double epsilon = 1.0;
 		int a;
 		Eigen::VectorXd beta_temp;
-		Eigen::VectorXd momenta_temp = rnorm_draw(beta.size(),rng);
+		Eigen::VectorXd momenta_temp;
+		Eigen::VectorXd momenta_static = rnorm_draw(p,rng);
 		Eigen::VectorXd beta_grad;
 		double ratio, energy_init, energy_prop;
-		energy_init = calculate_energy(beta,momenta_temp);
+		energy_init = calculate_energy(beta,momenta_static);
 		beta_grad = calculate_gradient(beta);
-		momenta_temp = momenta_temp + epsilon * beta_grad / 2.0;
+		momenta_temp = momenta_static + epsilon * beta_grad / 2.0;
 		beta_temp = beta + epsilon * momenta_temp;
 		beta_grad = calculate_gradient(beta);
 		momenta_temp  = momenta_temp + epsilon * beta_grad / 2.0;
@@ -74,13 +75,11 @@ class NHPP
 				break;
 			epsilon = pow(2,a) * epsilon;
 			beta_grad = calculate_gradient(beta);
-			momenta_temp = rnorm_draw(beta.size(),rng);
-			momenta_temp = momenta_temp + epsilon * beta_grad / 2.0;
+			momenta_temp = momenta_static + epsilon * beta_grad / 2.0;
 			beta_temp = beta + epsilon * momenta_temp;
 			beta_grad = calculate_gradient(beta);
 			momenta_temp  = momenta_temp + epsilon * beta_grad / 2.0;
 			energy_prop = calculate_energy(beta_temp,momenta_temp);
-			ratio = energy_prop - energy_init;
 			ratio = energy_prop - energy_init;
 			cntr ++;
 		}
@@ -99,7 +98,7 @@ class NHPP
 Rcpp::List nhpp_gamma(
 		const int &warm_up,
 		const int &iter_max,
-		Eigen::VectorXd &input_X,
+		Eigen::ArrayXXd &input_X,
 		Eigen::ArrayXd &input_n_j,
 		const double adapt_delta,
 		const int &seed
@@ -114,19 +113,20 @@ Rcpp::List nhpp_gamma(
 	int s = 1;
 	double n = 1.0;
 	int j = 0;
+	int p = input_X.cols();
 	int chain = 1;
 	// beta parameters
-	Eigen::MatrixXd beta_draws(iter_max - warm_up,input_X.cols());
-	beta_draws = Eigen::MatrixXd::Zero(iter_max - warm_up, input_X.cols());
-	Eigen::VectorXd acceptance(iter_max - warm_up);
-	acceptance = Eigen::VectorXd::Zero(iter_max - warm_up);
+	Eigen::MatrixXd beta_draws(iter_max,p);
+	beta_draws = Eigen::MatrixXd::Zero(iter_max, p);
+	Eigen::VectorXd acceptance(iter_max);
+	acceptance = Eigen::VectorXd::Zero(iter_max);
 	Eigen::VectorXi treedepth(iter_max);
 	Eigen::VectorXd return_beta;
-	Eigen::VectorXd current_beta = rnorm_draw(input_X.cols(),rng);
+	Eigen::VectorXd current_beta = rnorm_draw(p,rng);
 	// initialize model
 	NHPP model(input_X,input_n_j);
 	double epsilon = 0;
-	epsilon = model.FindReasonableEpsilon(current_beta,rng);
+	epsilon = model.FindReasonableEpsilon(p,current_beta,rng);
 	// epsilon tuning parameters
 	double epsilon_bar = 1;
 	double mu = log(10 * epsilon);
@@ -134,7 +134,6 @@ Rcpp::List nhpp_gamma(
 	double kappa = 0.75;
 	double gamma = 0.05;
 	double t_0 = 10.0;
-	double sample_ix = 0;
 	// random number engine
 	std::uniform_real_distribution<double> runif(0.0,1.0);
 
@@ -142,14 +141,14 @@ Rcpp::List nhpp_gamma(
 		print_progress(iter_ix,warm_up,iter_max,chain);
 		Eigen::VectorXd beta_left = current_beta;
 		Eigen::VectorXd beta_right = current_beta;
-		Eigen::VectorXd momenta = rnorm_draw(current_beta.size(),rng);
+		Eigen::VectorXd momenta = rnorm_draw(p,rng);
 		Eigen::VectorXd momenta_left = momenta;
 		Eigen::VectorXd momenta_right = momenta;
-		n = 1;
-		j = 0;
 		s = 1;
+		n = 1.0;
+		j = 0;
 		u = model.sample_u(current_beta,momenta,rng);
-		Tree tree(current_beta.size(),rng);
+		Tree tree(p,rng);
 		while(s == 1){
 			if(runif(rng)<=1){
 				tree.buildTree(model,beta_left,momenta_left,u,-1,j,epsilon,current_beta,momenta,rng);
@@ -169,7 +168,10 @@ Rcpp::List nhpp_gamma(
 			}
 			n += tree.get_n_prime();
 			s = tree.get_s_prime() * ((beta_right - beta_left).dot(momenta_left) >=0 )  * ((beta_right - beta_left).dot(momenta_right) >= 0) ;
+			s = 0;
 			j++;
+			if(j>10)
+				break;
 		}
 		treedepth(iter_ix-1) = j;
 		if(iter_ix <= warm_up){
@@ -183,13 +185,12 @@ Rcpp::List nhpp_gamma(
 		// store sample
 		if(acceptance(iter_ix-1) == 1){
 			current_beta = return_beta;
-			beta_draws.row(sample_ix) = return_beta.transpose();
-			sample_ix += 1;
+			beta_draws.row(iter_ix - 1) = return_beta.transpose();
 		}
 	}
 
 	return(Rcpp::List::create(
 				Rcpp::Named("treedepth") = treedepth,
 				Rcpp::Named("beta_samples") = beta_draws,
-							  Rcpp::Named("acceptance") = acceptance));
+				Rcpp::Named("acceptance") = acceptance));
 }
