@@ -4,7 +4,7 @@
 \alias{plot_pairs.ndp}
 \title{plots pairwise probability clustering plot}
 \usage{
-\method{plot_pairs}{ndp}(x)
+\method{plot_pairs}{ndp}(x, sort = FALSE)
 }
 \arguments{
 \item{x}{ndp object}

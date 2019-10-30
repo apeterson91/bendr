@@ -7,17 +7,18 @@
 using namespace Rcpp;
 
 // nhpp_gamma
-Rcpp::List nhpp_gamma(const int& warm_up, const int& iter_max, Eigen::VectorXd& input_X, Eigen::VectorXd& input_n_j, const int& seed);
-RcppExport SEXP _rndpp_nhpp_gamma(SEXP warm_upSEXP, SEXP iter_maxSEXP, SEXP input_XSEXP, SEXP input_n_jSEXP, SEXP seedSEXP) {
+Rcpp::List nhpp_gamma(const int& warm_up, const int& iter_max, Eigen::VectorXd& input_X, Eigen::ArrayXd& input_n_j, const double adapt_delta, const int& seed);
+RcppExport SEXP _rndpp_nhpp_gamma(SEXP warm_upSEXP, SEXP iter_maxSEXP, SEXP input_XSEXP, SEXP input_n_jSEXP, SEXP adapt_deltaSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const int& >::type warm_up(warm_upSEXP);
     Rcpp::traits::input_parameter< const int& >::type iter_max(iter_maxSEXP);
     Rcpp::traits::input_parameter< Eigen::VectorXd& >::type input_X(input_XSEXP);
-    Rcpp::traits::input_parameter< Eigen::VectorXd& >::type input_n_j(input_n_jSEXP);
+    Rcpp::traits::input_parameter< Eigen::ArrayXd& >::type input_n_j(input_n_jSEXP);
+    Rcpp::traits::input_parameter< const double >::type adapt_delta(adapt_deltaSEXP);
     Rcpp::traits::input_parameter< const int& >::type seed(seedSEXP);
-    rcpp_result_gen = Rcpp::wrap(nhpp_gamma(warm_up, iter_max, input_X, input_n_j, seed));
+    rcpp_result_gen = Rcpp::wrap(nhpp_gamma(warm_up, iter_max, input_X, input_n_j, adapt_delta, seed));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -111,7 +112,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rndpp_nhpp_gamma", (DL_FUNC) &_rndpp_nhpp_gamma, 5},
+    {"_rndpp_nhpp_gamma", (DL_FUNC) &_rndpp_nhpp_gamma, 6},
     {"_rndpp_nd_nhpp_fit", (DL_FUNC) &_rndpp_nd_nhpp_fit, 21},
     {"_rndpp_green_loss_unknown", (DL_FUNC) &_rndpp_green_loss_unknown, 3},
     {"_rndpp_green_loss_known", (DL_FUNC) &_rndpp_green_loss_known, 5},

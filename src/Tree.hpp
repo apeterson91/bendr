@@ -18,11 +18,16 @@ class Tree
         double n_alpha;
 
     public:
+		Tree(int p,std::mt19937 &rng){
+			momenta_new = rnorm_draw(p,rng);
+			momenta_left = momenta_new;
+			momenta_right = momenta_new;
+		}
         void buildTree(
 				NHPP &model,
 				Eigen::VectorXd &new_beta,
 				Eigen::VectorXd &new_momenta,
-                double& u,int v, int j,
+                double& u, int v, int j,
                 double &epsilon,
 				Eigen::VectorXd &beta_naught,
 				Eigen::VectorXd &momenta_naught,

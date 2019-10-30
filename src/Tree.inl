@@ -1,4 +1,3 @@
-
 void Tree::buildTree(
 		NHPP &model,
 		Eigen::VectorXd &new_beta,
@@ -11,7 +10,7 @@ void Tree::buildTree(
 
     if( j == 0 ){
         energy_init = model.calculate_energy(beta_naught,momenta_naught);
-        leapfrog(model,beta_new,momenta_new,v*epsilon);
+        leapfrog(model,new_beta,new_momenta,v*epsilon);
         energy_new = model.calculate_energy(beta_new,momenta_new);
         n_prime = u <= energy_new ? 1: 0;
         s_prime = u < (1000 + energy_new) ? 1:0;
@@ -21,7 +20,7 @@ void Tree::buildTree(
         n_alpha = 1.0;
     }else{
 		std::uniform_real_distribution<double> die(0.0,1.0);
-        Tree subtree;
+        Tree subtree(new_beta.size(),rng);
         subtree.buildTree(model,new_beta,new_momenta,u,v,j-1,epsilon,beta_naught,momenta_naught,rng);
         s_prime = subtree.get_s_prime();
         n_prime = subtree.get_n_prime();
@@ -33,7 +32,7 @@ void Tree::buildTree(
 		momenta_right = subtree.get_mr();
         alpha_prime = subtree.get_alpha_prime();
         if(subtree.get_s_prime() == 1){
-            Tree subsubtree;
+            Tree subsubtree(new_beta.size(),rng);
             if( v == -1 ){
                 subsubtree.buildTree(model, beta_left, momenta_left, u, v, j-1, epsilon, beta_naught, momenta_naught, rng);
 				beta_left = subsubtree.get_bl();
@@ -68,7 +67,7 @@ void Tree::leapfrog(NHPP &model,
 
 	beta_new = beta + epsilon * momenta_new;
 	
-	beta_grad = model.calculate_gradient(beta);
+	beta_grad = model.calculate_gradient(beta_new);
 
 	momenta_new  = momenta_new + epsilon * beta_grad / 2.0;
 

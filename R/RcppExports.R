@@ -3,8 +3,8 @@
 
 #' Returns draw of beta from posterior distribution via No U-Turn Sampler
 #'
-nhpp_gamma <- function(warm_up, iter_max, input_X, input_n_j, seed) {
-    .Call(`_rndpp_nhpp_gamma`, warm_up, iter_max, input_X, input_n_j, seed)
+nhpp_gamma <- function(warm_up, iter_max, input_X, input_n_j, adapt_delta, seed) {
+    .Call(`_rndpp_nhpp_gamma`, warm_up, iter_max, input_X, input_n_j, adapt_delta, seed)
 }
 
 #' Estimate the nonhomgogenous poisson process intensity function from grouped data
