@@ -9,7 +9,7 @@ Eigen::VectorXd rnorm_draw(int &n, std::mt19937 &rng){
 	return(out);
 }
 
-Eigen::VectorXd runif_draw(int &n std::mt19937 &rng){
+Eigen::VectorXd runif_draw(int &n, std::mt19937 &rng){
 
 	Eigen::VectorXd out(n);
 	std::uniform_real_distribution<double> runif(-2.0,2.0);
