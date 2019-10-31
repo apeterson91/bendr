@@ -122,7 +122,9 @@ plot_cluster_densities(fit,switch='color')
 plot_pairs(fit)
 ```
 
+```{r}
 
+```
 
 
 ```{r}

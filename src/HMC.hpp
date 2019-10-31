@@ -120,6 +120,7 @@ Rcpp::List nhpp_gamma(
 	// beta parameters
 	Eigen::MatrixXd beta_draws(iter_max,p);
 	beta_draws = Eigen::MatrixXd::Zero(iter_max, p);
+	Eigen::ArrayXd epsilons(iter_max);
 	Eigen::VectorXd acceptance(iter_max);
 	acceptance = Eigen::VectorXd::Zero(iter_max);
 	Eigen::VectorXi treedepth(iter_max);
@@ -169,19 +170,21 @@ Rcpp::List nhpp_gamma(
 				}
 			}
 			n += tree.get_n_prime();
-			s = tree.get_s_prime() * ((beta_right - beta_left).dot(momenta_left) >=0 )  * ((beta_right - beta_left).dot(momenta_right) >= 0) ;
+			s = tree.get_s_prime() * ((beta_right - beta_left).dot(momenta_left) >= 0.0 )  * ((beta_right - beta_left).dot(momenta_right) >= 0.0) ;
 			j++;
 			if(j>10)
 				break;
 		}
 		treedepth(iter_ix-1) = j;
 		if(iter_ix <= warm_up){
+			epsilons(iter_ix-1) = epsilon;
 			H_bar = ( 1 - 1.0 / (iter_ix + t_0)) * H_bar;
 			H_bar +=  1.0 / (iter_ix + t_0) * (adapt_delta - tree.get_alpha_prime() / tree.get_n_alpha());
 			epsilon = exp(mu - (sqrt(iter_ix) / gamma) * H_bar);
 			epsilon_bar = exp(pow(iter_ix,-kappa) * log(epsilon) + (1.0 - pow(iter_ix,-kappa)) * log(epsilon_bar));
 		}else{
 			epsilon = epsilon_bar;
+			epsilons(iter_ix-1) = epsilon;
 		}
 		// store sample
 		if(acceptance(iter_ix-1) == 1){
@@ -193,5 +196,6 @@ Rcpp::List nhpp_gamma(
 	return(Rcpp::List::create(
 				Rcpp::Named("treedepth") = treedepth,
 				Rcpp::Named("beta_samples") = beta_draws,
+				Rcpp::Named("epsilons") = epsilons,
 				Rcpp::Named("acceptance") = acceptance));
 }

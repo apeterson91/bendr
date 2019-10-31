@@ -51,7 +51,13 @@ plot_map <- function(x,coords,p)
 plot_pairs.ndp <- function(x,sort = FALSE){
 
 	P <- x$pmat
-	P[upper.tri(P)] <- P[lower.tri(P)]
+
+	makeSymm <- function(m) {
+	  m[upper.tri(m)] <- t(m)[upper.tri(m)]
+	  return(m)
+	}
+
+	P <- makeSymm(P)
 	if(sort){
 
 		i <- which(P == max(P),arr.ind = T)[1]

@@ -13,6 +13,7 @@ hmc <- function(object,warm_up,iter_max,X){
 	
 	return(structure(list(beta = beta,
 						  treedepth = object$treedepth,
+						  epsilons = object$epsilons,
 						  X = X),class = c("hmc")))
 
 }
