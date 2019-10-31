@@ -9,6 +9,16 @@ Eigen::VectorXd rnorm_draw(int &n, std::mt19937 &rng){
 	return(out);
 }
 
+Eigen::VectorXd runif_draww(int &n std::mt19937 &rng){
+
+	Eigen::VectorXd out(n);
+	std::uniform_real_distribution<double> runif(-2.0,2.0);
+	for(int i =0; i < n ; i ++)
+		out(i) = runif(rng);
+
+	return(out);
+}
+
 
 class NHPP
 {
@@ -125,7 +135,7 @@ Rcpp::List nhpp_gamma(
 	acceptance = Eigen::VectorXd::Zero(iter_max);
 	Eigen::VectorXi treedepth(iter_max);
 	Eigen::VectorXd return_beta;
-	Eigen::VectorXd current_beta = rnorm_draw(p,rng);
+	Eigen::VectorXd current_beta = runif_draw(p,rng);
 	// initialize model
 	NHPP model(input_X,input_n_j);
 	double epsilon = 0;
