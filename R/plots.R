@@ -36,9 +36,6 @@ plot_traceplots <- function(x, par="alpha")
 plot_network <- function(x,sample=NULL)
   UseMethod("plot_network")
 
-#' @export
-plot_map <- function(x,coords,p)
-  UseMethod("plot_map")
 
 #' plots pairwise probability clustering plot
 #'
@@ -180,30 +177,6 @@ plot_network.ndp <- function(x,mode_label = TRUE){
 		p <- p + ggraph::geom_node_point()
 
     return(p)
-}
-
-
-#' Plots clusters of a given observation with other observations around them within certain
-#' probability of co-clustering
-#'
-#' @export
-#' @method plot_map ndp
-#' @param x ndp object
-#' @param coords dataframe of observation geo coordinates
-#' @return ggplot plot object
-#'
-plot_map.ndp <- function(x,coords,p=c(0.025,0.5,0.90)){
-
-      df <- dplyr::as_tibble(x$pmat) %>%
-		  dplyr::mutate(Group_1 = 1:dplyr::n()) %>%
-          tidyr::gather(dplyr::contains("V"), key = "Group_2", value = "Probability") %>%
-          dplyr::mutate("Group_2" = as.numeric(stringr::str_replace(Group_2,"V",""))) %>%
-          dplyr::filter(Group_1 >= Group_2) %>% select(-Group_2)
-      df <- cbind(df,coords) ## should be able to join exactly
-      p <- qmplot(lon,lat,color= Probability,maptyype= 'toner-light',data = df %>% filter(Group_1 == 1 ))
-
-      return(p)
-
 }
 
 #' Plots global density function - for monitoring convergence

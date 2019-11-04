@@ -6,7 +6,6 @@ Authors@R: person("Adam", "Peterson", , "atpvyc@umich.edu", c("aut", "cre"))
 Description: Motivated by the need to identify different kinds of built environments,
   the rndpp package estimates the spatial intensity function for different clusters
   of Inhomogenous Poisson Processes.
-  Process 
 License: GPL-3
 BugReports: https://github.com/apeterson91/rndpp/issues
 Encoding: UTF-8

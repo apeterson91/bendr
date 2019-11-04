@@ -1,7 +1,11 @@
+#ifndef BETARNG
+#define BETARNG
+
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <random>
+
 
 namespace sftrabbit {
 
@@ -66,7 +70,7 @@ namespace sftrabbit {
       {
         gamma_dist_type a_param_gamma(param.a()),
                         b_param_gamma(param.b());
-        return generate(engine, a_param_gamma, b_param_gamma); 
+        return generate(engine, a_param_gamma, b_param_gamma);
       }
 
       result_type min() const { return 0.0; }
@@ -126,3 +130,4 @@ namespace sftrabbit {
   }
 
 }
+#endif

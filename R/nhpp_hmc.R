@@ -1,5 +1,6 @@
 #' Estimates the mean number of observations in an Inhomogenous Poisson Process
 #'
+#' currently applies a N(0,sigma=3) prior to all regression coefficients
 #' @param formula
 #' @param data data.frame from which to extract outcome and covariates
 #' @param warm_up number of iterations in which to tune HMC step-size, these will be discarded

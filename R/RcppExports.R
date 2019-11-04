@@ -29,6 +29,90 @@ nd_nhpp_fit <- function(r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, a_alph
     .Call(`_rndpp_nd_nhpp_fit`, r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, a_alpha, b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed, chain, num_posterior_samples)
 }
 
+#' @param x double real number
+NULL
+
+#' initialize's matrix of mixture component means
+#' @param L number of mixture components
+#' @param K number of cluster components
+#' @param a_0 base measure hyperparameter
+#' @param b_0 base measure hyperparameter
+#' @param rng random number generator
+NULL
+
+#' stick breaking atoms (not weights) for a vector with alpha,beta variable across vector elements
+#' n length of vector
+#' alpha vector of alpha parameters for posterior beta distribution
+#' beta vector of beta parameters for posterior beta distribution
+NULL
+
+#' stick breaking
+NULL
+
+#' returns density from mixture of betas with global tau
+NULL
+
+#' returns density from mixture of betas with cluster specific tau
+NULL
+
+#' Returns matrix of probabilities from mixture of betas with constant tau
+NULL
+
+#' Returns matrix of probabilities from mixture of betas with cluster specific tau
+NULL
+
+#' Estimate the nonhomgogenous poisson process intensity function from grouped data  
+#' 
+#' @param r vector of distances associatd with different BEFs 
+#' @param n_j matrix of integers denoting the start and length of each school's associated BEF distances
+#' @param d a 1D grid of positive real values over which the differing intensities are evaluated 
+#' @param mu_sd scale for mu proposal dist'n
+#' @param tau_sd scale for tau proposal dist'n
+#' @param L component truncation number
+#' @param K intensity cluster truncation number
+#' @param J number of rows in r matrix; number of groups
+#' @param a_0 hyperparameter for mu base measure
+#' @param b_0 hyperparameter for mu base measure
+#' @param a_alpha hyperparameter for alpha gamma prior
+#' @param b_alpha hyperparameter for alpha gamma prior
+#' @param a_rho hyperparameter for rho gamma prior
+#' @param b_rho hyperparameter for rho gamma prior
+#' @param iter_max total number of iterations for which to run sampler
+#' @param warm_up number of iterations for which to burn-in or "warm-up" sampler
+#' @param thin number of iterations to thin by
+#' @param seed integer with which to initialize random number generator
+#' @param chain integer chain label
+#'
+beta_nd_nhpp_fit <- function(r, n_j, d, mu_sd, tau_sd, L, K, J, a_0, b_0, a_alpha, b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed, chain) {
+    .Call(`_rndpp_beta_nd_nhpp_fit`, r, n_j, d, mu_sd, tau_sd, L, K, J, a_0, b_0, a_alpha, b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed, chain)
+}
+
+#' Estimate the nonhomgogenous poisson process intensity function from grouped data using multiple taus 
+#' 
+#' @param r vector of distances associatd with different BEFs 
+#' @param n_j matrix of integers denoting the start and length of each school's associated BEF distances
+#' @param d a 1D grid of positive real values over which the differing intensities are evaluated 
+#' @param mu_sd scale for mu proposal dist'n
+#' @param tau_sd  not used
+#' @param L component truncation number
+#' @param K intensity cluster truncation number
+#' @param J number of rows in r matrix; number of groups
+#' @param a_0 hyperparameter for mu base measure
+#' @param b_0 hyperparameter for mu base measure
+#' @param a_alpha hyperparameter for alpha gamma prior
+#' @param b_alpha hyperparameter for alpha gamma prior
+#' @param a_rho hyperparameter for rho gamma prior
+#' @param b_rho hyperparameter for rho gamma prior
+#' @param iter_max total number of iterations for which to run sampler
+#' @param warm_up number of iterations for which to burn-in or "warm-up" sampler
+#' @param thin number of iterations to thin by
+#' @param seed integer with which to initialize random number generator
+#' @param chain integer chain label
+#'
+beta_nd_nhpp_fit_multiple_taus <- function(r, n_j, d, mu_sd, tau_sd, L, K, J, a_0, b_0, a_alpha, b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed, chain) {
+    .Call(`_rndpp_beta_nd_nhpp_fit_multiple_taus`, r, n_j, d, mu_sd, tau_sd, L, K, J, a_0, b_0, a_alpha, b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed, chain)
+}
+
 #' Computes Green and Lau loss function with unknown classification
 #'
 #' @param cluster_assignment iter_total x J cluster assignment matrix

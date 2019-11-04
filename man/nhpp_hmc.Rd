@@ -7,8 +7,6 @@
 nhpp_hmc(formula, data, warm_up, iter_max, seed = NULL)
 }
 \arguments{
-\item{formula}{}
-
 \item{data}{data.frame from which to extract outcome and covariates}
 
 \item{warm_up}{number of iterations in which to tune HMC step-size, these will be discarded}
@@ -18,5 +16,5 @@ nhpp_hmc(formula, data, warm_up, iter_max, seed = NULL)
 \item{seed}{}
 }
 \description{
-Estimates the mean number of observations in an Inhomogenous Poisson Process
+currently applies a N(0,sigma=3) prior to all regression coefficients
 }
