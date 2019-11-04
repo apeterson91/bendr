@@ -4,9 +4,9 @@
 \alias{nd_nhpp_fixed}
 \title{Estimate the nonhomgogenous poisson process intensity function from grouped data using a normal kernel}
 \usage{
-nd_nhpp_fixed(X, r, n_j, mu_0 = 0, kappa_0 = 1, nu_0 = 1,
-  sigma_0 = 1, alpha = 1, rho = 1, L = 4, K = 4, iter_max,
-  warm_up, thin = 1, seed = NULL)
+nd_nhpp_fixed(r, n_j, mu_0 = 0, kappa_0 = 1, nu_0 = 1, sigma_0 = 1,
+  alpha = 1, rho = 1, L = 4, K = 4, iter_max, warm_up, thin = 1,
+  seed = NULL)
 }
 \arguments{
 \item{r}{vector of distances  associated with differing groups}

@@ -1,7 +1,7 @@
 #' Estimate the nonhomgogenous poisson process intensity function from grouped data using a normal kernel
 #'
 #' @param r vector of distances  associated with differing groups
-#' @param n_j matrix of integers denoting the start and length of each school's associated BEF distances
+#' @param n_j matrix of integers denoting the start and length of each school's associated BEF distances in r
 #' @param L component truncation number
 #' @param K intensity cluster truncation number
 #' @param mu_0 mean hyperparameter for mu normal base measure. Default is 0; Normal(0,1).
@@ -18,7 +18,7 @@
 #' @param seed integer with which to initialize random number generator
 #'
 #' @export
-nd_nhpp <- function(X, r, n_j,
+nd_nhpp <- function(r, n_j,
                     mu_0 = 0, kappa_0 = 1,
                     nu_0 = 1, sigma_0 = 1,
                     L = 4 , K = 4,
@@ -43,8 +43,6 @@ nd_nhpp <- function(X, r, n_j,
         R <- 1
     }
 
-
-
     if(is.null(seed))
         seed <- 1L
 
@@ -52,7 +50,7 @@ nd_nhpp <- function(X, r, n_j,
 
     d <- seq(from = floor(min(r_)), to = ceiling(max(r_)), by = 0.01) ## distance grid
     num_posterior_samples <- sum(seq(from=warm_up+1,to = iter_max,by=1) %% thin == 0 )
-    fit <- list(nd_nhpp_fit(X = X, r= r_, n_j = n_j, d = d,
+    fit <- list(nd_nhpp_fit(r= r_, n_j = n_j, d = d,
                           L = L, K = K, J = J,
                           mu_0 = mu_0, kappa_0 = kappa_0,
                           nu_0 = nu_0, sigma_0 = sigma_0,
@@ -63,7 +61,7 @@ nd_nhpp <- function(X, r, n_j,
                           num_posterior_samples = num_posterior_samples))
     d <- pnorm(d)
 
-    out <- ndp(c(list(K = K, L = L, d = R*d, X = X,
-                      n = sum(n_j[,2]), call = call),fit),1)
+    out <- ndp(c(list(K = K, L = L, d = R*d,
+                      n = sum(n_j[,2]), call = call),fit),1,J)
 }
 

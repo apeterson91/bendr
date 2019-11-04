@@ -4,14 +4,16 @@
 \alias{hmc}
 \title{Create a HMC model object}
 \usage{
-hmc(x, warm_up, iter_max, X)
+hmc(object, warm_up, iter_max, X)
 }
 \arguments{
-\item{x}{model fit object returned from nhpp_gamma Rcpp function}
+\item{object}{model fit object returned from nhpp_gamma Rcpp function}
 
 \item{warm_up}{same as nhpp_hmc}
 
 \item{iter_max}{same as nhpp_hmc}
+
+\item{X}{the design matrix used in the regression}
 }
 \value{
 an hmc model object

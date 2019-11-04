@@ -1,6 +1,5 @@
 
 //create sample containers
-Eigen::MatrixXd beta_samps(num_posterior_samples,X.cols());
 Eigen::MatrixXd w_samps(num_posterior_samples,L*K);
 Eigen::MatrixXd mu_samps(num_posterior_samples,L*K);
 Eigen::MatrixXd pi_samps(num_posterior_samples,K);

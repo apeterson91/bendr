@@ -28,5 +28,5 @@ green_loss.ndp <- function(object, truth = NULL, tau = 0.5, a = 1, b = 1){
 		ix <- which.min(loss)
 	}
 
-	out <- list(loss = max(loss), mode = object$cluster_assignment[[1]][ix,] )
+	out <- list(loss = loss,best_loss_ix = ix , mode = object$cluster_assignment[[1]][ix,] )
 }

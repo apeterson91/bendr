@@ -41,13 +41,13 @@ plot_map <- function(x,coords,p)
   UseMethod("plot_map")
 
 #' plots pairwise probability clustering plot
-#' 
+#'
 #' @export
 #' @method plot_pairs ndp
 #' @param x ndp object
 #' @importFrom ggplot2 ggplot aes geom_tile scale_fill_gradientn
 #' @return ggplot plot object
-#' 
+#'
 plot_pairs.ndp <- function(x,sort = FALSE){
 
 	P <- x$pmat
@@ -82,7 +82,7 @@ plot_pairs.ndp <- function(x,sort = FALSE){
 	  tidyr::gather(dplyr::contains("V"), key = "Group_2", value = "Probability") %>%
 	  dplyr::mutate("Group_2" = as.numeric(stringr::str_replace(Group_2,"V",""))) %>%
 	  ggplot(aes(x=Group_1,y=Group_2,fill=Probability)) +
-	  geom_tile() + scale_fill_gradientn(colours=rainbow(20),limits=c(0,1)) + 
+	  geom_tile() + scale_fill_gradientn(colours=c("white","grey","black"),limits=c(0,1)) +
 	  ggplot2::theme_bw() + ggplot2::labs(title = "Pairwise Probability of Function Clustering",
 										  x="Group 1", y = "Group 2") +
 	  ggplot2::theme(panel.grid.major = element_blank(),
@@ -111,33 +111,33 @@ plot_cluster_densities.ndp <- function(x, p = .9,pi_threshold = .1, switch = "fa
 		xlabel  <- "Distance (Transformed)"
 
 
-    p <- x$if_df %>% 
+    p <- x$if_df %>%
 		dplyr::mutate(Intensity_Function = factor(Intensity_Function),
-					  Distance = (transform==TRUE)*Distance + (transform==FALSE)*qnorm(Distance / ceiling(max(x$if_df$Distance)))) %>% 
+					  Distance = (transform==TRUE)*Distance + (transform==FALSE)*qnorm(Distance / ceiling(max(x$if_df$Distance)))) %>%
 		dplyr::filter(Intensity_Function %in% ks_to_keep) %>%
 		dplyr::group_by(Chain,Intensity_Function,Distance) %>%
         dplyr::summarise(lower = quantile(Density,.5 - p/2,na.rm=T),
                          med = median(Density,na.rm=T),
                          upper = quantile(Density,.5 + p /2,na.rm=T)) %>%
-    ggplot(aes(x=Distance,y=med)) + 
+    ggplot(aes(x=Distance,y=med)) +
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank()) +
     ggplot2::labs(title = "Cluster Normalized Intensity Functions",
-         subtitle = paste0("Shaded area indicates ",p,"% Credible Interval"),
+         subtitle = paste0("Shaded area indicates ",p*100,"% Credible Interval"),
          y = "Density", x = xlabel)
 
 	if(switch == "color")
 		p <- p + ggplot2::geom_line(aes(color=Intensity_Function)) + ggplot2::facet_wrap(~Chain)
-	else 
+	else
 		p <-  p + ggplot2::geom_line() + ggplot2::geom_ribbon(aes(ymin= lower,ymax=upper),alpha=0.3) +
-			ggplot2::facet_wrap(Chain ~ Intensity_Function) 
-    
+			ggplot2::facet_wrap(Chain ~ Intensity_Function)
+
     return(p)
 }
 
 
 #' Traceplots of various NDP-NHPP parameters
-#' 
+#'
 #' @export
 #' @method plot_traceplots ndp
 #' @param x ndp object
@@ -154,34 +154,30 @@ plot_traceplots.ndp <- function(x,par="alpha"){
 
 #' Network Cluster Plot
 #'
-#' @export 
+#' @export
 #' @method plot_network ndp
 #' @param x ndp object
-#' @param sample number samples to draw
 #' @param mode_label boolean value to indicate that the network graph should be colored with the Mode cluster label assignments
 #' @return ggplot plot object
 #'
-plot_network.ndp <- function(x,sample=NULL,mode_label = TRUE){
+plot_network.ndp <- function(x,mode_label = TRUE){
 
-	if(is.null(sample))
-		ics <- 1:nrow(x$pmat)
-	else
-		ics  <- sample(1:nrow(x$pmat),50)
 
-    t <- tidygraph::as_tbl_graph(x$pmat[ics,ics],directed=FALSE)
+
+    t <- tidygraph::as_tbl_graph(x$pmat,directed=FALSE)
 	if(mode_label){
-		mode <- assign_mode(x,ics)
+		mode <- assign_mode(x)
 		if(any(mode==0))
 			mode  <- mode + 1
 		t <- t %>% tidygraph::activate(nodes) %>% tidygraph::mutate(`Mode Labels` = factor(mode) )
 	}
     p <- t %>% ggraph::ggraph(layout='nicely') +
         ggraph::geom_edge_link(aes(alpha=weight)) +
-		 ggplot2::ggtitle("Network Plot") + ggplot2::theme_void() 
+		 ggplot2::ggtitle("Network Plot") + ggplot2::theme_void()
 	if(mode_label)
-		p <- p + ggraph::geom_node_point(aes(color=`Mode Labels`)) 
+		p <- p + ggraph::geom_node_point(aes(color=`Mode Labels`))
 	else
-		p <- p + ggraph::geom_node_point() 
+		p <- p + ggraph::geom_node_point()
 
     return(p)
 }
@@ -223,8 +219,8 @@ plot_global_density.ndp <- function(x, p = 0.9, r = NULL,transform = TRUE ){
 	if(p >= 1 || p <= 0 )
 		stop("p must be in (0,1)")
 
-    p <- x$global_density %>% 
-		dplyr::mutate(Distance = (transform==TRUE)*Distance + (transform==FALSE)*qnorm(Distance / ceiling(max(x$if_df$Distance)))) %>% 
+    p <- x$global_density %>%
+		dplyr::mutate(Distance = (transform==TRUE)*Distance + (transform==FALSE)*qnorm(Distance / ceiling(max(x$if_df$Distance)))) %>%
 		dplyr::group_by(Chain,Distance) %>%
         dplyr::summarise(lower = quantile(Global_Density,.5 - p / 2,na.rm=T),
                          med = median(Global_Density,na.rm=T),

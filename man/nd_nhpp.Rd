@@ -4,14 +4,14 @@
 \alias{nd_nhpp}
 \title{Estimate the nonhomgogenous poisson process intensity function from grouped data using a normal kernel}
 \usage{
-nd_nhpp(X, r, n_j, mu_0 = 0, kappa_0 = 1, nu_0 = 1, sigma_0 = 1,
+nd_nhpp(r, n_j, mu_0 = 0, kappa_0 = 1, nu_0 = 1, sigma_0 = 1,
   L = 4, K = 4, a_alpha = 1, b_alpha = 1, a_rho = 1, b_rho = 1,
   iter_max, warm_up, thin = 1, seed = NULL)
 }
 \arguments{
 \item{r}{vector of distances  associated with differing groups}
 
-\item{n_j}{matrix of integers denoting the start and length of each school's associated BEF distances}
+\item{n_j}{matrix of integers denoting the start and length of each school's associated BEF distances in r}
 
 \item{mu_0}{mean hyperparameter for mu normal base measure. Default is 0; Normal(0,1).}
 

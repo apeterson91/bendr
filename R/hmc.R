@@ -10,6 +10,9 @@ hmc <- function(object,warm_up,iter_max,X){
 	ics <- intersect((warm_up+1):iter_max,which(object$acceptance==1))
 	
 	beta <- coda::as.mcmc(object$beta_samples[ics,,drop=F])
+	if(nrow(beta)==0){
+		warning("No samples collected, please check scaling of covariates and other diagnostics")
+	}
 	
 	return(structure(list(beta = beta,
 						  treedepth = object$treedepth,

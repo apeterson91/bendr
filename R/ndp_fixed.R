@@ -4,11 +4,11 @@
 #' @param chains number of chains
 #' @return An ndp object
 #'
-ndp_fixed <- function(object,chains,alpha,rho){
+ndp_fixed <- function(object,chains,alpha,rho,J){
 
 
     d <- object$d 
-    offset <- 6
+    offset <- 5 
     if_df = purrr::map_dfr(1:chains,function(y){
                                 purrr::map_dfr(1:object$K,function(x){ 
                                  dplyr::as_tibble(object[[offset+y]]$intensities[,((x-1)*length(d)+x):(x*length(d)),drop=F ]) %>%
@@ -57,11 +57,6 @@ ndp_fixed <- function(object,chains,alpha,rho){
 
 	cluster_assignment  <- purrr::map(1:chains,function(x) object[[offset+x]]$cluster_assignment)
 
-    beta <- purrr::map(1:chains,function(x){
-                          betas <- object[[offset+x]]$beta_samples
-                          colnames(betas) <- colnames(object$X) 
-                          return(coda::as.mcmc(betas))})
-
     if(ncol(object[[offset+1]]$tau_samples)>1)
         tau_nms <- paste0("tau ",nms)
     else
@@ -73,10 +68,9 @@ ndp_fixed <- function(object,chains,alpha,rho){
     
     out <- list(call = object$call,
                 n = object$n,
-                J = nrow(object$X),
+                J = J,
                 if_df = if_df,
 				global_density = gd_df,
-                beta = coda::as.mcmc.list(beta),
                 pmat = pmat / chains,
 				cluster_assignment = cluster_assignment,
                 num_clusters = coda::as.mcmc.list(num_clusters),

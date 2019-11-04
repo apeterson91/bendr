@@ -4,7 +4,7 @@
 \alias{ndp_fixed}
 \title{Create a ndp_fixed object}
 \usage{
-ndp_fixed(object, chains, alpha, rho)
+ndp_fixed(object, chains, alpha, rho, J)
 }
 \arguments{
 \item{object}{A list provided by the nd_nhpp function}

@@ -9,7 +9,6 @@ nhpp_gamma <- function(warm_up, iter_max, input_X, input_n_j, adapt_delta, seed)
 
 #' Estimate the nonhomgogenous poisson process intensity function from grouped data
 #'
-#' @param X coefficient matrix for estimating mean number of BEFs in interval
 #' @param r vector of distances associatd with different BEFs
 #' @param n_j matrix of integers denoting the start and length of each observations associated BEF distances
 #' @param d a 1D grid of positive real values over which the differing intensities are evaluated
@@ -26,8 +25,8 @@ nhpp_gamma <- function(warm_up, iter_max, input_X, input_n_j, adapt_delta, seed)
 #' @param seed integer with which to initialize random number generator
 #' @param chain integer chain label
 #'
-nd_nhpp_fit <- function(X, r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, a_alpha, b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed, chain, num_posterior_samples) {
-    .Call(`_rndpp_nd_nhpp_fit`, X, r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, a_alpha, b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed, chain, num_posterior_samples)
+nd_nhpp_fit <- function(r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, a_alpha, b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed, chain, num_posterior_samples) {
+    .Call(`_rndpp_nd_nhpp_fit`, r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, a_alpha, b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed, chain, num_posterior_samples)
 }
 
 #' Computes Green and Lau loss function with unknown classification
@@ -50,11 +49,18 @@ green_loss_known <- function(cluster_assignment, pmat, true_cluster_assignment, 
     .Call(`_rndpp_green_loss_known`, cluster_assignment, pmat, true_cluster_assignment, a, b)
 }
 
-#' Estimate the nonhomgogenous poisson process intensity function from grouped data with fixed concentration parameters
-#' 
-#' 
+#' Computes Square loss with unknown classification
 #'
-#' @param X coefficient matrix for estimating mean number of BEFs in interval
+#' @param cluster_assignment iter_total x J cluster assignment matrix
+#' @param pmat J x J pairwise probability of co-clustering matrix
+square_error <- function(cluster_assignment, pmat) {
+    .Call(`_rndpp_square_error`, cluster_assignment, pmat)
+}
+
+#' Estimate the nonhomgogenous poisson process intensity function from grouped data with fixed concentration parameters
+#'
+#'
+#'
 #' @param r vector of distances associatd with different BEFs
 #' @param n_j matrix of integers denoting the start and length of each observations associated BEF distances
 #' @param d a 1D grid of positive real values over which the differing intensities are evaluated
@@ -67,7 +73,7 @@ green_loss_known <- function(cluster_assignment, pmat, true_cluster_assignment, 
 #' @param seed integer with which to initialize random number generator
 #' @param chain integer chain label
 #'
-nd_nhpp_fixed_fit <- function(X, r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, alpha, rho, iter_max, warm_up, thin, seed, chain, num_posterior_samples) {
-    .Call(`_rndpp_nd_nhpp_fixed_fit`, X, r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, alpha, rho, iter_max, warm_up, thin, seed, chain, num_posterior_samples)
+nd_nhpp_fixed_fit <- function(r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, alpha, rho, iter_max, warm_up, thin, seed, chain, num_posterior_samples) {
+    .Call(`_rndpp_nd_nhpp_fixed_fit`, r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, alpha, rho, iter_max, warm_up, thin, seed, chain, num_posterior_samples)
 }
 

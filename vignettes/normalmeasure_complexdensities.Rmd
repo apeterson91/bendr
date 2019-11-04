@@ -14,29 +14,50 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+
+# Nested Dirichlet Process for Inhomogenous Poisson Processes
+
+This vignette serves to introduce the `rnpp` R package, an R package that fits the nested dirichlet processes to realizations of an inhomogenous poisson process. We begin with substantive motivation and theoretical notation to elucidate some key model components.  
+
+
+## Motivation and Notation
+The motivation for this model comes from a scientific interest in classifying food environments around school or residential environments. If we pick, say, Fast Food Restaurants (FFRs), we could model the rate at which these restaurants occur around schools by modeling their distances from schools as an inhomogenous poisson process.
+
+Denote the $r_{ij}$ as the distance between the $i$th FFR and $j$th school, where all $r_{ij} <R$, some upper bound. This is something like a 1 or 2 mile radius within which all the FFRs are found. If we model these distances as realizations from an inhomogenous poisson process, then the likelihood will decompoase as follows:
+
+$$
+p(\{r_{ij}\}|\gamma,f_j(\cdot)) \propto \prod_{j=1}^{J}\gamma_j^{n_j}\exp\{-\gamma_j\}\prod_{i=1}^{n_j}f_j(r_{ij})
+$$
+There are pieces in the above that haven't been explained yet. $f_j$ is the density (normalized intensity function) of the $j$th school, $\gamma_j$ is the expected number of FFRs within radius $R$ (the inverse of the normalizing constant) and $n_j$ is the number of FFrs observed around the $j$th school within the $R$ distance boundary.  
+
+Since the $\gamma_j$ and the $f_j$ are multiplied together, they're independent and can be modeled separately. The `rndpp` package offers solutions for both, but the modeling of $\gamma_j$ in `rndpp` is akin to a generalized linear model with a gamma error distribution and log link function : $\gamma_j = \exp(x_j^{T}\beta)$. Since this kind of model is fairly common, we won't spend much time writing about it here, beyond showing what function call you can use to estimate the coefficients, $\beta$.
+
+In contrast, modeling the $f_j$ will be our main focus, as it offers us a lot more opportunities to investigate how the rate of FFRs around schools change as a function of distance. Let's start loading in some libraries and simulating some data before elaborating further.
+
+
+```{r setup,warning=FALSE}
 library(rndpp)
-library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
 ```
+## Simulation Set-up
 
-
-# Simulation Set-up
-
-Distances are simulated from the following 3 mixture densities:
+We'll simulate distances from the following 3 intensity functions, each composed themselves of a *mixture* of simpler densities:
 $$
-f_1(d) = 3\times(\frac{1}{2}\text{beta}(d|1,8) + \frac{1}{2}\text{beta}(d|6,1)), \\
-f_2(d) = 3\times(\frac{1}{5}\text{beta}(d|3,2) + \frac{2}{3}\text{beta}(d|3,1) + \frac{2}{15}\text{beta}(d|1,1))\\
-f_3(d) = 3\times(\frac{1}{2}\text{beta}(d|8,2) + \frac{1}{2}\text{dbeta}(d,30,50))
+f_1(d) = \frac{1}{2}\text{beta}(d|1,8) + \frac{1}{2}\text{beta}(d|6,1), \\
+f_2(d) = \frac{1}{5}\text{beta}(d|3,2) + \frac{2}{3}\text{beta}(d|3,1) + \frac{2}{15}\text{beta}(d|1,1)\\
+f_3(d) = \frac{1}{2}\text{beta}(d|8,2) + \frac{1}{2}\text{dbeta}(d,30,50).
 $$
-
+We'll plot these below, choosing a 5 mile distance boundary, but any boundary could be used in principal.
 
 ```{r intensity_plots,echo=F}
 set.seed(3431)
 R <- 5
 d <- seq(from=0,to=R,by=0.01)
-f_1 <- function(x) 3*((1/2)*dbeta(x/R,1,8) + (1/2)*dbeta(x/R,6,1))
-f_2 <- function(x) 3*((1/5)*dbeta(x/R,3,2) + (2/3)*dbeta(x/R,3,1) + (2/15)*dbeta(x/R,1,1))
-f_3 <- function(x) 3*((1/2)*dbeta(x/R,8,2) + (1/2)*dbeta(x/R,30,50))
+f_1 <- function(x) ((1/2)*dbeta(x/R,1,8) + (1/2)*dbeta(x/R,6,1))
+f_2 <- function(x) ((1/5)*dbeta(x/R,3,2) + (2/3)*dbeta(x/R,3,1) + (2/15)*dbeta(x/R,1,1))
+f_3 <- function(x) ((1/2)*dbeta(x/R,8,2) + (1/2)*dbeta(x/R,30,50))
 pltdf <- tibble(Distance = d,
        Intensity = f_1(d),
        Cluster = 1) %>% 
@@ -49,19 +70,24 @@ pltdf <- tibble(Distance = d,
 pltdf %>% ggplot(aes(x=Distance,y=Intensity)) + geom_line() + 
     facet_wrap(~Cluster) + theme_bw() + 
     theme(strip.background = element_blank()) + 
-    ggtitle("Intensity Functions")
+    ggtitle("Intensity Functions") + xlab("Distance (mi)")
 
 ```
 
+Each of intensity functions correspond to a different kind of FFR exposure around schools. Schools around the first intensity function will have a lot of FFRs within the first mile or so from their school, but then not many until getting about 4 or more miles from school.
 
-Looking at the empirical density estimates...
+Similarly, school's that have FFRs simulated from cluster 3 will have a lot of FFrs at around 2 miles away from them, but almost none within 1 mile.  
+
+These different kinds of patterns may be of scientific interest because they could help explain why certain kids are more likely to go to FFRs and others aren't. 
+
+Let's assume a simple constant $\gamma=3$ across all the schools, 50 from each intensity function.
 ```{r density_estimates,echo=F}
 num_schools <- 50
-schools_1 <- rnhpp(nsim = num_schools,lambda = f_1,
+schools_1 <- rnhpp(nsim = num_schools,lambda = function(y) 3*f_1(y),
                    interval = c(0,R),seed = 3431,
                    max =max(f_1(d)))
-schools_2 <- rnhpp(nsim = num_schools,lambda = f_2,interval = c(0,R),seed = 3431,max = max(f_2(d)))
-schools_3 <- rnhpp(nsim = num_schools,lambda = f_3 ,interval = c(0,R),seed = 3431,max = max(f_3(d)))
+schools_2 <- rnhpp(nsim = num_schools,lambda = function(y) 3*f_2(y),interval = c(0,R),seed = 3431,max = max(f_2(d)))
+schools_3 <- rnhpp(nsim = num_schools,lambda = function(y) 3*f_3(y) ,interval = c(0,R),seed = 3431,max = max(f_3(d)))
 school_df <- as_tibble(schools_1)
 school_df <- rbind(school_df,as_tibble(schools_2) %>% mutate(sim_id = sim_id + num_schools)) %>% 
     mutate(density = ifelse(sim_id<=num_schools,1,2) )
@@ -69,8 +95,31 @@ school_df <- rbind(school_df,schools_3 %>% mutate(sim_id = sim_id + 2*num_school
 school_df %>% ggplot(aes(x=event_times)) + geom_density() + facet_wrap(~density) + 
     theme_bw() + theme(strip.background = element_blank()) + xlab("Distance")
 ```
+We can see that the empirical estimates (when we know which cluster each school belongs to), correspond well to the real densities. Now how are we going to model these densities and cluster each school to it's appropriate cluster?
 
-```{r,echo=F}
+## The Nested Dirichlet Process
+
+The Nested Dirichlet Process (NDP) is an extension of the Dirichlet Process, that uses a Dirichlet Process as the base measure for another Dirichlet Process (hence the nested name). The mathematic formulation is abstract, but can be seen below. If you don't have familiarity with the Dirichlet Process or Random Measures (especially random stick-breaking measures), the $\delta(\cdot)$ function is a point mass indicator that that only exists at the subscript value and the $*$ on the $\pi_k^*$ and other values reflects the idea that there may be multiple duplicate $pi_k$'s and the $\pi_k^*$ are the unique values. For further reading see Chapter 23 of Bayesian Data Analysis (3rd edition), for now let's see the math:
+
+$$
+G_j \sim Q = DP(\alpha,DP(\rho,G_0))\\
+Q = \sum_{k=1}^{\infty} \pi^*_k\delta_{G^*_j(\cdot)}(\cdot) \\
+G_j = \sum_{l=1}^{\infty} w^*_{lk}\delta_{\theta_{lk}^*}(\cdot) 
+$$
+
+Essentially we're going to use the Nested Dirichlet process to draw several different *clusters* of mixing measures to combine several simpler densities (like the Normal) that will ultimately be used to estimate the inhomogenous poisson process intensity function.
+
+The math is below. For computational purposes we're going to use a Normal mixing kernel and truncate the infinite mixture above with some finite number of components $K$ and $L$, for the two different indices, respectively.
+
+$$
+f_j(r) = \int \mathcal{N}(r,(\mu,\sigma^2))dG_j((\mu,\sigma^2))\\
+Q = \sum_{k=1}^{K} \pi_k^*\delta_{G^*_j(\cdot)}(\cdot)\\
+G_j = \sum_{l=1}^{L} w_{lk}^*\delta_{(\mu,\sigma^2)}^*(\cdot)}(\cdot)
+$$
+
+With all of this work out of the way, lets take the distances, calculate the $n_j$ above, keeping track of our position in the distances vector (see code below). Note that nothing we create here involves covariates used to estimate $\gamma_j$, that will come later.
+
+```{r}
 r <- school_df %>% arrange(sim_id) %>% 
     select(event_times) %>% pull()
 
@@ -81,54 +130,51 @@ n_j <- school_df %>% group_by(sim_id) %>% count() %>%
     select(start,go) %>% as.matrix()
 ```
 
-
+We can use a smaller number of $L$ and $K$ stick components because we know the true components aren't that many. In a real data analysis you would want to use more. We'll set non-informative conjugate priors and fit the model as follows.
 ```{r modelfit1}
-fit <- nd_nhpp(X=matrix(1,ncol=1,nrow=nrow(n_j)),
-               r = r, n_j = n_j,
-               L = 2,K = 4,
-               mu_0 = 0, kappa_0 = 1, ## Normal Mean Base Measure Hyperparameters
-               sigma_0 = 1, nu_0 = 1, ## Inverse Chi square prior Hyperparameters
-               a_alpha = 3, b_alpha = 1 / 3, ## alpha Gamma prior hyperparameters
-               a_rho = 3, b_rho = 1 / 3, ## rho Gamma prior hyperparameters
-               iter_max = 5E4,
-               warm_up = 1E3,
-               thin = 1,
-               seed = 34143)
-```
-```{r}
-plot(fit$rho)
+fit <- nd_nhpp_fixed(r = r, n_j = n_j,
+                     L = 4,K = 4,
+                     alpha = 2,rho = 2,
+                     mu_0 = 0, kappa_0 = 1, ## Normal Mean Base Measure Hyperparameters
+                     sigma_0 = 1, nu_0 = 1, ## Inverse Chi square prior Hyperparameters
+                     iter_max = 15E3,
+                     warm_up = 10E3,
+                     thin = 1,
+                     seed = 34143)
 ```
 
-```{r}
-plot(fit$alpha)
-```
+The ndp model object returned by `nd_nhpp` contains the parameters of interest as `coda mcmc` objects, so that the coda functions can be called on them easily. For example, we can look at the 
 
 ```{r}
+summary(fit$pi)
+```
+We can also call `rndpp` specific functions that will help us check whether our model is correctly estimating the densities. To begin with, we can look at an estimate of the global density estimate (averaging over all clusters' densities):
+```{r plot_global}
 plot_global_density(fit,r=r)
 ```
 
 
-```{r}
-plot_cluster_densities(fit)
+```{r plot_cluster}
+plot_cluster_densities(fit,switch = 'color')
 ```
 
 
-
-```{r}
-plot_cluster_densities(fit,switch='color')
+Since we transformed the distances, the previous plot of the densities does not show the "true" densities, but only densities that are proportional on the domain. The true densities can be plotted using the 
+`plot_cluster_densities` function with the arguments `transform = FALSE` as listed below.
+```{r plot_cluster_fac}
+plot_cluster_densities(fit,switch='facet',transform = FALSE)
 ```
 
+Looking at the pairwise probability plot, we can see that 
+
 ```{r}
-plot_pairs(fit)
+plot_pairs(fit,sort = F)
 ```
 
-```{r}
-
-```
-
+We can also sort the pairwise probability plot to try and identify groups - since in real world data we won't know where the "true clusters" really are.
 
 ```{r}
-plot_network(fit,sample = 50)
+plot_pairs(fit,sort = T)
 ```
 
 

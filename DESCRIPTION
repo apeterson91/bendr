@@ -4,7 +4,9 @@ Title: Nested Dirichlet Process Mixture Models for Non Homgeonous Poisson Proces
 Version: 0.1.0
 Authors@R: person("Adam", "Peterson", , "atpvyc@umich.edu", c("aut", "cre"))
 Description: Motivated by the need to identify different kinds of built environments,
-  the rndpp package estimates 
+  the rndpp package estimates the spatial intensity function for different clusters
+  of Inhomogenous Poisson Processes.
+  Process 
 License: GPL-3
 BugReports: https://github.com/apeterson91/rndpp/issues
 Encoding: UTF-8
@@ -22,5 +24,6 @@ LinkingTo:
     RcppEigen(>= 0.3.3.3.0)
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat (>= 2.1.0)
 VignetteBuilder: knitr

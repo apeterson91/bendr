@@ -4,7 +4,7 @@
 \alias{ndp}
 \title{Create a ndp object}
 \usage{
-ndp(object, chains)
+ndp(object, chains, J)
 }
 \arguments{
 \item{object}{A list provided by the nd_nhpp function}

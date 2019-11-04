@@ -56,12 +56,4 @@ Eigen::ArrayXd rnorm(const int& L, const int& K, std::mt19937& rng){
     return(out);
 }
 
-//' @param n_j vector of group counts
-//' @param eta vector of estimated mean pre-transformation
-double dnhpp(Eigen::VectorXd& n_j, Eigen::VectorXd& eta){
-    
-    double out =  eta.dot(n_j) ;
-    out += - (exp( eta.array())).sum()  ;
-    return(out); 
-}
 #endif

@@ -1,8 +1,7 @@
 //' Estimate the nonhomgogenous poisson process intensity function from grouped data with fixed concentration parameters
-//' 
-//' 
 //'
-//' @param X coefficient matrix for estimating mean number of BEFs in interval
+//'
+//'
 //' @param r vector of distances associatd with different BEFs
 //' @param n_j matrix of integers denoting the start and length of each observations associated BEF distances
 //' @param d a 1D grid of positive real values over which the differing intensities are evaluated
@@ -17,7 +16,6 @@
 //'
 // [[Rcpp::export]]
 Rcpp::List nd_nhpp_fixed_fit(
-        const Eigen::MatrixXd& X,
         const Eigen::ArrayXd& r,
         const Eigen::MatrixXi& n_j,
         const Eigen::ArrayXd& d,
@@ -60,7 +58,6 @@ Rcpp::List nd_nhpp_fixed_fit(
 
     mu = initialize_mu(L,K,mu_0,kappa_0,rng);
     tau = initialize_tau(L,K,sigma_0,nu_0);
-    beta = rnorm_vector(beta.rows(),rng);
 
 
     Rcpp::Rcout << "Beginning Sampling" << std::endl;
@@ -105,7 +102,7 @@ Rcpp::List nd_nhpp_fixed_fit(
         v = stick_break(K, v_posterior_beta_alpha,v_posterior_beta_beta,rng);
         pi = stick_break_weights(v);
 
-        
+
 
         for(int l = 0; l < L; l ++){
             for(int k = 0; k < K; k++){
@@ -133,7 +130,7 @@ Rcpp::List nd_nhpp_fixed_fit(
             }
           }
         }
-        
+
 
         //sample mu via conjugacy
 
@@ -152,14 +149,6 @@ Rcpp::List nd_nhpp_fixed_fit(
            }
          }
        }
-
-        // sample beta
-        beta_prop = rnorm_vector(beta.rows(),rng)*2.4 /sqrt(beta.rows()) + beta;
-        eta_prop = X * beta_prop;
-        eta = X * beta;
-        prob_temp_prop = dnhpp(n_j_vec,eta_prop) * exp(-.02 * beta_prop.dot(beta_prop));
-        prob_temp = dnhpp(n_j_vec,eta) * exp( -.02 * beta.dot(beta));
-        beta = runif(rng) <= exp(prob_temp_prop - prob_temp) ? beta_prop : beta;
 
 
         // calculate adjacency matrix and store samples
@@ -188,7 +177,6 @@ Rcpp::List nd_nhpp_fixed_fit(
           tau_samps.row(sample_ix) = tau_samp;
           alpha_samps(sample_ix,0) = alpha;
           rho_samps(sample_ix,0) = rho;
-          beta_samps.row(sample_ix) = beta;
           sample_ix += 1;
         }
     }
@@ -203,7 +191,6 @@ Rcpp::List nd_nhpp_fixed_fit(
                               Rcpp::Named("intensities") = intensities,
 							  Rcpp::Named("global_intensity") = global_intensity,
                               Rcpp::Named("mu_samples") =  mu_samps,
-                              Rcpp::Named("tau_samples") = tau_samps,
-                              Rcpp::Named("beta_samples") = beta_samps
+                              Rcpp::Named("tau_samples") = tau_samps
     ));
 }

@@ -1,6 +1,6 @@
 #' Estimates the mean number of observations in an Inhomogenous Poisson Process
 #'
-#' @param formula 
+#' @param formula
 #' @param data data.frame from which to extract outcome and covariates
 #' @param warm_up number of iterations in which to tune HMC step-size, these will be discarded
 #' @param iter_max total number of samples for which to run sampler
@@ -15,11 +15,11 @@ nhpp_hmc <- function(formula,
 
 	stopifnot( (warm_up<iter_max) && (iter_max>0) && (warm_up >0) )
 	if(is.null(seed))
-		set.seed(23413)
-	
+		seed <- 23413
+
 	call <- match.call(expand.dots = TRUE)
 	mf <- match.call(expand.dots = FALSE)
-	m <- match(c("formula" ), 
+	m <- match(c("formula" ),
 			 table = names(mf), nomatch = 0L)
 	mf <- mf[c(1L, m)]
 	mf$data <- data
