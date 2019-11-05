@@ -17,13 +17,13 @@ knitr::opts_chunk$set(
 
 # Nested Dirichlet Process for Inhomogenous Poisson Processes
 
-This vignette serves to introduce the `rnpp` R package, an R package that fits the nested dirichlet processes to realizations of an inhomogenous poisson process. We begin with substantive motivation and theoretical notation to elucidate some key model components.  
+This vignette serves to introduce the `rndpp` R package, an R package that fits the Nested Dirichlet Process to realizations of an Inhomogenous Poisson Process. We begin with substantive motivation and theoretical notation to elucidate some key model components.  
 
 
 ## Motivation and Notation
 The motivation for this model comes from a scientific interest in classifying food environments around school or residential environments. If we pick, say, Fast Food Restaurants (FFRs), we could model the rate at which these restaurants occur around schools by modeling their distances from schools as an inhomogenous poisson process.
 
-Denote the $r_{ij}$ as the distance between the $i$th FFR and $j$th school, where all $r_{ij} <R$, some upper bound. This is something like a 1 or 2 mile radius within which all the FFRs are found. If we model these distances as realizations from an inhomogenous poisson process, then the likelihood will decompoase as follows:
+Denote $r_{ij}$ as the distance between the $i$th FFR and $j$th school, where all $r_{ij} <R$. This $R$ is something like a 1 or 2 mile radius chosen based on data available at hand and whether . If we model these distances as realizations from an inhomogenous poisson process, then the likelihood will decompoase as follows:
 
 $$
 p(\{r_{ij}\}|\gamma,f_j(\cdot)) \propto \prod_{j=1}^{J}\gamma_j^{n_j}\exp\{-\gamma_j\}\prod_{i=1}^{n_j}f_j(r_{ij})
@@ -80,10 +80,10 @@ Similarly, school's that have FFRs simulated from cluster 3 will have a lot of F
 
 These different kinds of patterns may be of scientific interest because they could help explain why certain kids are more likely to go to FFRs and others aren't. 
 
-Let's assume a simple constant $\gamma=3$ across all the schools, 50 from each intensity function.
+Let's assume a simple constant $\gamma=10$ across all the schools, 50 from each intensity function.  
 ```{r density_estimates,echo=F}
 num_schools <- 50
-avg_FFR <- 7
+avg_FFR <- 10
 schools_1 <- rnhpp(nsim = num_schools,lambda = function(y) avg_FFR*f_1(y),
                    interval = c(0,R),seed = 3431,
                    max =max(f_1(d)))
@@ -115,7 +115,7 @@ The math is below. For computational purposes we're going to use a Normal mixing
 $$
 f_j(r) = \int \mathcal{N}(r,(\mu,\sigma^2))dG_j((\mu,\sigma^2))\\
 Q = \sum_{k=1}^{K} \pi_k^*\delta_{G^*_j(\cdot)}(\cdot)\\
-G_j = \sum_{l=1}^{L} w_{lk}^*\delta_{(\mu,\sigma^2)}^*(\cdot)}(\cdot)
+G_j = \sum_{l=1}^{L} w_{lk}^*\delta_{(\mu,\sigma^2)^*}(\cdot)
 $$
 
 With all of this work out of the way, lets take the distances, calculate the $n_j$ above, keeping track of our position in the distances vector (see code below). Note that nothing we create here involves covariates used to estimate $\gamma_j$, that will come later.
@@ -144,9 +144,9 @@ fit <- nd_nhpp_fixed(r = r, n_j = n_j,
                      seed = 34143)
 ```
 
-The ndp model object returned by `nd_nhpp` contains the parameters of interest as `coda mcmc` objects, so that the coda functions can be called on them easily. For example, we can look at the 
+The ndp model object returned by `nd_nhpp` contains the parameters of interest as `coda mcmc` objects, so that the coda functions can be called on them easily. For example, we can look at the $\pi_k$ parameters that denote the probability of a school being assigned to the $k$th cluster.
 
-```{r}
+```{r summary}
 summary(fit$pi)
 ```
 We can also call `rndpp` specific functions that will help us check whether our model is correctly estimating the densities. To begin with, we can look at an estimate of the global density estimate (averaging over all clusters' densities):

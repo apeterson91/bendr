@@ -108,28 +108,32 @@ plot_cluster_densities.ndp <- function(x, p = .9,pi_threshold = .1, switch = "fa
 		xlabel  <- "Distance (Transformed)"
 
 
-    p <- x$if_df %>%
+    plt <- x$if_df %>%
 		dplyr::mutate(Intensity_Function = factor(Intensity_Function),
 					  Distance = (transform==TRUE)*Distance + (transform==FALSE)*qnorm(Distance / ceiling(max(x$if_df$Distance)))) %>%
 		dplyr::filter(Intensity_Function %in% ks_to_keep) %>%
-		dplyr::group_by(Chain,Intensity_Function,Distance) %>%
+		dplyr::rename(`Intensity Function` = Intensity_Function) %>%
+		dplyr::group_by(Chain,`Intensity Function`,Distance) %>%
         dplyr::summarise(lower = quantile(Density,.5 - p/2,na.rm=T),
                          med = median(Density,na.rm=T),
                          upper = quantile(Density,.5 + p /2,na.rm=T)) %>%
     ggplot(aes(x=Distance,y=med)) +
     ggplot2::theme_bw() +
-    ggplot2::theme(strip.background = ggplot2::element_blank()) +
-    ggplot2::labs(title = "Cluster Normalized Intensity Functions",
-         subtitle = paste0("Shaded area indicates ",p*100,"% Credible Interval"),
-         y = "Density", x = xlabel)
+    ggplot2::theme(strip.background = ggplot2::element_blank())
 
-	if(switch == "color")
-		p <- p + ggplot2::geom_line(aes(color=Intensity_Function)) + ggplot2::facet_wrap(~Chain)
-	else
-		p <-  p + ggplot2::geom_line() + ggplot2::geom_ribbon(aes(ymin= lower,ymax=upper),alpha=0.3) +
-			ggplot2::facet_wrap(Chain ~ Intensity_Function)
+	if(switch == "color"){
+		plt <- plt + ggplot2::geom_line(aes(color=`Intensity Function`)) +
+			ggplot2::labs(title = "Cluster Normalized Intensity Functions", y = "Density", x = xlabel)
+	}
+	else{
+		plt <-  plt + ggplot2::geom_line() + ggplot2::geom_ribbon(aes(ymin= lower,ymax=upper),alpha=0.3) +
+			ggplot2::facet_wrap( ~ `Intensity Function`) +
+			ggplot2::labs(title = "Cluster Normalized Intensity Functions",
+						  subtitle = paste0("Shaded area indicates ",p * 100,"% Credible Interval"),
+						  y = "Density", x = xlabel)
+	}
 
-    return(p)
+    return(plt)
 }
 
 
@@ -192,7 +196,7 @@ plot_global_density.ndp <- function(x, p = 0.9, r = NULL,transform = TRUE ){
 	if(p >= 1 || p <= 0 )
 		stop("p must be in (0,1)")
 
-    p <- x$global_density %>%
+    plt <- x$global_density %>%
 		dplyr::mutate(Distance = (transform==TRUE)*Distance + (transform==FALSE)*qnorm(Distance / ceiling(max(x$if_df$Distance)))) %>%
 		dplyr::group_by(Chain,Distance) %>%
         dplyr::summarise(lower = quantile(Global_Density,.5 - p / 2,na.rm=T),
@@ -204,14 +208,14 @@ plot_global_density.ndp <- function(x, p = 0.9, r = NULL,transform = TRUE ){
     ggplot2::facet_wrap(~Chain) +
     ggplot2::theme(strip.background = ggplot2::element_blank()) +
     ggplot2::labs(title = "Global Density NDP Estimate",
-         subtitle = paste0("Shaded area indicates ",p,"% Credible Interval"),
+         subtitle = paste0("Shaded area indicates ",p*100,"% Credible Interval"),
          y = "Density")
 	if(is.null(r))
-		return(p)
+		return(plt)
 	else if(is.numeric(r)){
 		p2 <- dplyr::tibble(distances = r) %>%  ggplot2::ggplot(aes(x=distances)) +
 			ggplot2::geom_density() + ggplot2::theme_bw() +
 			ggplot2::labs(title = "Global Kernel Density Estimate")
-		return(gridExtra::grid.arrange(p,p2,nrow=1))
+		return(gridExtra::grid.arrange(plt,p2,nrow=1))
 	}
 }

@@ -69,22 +69,26 @@ plot_cluster_densities.bndp <- function(x, p = .9,pi_threshold = .1, switch = "f
 		dplyr::mutate(Intensity_Function = factor(Intensity_Function),
 					  Distance = (transform==TRUE)*Distance + (transform==FALSE)*qnorm(Distance / ceiling(max(x$if_df$Distance)))) %>% 
 		dplyr::filter(Intensity_Function %in% ks_to_keep) %>%
-		dplyr::group_by(Chain,Intensity_Function,Distance) %>%
+		dplyr::rename(`Intensity Function` = Intensity_Function) %>% 
+		dplyr::group_by(Chain,`Intensity Function`,Distance) %>%
         dplyr::summarise(lower = quantile(Density,.5 + p/2,na.rm=T),
                          med = median(Density,na.rm=T),
                          upper = quantile(Density,.5 + p /2,na.rm=T)) %>%
     ggplot(aes(x=Distance,y=med)) + 
     ggplot2::theme_bw() +
-    ggplot2::theme(strip.background = ggplot2::element_blank()) +
-    ggplot2::labs(title = "Cluster Normalized Intensity Functions",
-         subtitle = paste0("Shaded area indicates ",p,"% Credible Interval"),
-         y = "Density", x = xlabel)
-
-	if(switch == "color")
-		p <- p + ggplot2::geom_line(aes(color=Intensity_Function)) + ggplot2::facet_wrap(~Chain)
-	else 
+    ggplot2::theme(strip.background = ggplot2::element_blank())
+    
+	if(switch == "color"){
+		p <- p + ggplot2::geom_line(aes(color=`Intensity Function`)) + 
+			ggplot2::labs(title = "Cluster Normalized Intensity Functions", y = "Density", x = xlabel)
+	}
+	else{
 		p <-  p + ggplot2::geom_line() + ggplot2::geom_ribbon(aes(ymin= lower,ymax=upper),alpha=0.3) +
-			ggplot2::facet_wrap(Chain ~ Intensity_Function) 
+			ggplot2::facet_wrap( ~ `Intensity Function`) + 
+			ggplot2::labs(title = "Cluster Normalized Intensity Functions",
+						  subtitle = paste0("Shaded area indicates ",p*100,"% Credible Interval"),
+						  y = "Density", x = xlabel)
+	}
     
     return(p)
 }
