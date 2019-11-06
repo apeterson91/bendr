@@ -1314,7 +1314,7 @@ class NHPP
 		momenta_temp  = momenta_temp + epsilon * beta_grad / 2.0;
 		energy_prop = calculate_energy(beta_temp,momenta_temp);
 		ratio  = energy_prop - energy_init;
-		ratio = isinf(-ratio) ? - DBL_MAX: ratio;
+		ratio = std::isinf(-ratio) ? - DBL_MAX: ratio;
 		a = ratio > log(.5) ? 1 : - 1;
 		int cntr = 0;
 		while(a * ratio > -a * log(2)){
