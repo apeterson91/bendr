@@ -148,8 +148,8 @@ fit <- nd_nhpp_fixed(r = r, n_j = n_j,
                      alpha = 1, rho = 1,
                      mu_0 = 0, kappa_0 = 1, ## Normal Mean Base Measure Hyperparameters
                      sigma_0 = 1, nu_0 = 1, ## Inverse Chi square prior Hyperparameters
-                     iter_max = 6E4,
-                     warm_up = 5.7E4,
+                     iter_max = 1.5E5,
+                     warm_up = 1.4E5,
                      thin = 1,
                      seed = 34143)
 ```
