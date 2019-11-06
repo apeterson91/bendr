@@ -185,7 +185,7 @@ plot_cluster_densities.ndp <- function(x, p = .9, pi_threshold = .1, switch = "f
 	else{
 		plt <-  plt + ggplot2::geom_line() + ggplot2::geom_ribbon(aes(ymin= lower,ymax=upper),alpha=0.3) +
 			ggplot2::facet_wrap( ~ `Intensity Function`) +
-			ggplot2::labs(title = "Unnormalized Cluster Intensity Functions",
+			ggplot2::labs(title = "Normalized Cluster Intensity Functions",
 						  subtitle = paste0("Shaded area indicates ",p * 100,"% Credible Interval"),
 						  y = "Density", x = xlabel)
 	}

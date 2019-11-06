@@ -28,14 +28,14 @@ Denote $r_{ij}$ as the distance between the $i$th FFR and $j$th school, where al
 $$
 p(\{r_{ij}\}|\gamma,f_j(\cdot)) \propto \prod_{j=1}^{J}\gamma_j^{n_j}\exp\{-\gamma_j\}\prod_{i=1}^{n_j}f_j(r_{ij})
 $$
-There are pieces in the above that haven't been explained yet. $f_j$ is the density (normalized intensity function) of the $j$th school, $\gamma_j$ is the expected number of FFRs within radius $R$ (the inverse of the normalizing constant) and $n_j$ is the number of FFrs observed around the $j$th school within the $R$ distance boundary.  
+In the above, $f_j(\cdot)$ is the spatial FFR incidence density  (normalized intensity function) of the $j$th school, $\gamma_j$ is the expected number of FFRs within radius $R$ and $n_j$ is the number of FFRs observed around the $j$th school within the $R$ distance boundary.  
 
 Since the $\gamma_j$ and the $f_j$ are multiplied together, they're independent and can be modeled separately. The `rndpp` package offers solutions for both, but the modeling of $\gamma_j$ in `rndpp` is akin to a generalized linear model with a gamma error distribution and log link function : $\gamma_j = \exp(x_j^{T}\beta)$. Since this kind of model is fairly common, we won't spend much time writing about it here, beyond showing what function call you can use to estimate the coefficients, $\beta$.
 
-In contrast, modeling the $f_j$ will be our main focus, as it offers us a lot more opportunities to investigate how the rate of FFRs around schools change as a function of distance. Let's start loading in some libraries and simulating some data before elaborating further.
+In contrast, modeling the $f_j(\cdot)$ will be our main focus, as it offers us a lot more opportunities to investigate how the rate of FFRs around schools change as a function of distance. Let's start loading in some libraries and simulating some data before elaborating further.
 
 
-```{r setup,warning=FALSE}
+```{r setup,warning=FALSE,message=FALSE}
 library(rndpp)
 library(dplyr)
 library(ggplot2)
@@ -197,7 +197,7 @@ reg_fit <- nhpp_hmc(y~1,data=df,iter_max=2E3,warm_up = 1E3)
 reg_fit
 ```
 
-To provide a point of reference, this model can be emulated in standard libraries, e.g. `stats::glm`.
+To provide a point of reference, this model can be replicated in standard libraries, e.g. `stats::glm`.
 ```{r, regression2}
 reg_fit2 <- glm(y~1,data=df,family=Gamma(link='log'))
 reg_fit2
@@ -205,16 +205,16 @@ reg_fit2
 
 
 ```{r,echo=F,results='hide'}
-## graphic for JOSS paper
-p1 <- pltdf %>% mutate(Cluster = factor(Cluster)) %>% 
-  ggplot(aes(x=Distance,y=Intensity)) + geom_line() +
-  facet_wrap(~Cluster) +
-  theme_bw() + theme(strip.background = element_blank(),legend.position = "none") + 
-  ggtitle("True Intensity Functions") + xlab("Distance")
-p2 <- plot_cluster_densities(fit) + labs(title = "Unnormalized Cluster Intensity Functions",
-                                        subtitle = "Shaded Area indicates 90% credible interval")
-p3 <- plot_pairs(fit)
-ggsave("../paper/paper_fig1.png",plot=p1,height = 7,width = 10,units = "cm")
-ggsave("../paper/paper_fig2.png",plot=p2,height = 7,width = 10,units = "cm")
-ggsave("../paper/paper_fig3.png",plot=p3,height = 7,width = 10,units = "cm")
+# ## graphic for JOSS paper
+# p1 <- pltdf %>% mutate(Cluster = factor(Cluster)) %>% 
+#   ggplot(aes(x=Distance,y=Intensity)) + geom_line() +
+#   facet_wrap(~Cluster) +
+#   theme_bw() + theme(strip.background = element_blank(),legend.position = "none") + 
+#   ggtitle("True Intensity Functions") + xlab("Distance")
+# p2 <- plot_cluster_densities(fit) + labs(title = "Unnormalized Cluster Intensity Functions",
+#                                         subtitle = "Shaded Area indicates 90% credible interval")
+# p3 <- plot_pairs(fit)
+# ggsave("../paper/paper_fig1.png",plot=p1,height = 7,width = 10,units = "cm")
+# ggsave("../paper/paper_fig2.png",plot=p2,height = 7,width = 10,units = "cm")
+# ggsave("../paper/paper_fig3.png",plot=p3,height = 7,width = 10,units = "cm")
 ```

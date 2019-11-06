@@ -76,7 +76,8 @@ plot_pairs.bndp <- function(x,sort = FALSE){
 }
 
 #' Plots cluster intensity function densities
-#' @export
+#'
+#' 
 #' @param x bndp object
 #' @param p the probability for the credible interval
 #' @param pi_threshold intensities with probability of assignment greater than pi_threshold are plotted
@@ -85,6 +86,7 @@ plot_pairs.bndp <- function(x,sort = FALSE){
 #' @param transform not used for objects of type bndp
 #' @return ggplot plot object
 #'
+#' @export
 plot_cluster_densities.bndp <- function(x, p = .9,pi_threshold = .1, switch = "facet", transform = FALSE){
 
 	### To pass R CMD CHECK
@@ -106,18 +108,18 @@ plot_cluster_densities.bndp <- function(x, p = .9,pi_threshold = .1, switch = "f
         dplyr::summarise(lower = quantile(Density,.5 + p/2,na.rm=T),
                          med = median(Density,na.rm=T),
                          upper = quantile(Density,.5 + p /2,na.rm=T)) %>%
-    ggplot(aes(x=Distance,y=med)) + 
+    ggplot2::ggplot(ggplot2::aes(x=Distance,y=med)) + 
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_blank())
     
 	if(switch == "color"){
 		p <- p + ggplot2::geom_line(aes(color=`Intensity Function`)) + 
-			ggplot2::labs(title = "Unormalized Cluster Intensity Functions", y = "Density", x = xlabel)
+			ggplot2::labs(title = "Cluster Intensity Functions", y = "Density", x = xlabel)
 	}
 	else{
 		p <-  p + ggplot2::geom_line() + ggplot2::geom_ribbon(aes(ymin= lower,ymax=upper),alpha=0.3) +
 			ggplot2::facet_wrap( ~ `Intensity Function`) + 
-			ggplot2::labs(title = "Unnormalized Cluster Intensity Functions",
+			ggplot2::labs(title = "Cluster Intensity Functions",
 						  subtitle = paste0("Shaded area indicates ",p*100,"% Credible Interval"),
 						  y = "Density", x = xlabel)
 	}
