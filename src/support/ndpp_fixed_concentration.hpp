@@ -8,11 +8,18 @@
 //' @param L component truncation number
 //' @param K intensity cluster truncation number
 //' @param J number of rows in r matrix; number of groups
+//' @param mu_0 normal base measure prior mean
+//' @param kappa_0 normal base measure prior variance scale 
+//' @param nu_0 inverse chi sqaure base measure prior degrees of freedom
+//' @param sigma_0 inverse chi square base measure prior scale  
+//' @param alpha upper level concentration parameter (fixed)
+//' @param rho lower level concentration parameter (fixed)
 //' @param iter_max total number of iterations for which to run sampler
 //' @param warm_up number of iterations for which to burn-in or "warm-up" sampler
 //' @param thin number of iterations to thin by
 //' @param seed integer with which to initialize random number generator
 //' @param chain integer chain label
+//' @param num_posterior_samples the total number of posterior samples after burn in 
 //'
 // [[Rcpp::export]]
 Rcpp::List nd_nhpp_fixed_fit(

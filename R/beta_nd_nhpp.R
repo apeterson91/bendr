@@ -15,6 +15,7 @@
 #' @param iter_max total number of iterations for which to run sampler
 #' @param warm_up number of iterations for which to burn-in or "warm-up" sampler
 #' @param thin number of iterations to thin by
+#' @param multiple_taus logical indicator for whether or not cluster specific scales (tau) should be estimated
 #' @param seed integer with which to initialize random number generator
 #'
 #' @export
@@ -27,7 +28,6 @@ beta_nd_nhpp <- function(r, n_j,
                     iter_max, warm_up, 
                     thin = 1,
                     multiple_taus = FALSE,
-                    kernel = "Normal",
                     seed = NULL) {
 
     call <- match.call(expand.dots=TRUE)

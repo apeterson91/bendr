@@ -7,14 +7,28 @@
 nhpp_hmc(formula, data, warm_up, iter_max, seed = NULL)
 }
 \arguments{
+\item{formula}{formula specifying the design matrix and outcome 
+akin to \code{\link[stats]{glm}} for more information.}
+
 \item{data}{data.frame from which to extract outcome and covariates}
 
 \item{warm_up}{number of iterations in which to tune HMC step-size, these will be discarded}
 
 \item{iter_max}{total number of samples for which to run sampler}
 
-\item{seed}{}
+\item{seed}{random number generator intializing seed}
 }
 \description{
-currently applies a N(0,sigma=3) prior to all regression coefficients
+fits an exponential linear regression model with log link.
+}
+\section{Details}{
+ 
+Fits an exponential linear regression model using a log link via
+No-U-Turn Sampler (see reference). This model has a 
+ \eqn{N(0,\sigma=3)} prior on all regression coefficients.
+}
+
+\references{
+No U-Turn Sampler Hoffman, M. and Gelman A.(2014). \emph{The No-U-Turn Sampler: Adaptively Setting Path Lengths in Hamiltonian Monte Carlo}
+Journal of Machine Learning Research 15 (1593-1623).
 }

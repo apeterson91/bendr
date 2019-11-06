@@ -1,11 +1,20 @@
 #' Estimates the mean number of observations in an Inhomogenous Poisson Process
 #'
-#' currently applies a N(0,sigma=3) prior to all regression coefficients
-#' @param formula
+#' 
+#' fits an exponential linear regression model with log link.
+#' 
+#' @template nuts
+#'
+#' @section Details: 
+#' Fits an exponential linear regression model using a log link via
+#' No-U-Turn Sampler (see reference). This model has a 
+#'  \eqn{N(0,\sigma=3)} prior on all regression coefficients.
+#' @param formula formula specifying the design matrix and outcome 
+#' akin to \code{\link[stats]{glm}} for more information.
 #' @param data data.frame from which to extract outcome and covariates
 #' @param warm_up number of iterations in which to tune HMC step-size, these will be discarded
 #' @param iter_max total number of samples for which to run sampler
-#' @param seed
+#' @param seed random number generator intializing seed
 #'
 #' @export
 nhpp_hmc <- function(formula,
@@ -28,10 +37,10 @@ nhpp_hmc <- function(formula,
 	mf[[1L]] <- as.name("model.frame")
 	mf <- eval(mf, parent.frame())
 	mt <- attr(mf, "terms")
-	Y <- model.response(mf, type = "any")
-	if (is.empty.model(mt))
+	Y <- stats::model.response(mf, type = "any")
+	if (stats::is.empty.model(mt))
 	stop("No intercept or predictors specified.", call. = FALSE)
-	X <- model.matrix(mt, mf)
+	X <- stats::model.matrix(mt, mf)
 
 	fit <- nhpp_gamma(warm_up,iter_max,X,Y,0.65,seed)
 

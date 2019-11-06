@@ -1,35 +1,14 @@
-// -*- mode: C++; c-indent-level: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
-// we only include RcppEigen.h which pulls Rcpp.h in for us
-#include <RcppEigen.h>
-#include <random>
-#include "beta_rng.hpp"
-#include<vector>
-// via the depends attribute we tell Rcpp to create hooks for
-// RcppEigen so that the build process will know what to do
-//
-// [[Rcpp::depends(RcppEigen)]]
-
-// simple example of creating two matrices and
-// returning the result of an operatioon on them
-//
-// via the exports attribute we tell Rcpp to make this function
-// available from R
-//
-//
-//
-//
-
-//' @param x double real number
+// @param x double real number
 double sigmoid(double& x){
     return((exp(x) / (1+exp(x))));
 }
 
-//' initialize's matrix of mixture component means
-//' @param L number of mixture components
-//' @param K number of cluster components
-//' @param a_0 base measure hyperparameter
-//' @param b_0 base measure hyperparameter
-//' @param rng random number generator
+// initialize's matrix of mixture component means
+// @param L number of mixture components
+// @param K number of cluster components
+// @param a_0 base measure hyperparameter
+// @param b_0 base measure hyperparameter
+// @param rng random number generator
 Eigen::MatrixXd initialize_mu_beta(const int& L, const int& K, const double& a_0, const double& b_0, std::mt19937& rng){
     
     Eigen::MatrixXd out(L,K);
@@ -43,10 +22,10 @@ Eigen::MatrixXd initialize_mu_beta(const int& L, const int& K, const double& a_0
     return(out);
     
 }
-//' stick breaking atoms (not weights) for a vector with alpha,beta variable across vector elements
-//' n length of vector
-//' alpha vector of alpha parameters for posterior beta distribution
-//' beta vector of beta parameters for posterior beta distribution
+// stick breaking atoms (not weights) for a vector with alpha,beta variable across vector elements
+// @param n length of vector
+// @param alpha vector of alpha parameters for posterior beta distribution
+// @param beta vector of beta parameters for posterior beta distribution
 Eigen::VectorXd stick_break(const int n, Eigen::VectorXd& alpha,Eigen::VectorXd& beta, std::mt19937& rng){
     
     Eigen::VectorXd v(n);
@@ -62,7 +41,7 @@ Eigen::VectorXd stick_break(const int n, Eigen::VectorXd& alpha,Eigen::VectorXd&
     return(v);
 }
 
-//' stick breaking
+// stick breaking
 Eigen::MatrixXd stick_break(Eigen::MatrixXd& alpha, Eigen::MatrixXd& beta, std::mt19937& rng){
     
     const int rows = alpha.rows();
@@ -90,6 +69,7 @@ Eigen::VectorXd stick_break_weights(const int n, Eigen::VectorXd& v){
     return(w);
 }
 
+// stick break weights returning vector
 Eigen::VectorXd stick_break_weights(Eigen::VectorXd& v){
     
     const int n = v.rows();
@@ -101,6 +81,7 @@ Eigen::VectorXd stick_break_weights(Eigen::VectorXd& v){
     return(w);
 }
 
+// stick break weights returning matrix
 Eigen::MatrixXd stick_break_weights(Eigen::MatrixXd& u){
     
     const int rows = u.rows();
@@ -116,7 +97,7 @@ Eigen::MatrixXd stick_break_weights(Eigen::MatrixXd& u){
     return(w);
 }
 
-//' returns density from mixture of betas with global tau
+// returns density from mixture of betas with global tau
 Eigen::MatrixXd dbeta(const int& J, const Eigen::VectorXd& r,const Eigen::MatrixXi& n_j, Eigen::VectorXd& pi,Eigen::MatrixXd& w, Eigen::MatrixXd& mu,double& tau){
     
     const int rows = mu.rows();
@@ -140,7 +121,7 @@ Eigen::MatrixXd dbeta(const int& J, const Eigen::VectorXd& r,const Eigen::Matrix
     return(q);
 }
 
-//' returns density from mixture of betas with cluster specific tau
+// returns density from mixture of betas with cluster specific tau
 Eigen::MatrixXd dbeta(const int& J, const Eigen::VectorXd& r,const Eigen::MatrixXi& n_j, Eigen::VectorXd& pi,Eigen::MatrixXd& w, Eigen::MatrixXd& mu,Eigen::MatrixXd& tau){
     
     const int rows = mu.rows();
@@ -164,7 +145,7 @@ Eigen::MatrixXd dbeta(const int& J, const Eigen::VectorXd& r,const Eigen::Matrix
     return(q);
 }
 
-//' Returns matrix of probabilities from mixture of betas with constant tau
+// Returns matrix of probabilities from mixture of betas with constant tau
 Eigen::MatrixXd dbeta(const Eigen::VectorXd& r, const Eigen::MatrixXi& n_j, Eigen::MatrixXd& w, Eigen::MatrixXd& mu, double& tau, Eigen::VectorXi& zeta){
     
     const int L = mu.rows();
@@ -181,7 +162,7 @@ Eigen::MatrixXd dbeta(const Eigen::VectorXd& r, const Eigen::MatrixXi& n_j, Eige
     return(b);
 }
 
-//' Returns matrix of probabilities from mixture of betas with cluster specific tau
+// Returns matrix of probabilities from mixture of betas with cluster specific tau
 Eigen::MatrixXd dbeta(const Eigen::VectorXd& r, const Eigen::MatrixXi& n_j, Eigen::MatrixXd& w, Eigen::MatrixXd& mu, Eigen::MatrixXd& tau, Eigen::VectorXi& zeta){
     
     const int L = mu.rows();

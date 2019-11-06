@@ -5,7 +5,7 @@
 \title{Plots cluster intensity function densities}
 \usage{
 \method{plot_cluster_densities}{ndp}(x, p = 0.9, pi_threshold = 0.1,
-  switch = "facet", transform = TRUE)
+  switch = "facet", transform = FALSE)
 }
 \arguments{
 \item{x}{ndp object}
@@ -16,6 +16,9 @@
 default is zero}
 
 \item{switch}{one of two character values "facet" or "color" denoting whether to separate clusters by facet or by color}
+
+\item{transform}{boolean value denoting whether or not to transform the distances: FALSE indicates values
+are shown on the [0,R) domain, while TRUE indicates they are shown on the real line.}
 }
 \value{
 ggplot plot object

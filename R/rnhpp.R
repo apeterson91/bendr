@@ -23,11 +23,11 @@ rnhpp <- function(nsim = 1, lambda = function(x) x^2, max = NULL, interval = c(0
         I <- 0
         S_I <- 0
         while(TRUE){
-            u_1 <- runif(1)
+            u_1 <- stats::runif(1)
             t <- t - log(u_1)/max
             if(t > interval[2])
                 break
-            u_2 <- runif(1)
+            u_2 <- stats::runif(1)
             if(u_2 <= p_t(t) ){
                 ts <- c(ts,t)
                 I <- I + 1

@@ -7,25 +7,14 @@
 \method{print}{ndp}(x, digits = 2, ...)
 }
 \arguments{
+\item{x}{a ndp object}
+
 \item{digits}{Number of digits to use for formatting numbers.}
 
 \item{...}{Ignored.}
 }
 \value{
-Returns \code{x}, invisibly.  #' @details 
-\subsection{Point estimates}{
-Point estimates are medians computed from simulations.
-For models fit using MCMC (\code{"sampling"}) the posterior
-sample is used.  The point estimates reported are the same as the values
-returned by \code{\link[=coef.stapreg]{coef}}.
-}
-\subsection{Uncertainty estimates (MAD_SD)}{
-The standard deviations reported (labeled \code{MAD_SD} in the print output)
-are computed from the same set of draws described above and are proportional
-to the median absolute deviation (\code{\link[stats]{mad}}) from the median.
-Compared to the raw posterior standard deviation, the MAD_SD will be
-more robust for long-tailed distributions. 
-}
+Returns \code{x}, invisibly.
 }
 \description{
 The \code{print} method for ndp objects displays a compact summary of the
@@ -33,6 +22,18 @@ fitted model. See the \strong{Details} section below for descriptions of the
 different components of the printed output. For additional summary statistics
 and diagnostics use the \code{\link[=summary.ndp]{summary}} method.
 }
+\details{
+\subsection{Point Estimates}{
+Point estimates are medians computed from simulations.
+}
+\subsection{Uncertainty estimates (SD)}{
+The standard deviations reported (labeled \code{MAD} in the print output)
+are computed from the same set of draws described above and are proportional
+to the median absolute deviation (\code{\link[stats]{mad}}) from the median.
+Compared to the raw posterior standard deviation, the MAD_SD will be
+more robust for long-tailed distributions. These are the same as the values
+}
+}
 \seealso{
-\code{\link{summary.ndp}}, \code{\link{stapreg-methods}}
+\code{\link{summary.ndp}}
 }

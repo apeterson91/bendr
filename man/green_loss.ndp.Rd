@@ -8,6 +8,8 @@
   b = 1)
 }
 \arguments{
+\item{object}{a ndp object}
+
 \item{truth}{True adjacency matrix}
 
 \item{tau}{loss function tuning parameter}
@@ -17,8 +19,9 @@
 \item{b}{misclassification penalty parameter - see Green and Lau for details}
 }
 \value{
-list of two objects (1) the partition corresponding to the minimal loss and
-(2) the loss value itself
+list of three objects (1)loss:  the loss corresponding to each clustering 
+configuration, (2) best_loss_ix:  The index corresponding to the "best" partition,
+and (3) mode: the best partition itself
 }
 \description{
 Lau and Green posterior loss function

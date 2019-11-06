@@ -2,10 +2,30 @@
 % Please edit documentation in R/RcppExports.R
 \name{nhpp_gamma}
 \alias{nhpp_gamma}
-\title{Returns draw of beta from posterior distribution via No U-Turn Sampler}
+\title{Returns draw of beta regression coefficients from posterior distribution via No U-Turn Sampler}
 \usage{
 nhpp_gamma(warm_up, iter_max, input_X, input_n_j, adapt_delta, seed)
 }
+\arguments{
+\item{warm_up}{number of iterations for which to tune step-size}
+
+\item{iter_max}{total number of iterations for which to run the sampler}
+
+\item{input_X}{design matrix}
+
+\item{input_n_j}{outcome of counts}
+
+\item{adapt_delta}{(0,1) scalar that denotes the average acceptance probability}
+
+\item{seed}{random number generator seed}
+}
 \description{
-Returns draw of beta from posterior distribution via No U-Turn Sampler
+Returns draw of beta regression coefficients from posterior distribution via No U-Turn Sampler
+}
+\references{
+No U-Turn Sampler Hoffman, M. and Gelman A.(2014). \emph{The No-U-Turn Sampler: Adaptively Setting Path Lengths in Hamiltonian Monte Carlo}
+Journal of Machine Learning Research 15 (1593-1623).
+}
+\seealso{
+the reference linked
 }

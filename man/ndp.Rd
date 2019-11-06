@@ -10,6 +10,8 @@ ndp(object, chains, J)
 \item{object}{A list provided by the nd_nhpp function}
 
 \item{chains}{number of chains}
+
+\item{J}{number of groups}
 }
 \value{
 An ndp object

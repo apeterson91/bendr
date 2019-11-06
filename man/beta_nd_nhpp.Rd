@@ -6,8 +6,7 @@
 \usage{
 beta_nd_nhpp(r, n_j, mu_sd, tau_sd, L = 4, K = 4, a_0 = 1, b_0 = 1,
   a_alpha = 1, b_alpha = 1, a_rho = 1, b_rho = 1, iter_max,
-  warm_up, thin = 1, multiple_taus = FALSE, kernel = "Normal",
-  seed = NULL)
+  warm_up, thin = 1, multiple_taus = FALSE, seed = NULL)
 }
 \arguments{
 \item{r}{vector of distances  associated with differing groups}
@@ -39,6 +38,8 @@ beta_nd_nhpp(r, n_j, mu_sd, tau_sd, L = 4, K = 4, a_0 = 1, b_0 = 1,
 \item{warm_up}{number of iterations for which to burn-in or "warm-up" sampler}
 
 \item{thin}{number of iterations to thin by}
+
+\item{multiple_taus}{logical indicator for whether or not cluster specific scales (tau) should be estimated}
 
 \item{seed}{integer with which to initialize random number generator}
 }

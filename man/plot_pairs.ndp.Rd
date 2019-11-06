@@ -8,6 +8,8 @@
 }
 \arguments{
 \item{x}{ndp object}
+
+\item{sort}{boolean asking whether sorting algorithm should be used to sort}
 }
 \value{
 ggplot plot object

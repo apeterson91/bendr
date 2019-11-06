@@ -10,6 +10,12 @@ ndp_fixed(object, chains, alpha, rho, J)
 \item{object}{A list provided by the nd_nhpp function}
 
 \item{chains}{number of chains}
+
+\item{alpha}{the fixed upper layer concentration parameter}
+
+\item{rho}{the fixed inner layer concentration parameter}
+
+\item{J}{number of groups}
 }
 \value{
 An ndp object

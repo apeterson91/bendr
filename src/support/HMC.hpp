@@ -104,7 +104,16 @@ class NHPP
 #include "Tree.hpp"
 
 
-//' Returns draw of beta from posterior distribution via No U-Turn Sampler
+//' Returns draw of beta regression coefficients from posterior distribution via No U-Turn Sampler
+//'
+//' @template nuts 
+//' @param warm_up number of iterations for which to tune step-size 
+//' @param iter_max total number of iterations for which to run the sampler
+//' @param input_X design matrix
+//' @param input_n_j outcome of counts
+//' @param adapt_delta (0,1) scalar that denotes the average acceptance probability 
+//' @param seed random number generator seed
+//' @seealso the reference linked
 //'
 //[[Rcpp::export]]
 Rcpp::List nhpp_gamma(

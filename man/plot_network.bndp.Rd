@@ -4,12 +4,10 @@
 \alias{plot_network.bndp}
 \title{Network Cluster Plot}
 \usage{
-\method{plot_network}{bndp}(x, sample = NULL, mode_label = TRUE)
+\method{plot_network}{bndp}(x, mode_label = TRUE)
 }
 \arguments{
 \item{x}{bndp object}
-
-\item{sample}{number samples to draw}
 
 \item{mode_label}{boolean value to indicate that the network graph should be colored with the Mode cluster label assignments}
 }

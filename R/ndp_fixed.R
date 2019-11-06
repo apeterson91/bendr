@@ -2,10 +2,17 @@
 #'
 #' @param object A list provided by the nd_nhpp function
 #' @param chains number of chains
+#' @param alpha the fixed upper layer concentration parameter
+#' @param rho the fixed inner layer concentration parameter
+#' @param J number of groups
 #' @return An ndp object
 #'
 ndp_fixed <- function(object,chains,alpha,rho,J){
 
+
+	### To pass R CMD Check
+	column_names <- NULL
+	###
 
     d <- object$d 
     offset <- 5 

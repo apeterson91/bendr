@@ -45,7 +45,7 @@ nd_nhpp_fixed <- function(r, n_j,
     if(is.null(seed))
         seed <- 1L
 
-	r_  <-  qnorm(r_)
+	r_  <-  stats::qnorm(r_)
 
     d <- seq(from = floor(min(r_)), to = ceiling(max(r_)), by = 0.01) ## distance grid
     num_posterior_samples <- sum(seq(from=warm_up+1,to = iter_max,by=1) %% thin == 0 )
@@ -57,7 +57,7 @@ nd_nhpp_fixed <- function(r, n_j,
 								  iter_max = iter_max, warm_up = warm_up,
 								  thin = thin, seed = seed, chain = 1,
 								  num_posterior_samples = num_posterior_samples))
-    d <- pnorm(d)
+    d <- stats::pnorm(d)
 
     out <- ndp_fixed(c(list(K = K, L = L, d = R*d,
                       n = sum(n_j[,2]), call = call),fit),1,alpha,rho,J)

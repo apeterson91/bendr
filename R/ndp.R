@@ -2,10 +2,16 @@
 #'
 #' @param object A list provided by the nd_nhpp function
 #' @param chains number of chains
+#' @param J number of groups
 #' @return An ndp object
 #'
 ndp <- function(object,chains, J){
 
+
+	### To pass R CMD Check
+	column_names <- NULL
+	###
+	
 
     d <- object$d 
     offset <- 5 

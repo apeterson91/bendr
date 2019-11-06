@@ -2,14 +2,12 @@
 % Please edit documentation in R/beta_print-and-summary.R
 \name{summary.bndp}
 \alias{summary.bndp}
-\title{Summary method for ndp objects}
+\title{Summary method for bndp objects}
 \usage{
-\method{summary}{ndp}(object, probs, digits = 1, ...)
+\method{summary}{bndp}(object, digits = 1, ...)
 }
 \arguments{
-\item{probs}{For models fit using MCMC, 
-an optional numeric vector of probabilities passed to 
-\code{\link[stats]{quantile}}.}
+\item{object}{a bndp object}
 
 \item{digits}{Number of digits to use for formatting numbers when printing. 
 When calling \code{summary}, the value of digits is stored as the 
@@ -19,9 +17,9 @@ When calling \code{summary}, the value of digits is stored as the
 }
 \value{
 The \code{summary} method returns an object of class 
-  \code{"summary.ndp"}.
+  \code{"summary.bndp"}.
 }
 \description{
 Summaries of parameter estimates and MCMC convergence diagnostics 
-(Monte Carlo error, effective sample size, Rhat).
+(Monte Carlo error, effective sample size).
 }

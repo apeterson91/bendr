@@ -4,15 +4,17 @@
 \alias{plot.bndp}
 \title{Plot method for bndp objects}
 \usage{
-\method{plot}{bndp}(x, plotfun = "cluster")
+\method{plot}{bndp}(x, plotfun = "cluster", ...)
 }
 \arguments{
 \item{x}{an bndp object}
 
 \item{plotfun}{one of "cluster","global", or "network"}
+
+\item{...}{ignored}
 }
 \description{
-The \code{plot} method for \link{bndp-objects} provides convenient
+The \code{plot} method for bndp-objects provides convenient
 access to several types of plots useful for visualizing
 bndp models using the default settings.
 }

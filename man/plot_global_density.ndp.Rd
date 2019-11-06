@@ -2,19 +2,23 @@
 % Please edit documentation in R/plots.R
 \name{plot_global_density.ndp}
 \alias{plot_global_density.ndp}
-\title{Plots global density function - for monitoring convergence}
+\title{Plots global density function}
 \usage{
 \method{plot_global_density}{ndp}(x, p = 0.9, r = NULL,
-  transform = TRUE)
+  transform = FALSE)
 }
 \arguments{
 \item{x}{ndp object}
 
 \item{p}{probability mass contained in uncertainty interval}
+
+\item{r}{optional vector of observed distances}
+
+\item{transform}{boolean denoting whether or not to transform distances}
 }
 \value{
 ggplot plot object
 }
 \description{
-Plots global density function - for monitoring convergence
+Plots global density function
 }

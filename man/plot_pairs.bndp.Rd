@@ -4,10 +4,12 @@
 \alias{plot_pairs.bndp}
 \title{plots pairwise probability clustering plot}
 \usage{
-\method{plot_pairs}{bndp}(x)
+\method{plot_pairs}{bndp}(x, sort = FALSE)
 }
 \arguments{
 \item{x}{bndp object}
+
+\item{sort}{boolean asking whether sorting algorithm should be used to sort}
 }
 \value{
 ggplot plot object

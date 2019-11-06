@@ -20,6 +20,18 @@ nd_nhpp_fixed_fit(r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, alpha,
 
 \item{J}{number of rows in r matrix; number of groups}
 
+\item{mu_0}{normal base measure prior mean}
+
+\item{kappa_0}{normal base measure prior variance scale}
+
+\item{nu_0}{inverse chi sqaure base measure prior degrees of freedom}
+
+\item{sigma_0}{inverse chi square base measure prior scale}
+
+\item{alpha}{upper level concentration parameter (fixed)}
+
+\item{rho}{lower level concentration parameter (fixed)}
+
 \item{iter_max}{total number of iterations for which to run sampler}
 
 \item{warm_up}{number of iterations for which to burn-in or "warm-up" sampler}
@@ -29,6 +41,8 @@ nd_nhpp_fixed_fit(r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, alpha,
 \item{seed}{integer with which to initialize random number generator}
 
 \item{chain}{integer chain label}
+
+\item{num_posterior_samples}{the total number of posterior samples after burn in}
 }
 \description{
 Estimate the nonhomgogenous poisson process intensity function from grouped data with fixed concentration parameters

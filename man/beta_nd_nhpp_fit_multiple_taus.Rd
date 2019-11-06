@@ -4,9 +4,8 @@
 \alias{beta_nd_nhpp_fit_multiple_taus}
 \title{Estimate the nonhomgogenous poisson process intensity function from grouped data using multiple taus}
 \usage{
-beta_nd_nhpp_fit_multiple_taus(X, r, n_j, d, mu_sd, tau_sd, L, K, J, a_0,
-  b_0, a_alpha, b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed,
-  chain)
+beta_nd_nhpp_fit_multiple_taus(r, n_j, d, mu_sd, tau_sd, L, K, J, a_0, b_0,
+  a_alpha, b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed, chain)
 }
 \arguments{
 \item{r}{vector of distances associatd with different BEFs}
