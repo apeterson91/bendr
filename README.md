@@ -9,7 +9,7 @@
 
 This is an R package that fits the Nested Dirichlet Process to grouped distance data according to 
 an Inhomogenous Poisson Process model. The primary target audience is researchers interested in the effect of built environment features (BEFs) on human health, 
-though other applications are possible. See the package's [website](https://apeterson91.github.io/rndpp/) for an [introduction](https://apeterson91.github.io/rndpp/articles/Introduction.html).
+though other applications are possible. See the package's [website](https://apeterson91.github.io/rndpp/) for an [introduction](https://apeterson91.github.io/rndpp/articles/normalmeasure_complexdensities.html).
  Currently both normal and beta base measures are implemented. See the documentation for more information.
 
 
