@@ -13,7 +13,7 @@ assign_mode <- function(x)
 assign_mode.ndp <- function(x){
 
 	error <- get_square_error(x)
-	return(x$cluster_assignment[[1]][which.max(error),])
+	return(x$cluster_assignment[[1]][which.min(error),])
 
 }
 
@@ -21,7 +21,7 @@ assign_mode.ndp <- function(x){
 assign_mode.bndp <- function(x){
 
 	error <- get_square_error(x)
-	return(x$cluster_assignment[[1]][which.max(error)])
+	return(x$cluster_assignment[[1]][which.min(error)])
 
 }
 
@@ -36,6 +36,7 @@ get_square_error <- function(x)
 
 
 #' @export
+#'
 get_square_error.ndp <- function(x){
 
 	error <- square_error(x$cluster_assignment[[1]],x$pmat)

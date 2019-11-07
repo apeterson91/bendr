@@ -200,11 +200,10 @@ plot_cluster_densities.ndp <- function(x, p = .9, pi_threshold = .1, switch = "f
 #' @param x ndp object
 #' @param par character vector of parameter names, defaults to c("alpha")
 #' @return ggplot plot object
-#' @importFrom ggmcmc ggs_traceplot ggs
 #'
 plot_traceplots.ndp <- function(x,par="alpha"){
 
-    p <- ggs_traceplot( ggs( x[[par]] ) )
+    p <- ggmcmc::ggs_traceplot( ggmcmc::ggs( x[[par]] ) )
 
     return(p)
 }

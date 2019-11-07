@@ -23,7 +23,6 @@
 #' }
 #' 
 #' @seealso \code{\link{summary.ndp}}
-#' @importFrom coda as.matrix
 #' 
 print.ndp <- function(x, digits = 2, ...) {
   cat("\n observations:", x$n)

@@ -24,7 +24,6 @@
 #' @seealso \code{\link{summary.bndp}},
 #' 
 #' @importFrom stats mad
-#' @importFrom coda as.matrix
 print.bndp <- function(x, digits = 2, ...) {
   cat("\n observations:", x$n)
   cat("\n groups:", x$J)

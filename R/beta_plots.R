@@ -128,6 +128,21 @@ plot_cluster_densities.bndp <- function(x, p = .9,pi_threshold = .1, switch = "f
 }
 
 
+#' Traceplots of various NDP-NHPP parameters
+#'
+#' @export
+#' @param x bndp object
+#' @param par character vector of parameter names, defaults to c("alpha")
+#' @return ggplot plot object
+#'
+plot_traceplots.bndp <- function(x,par="alpha"){
+
+    p <- ggmcmc::ggs_traceplot( ggmcmc::ggs( x[[par]] ) )
+
+    return(p)
+}
+
+
 #' Network Cluster Plot
 #'
 #' @export 

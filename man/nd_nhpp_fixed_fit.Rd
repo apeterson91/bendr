@@ -47,3 +47,10 @@ nd_nhpp_fixed_fit(r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, alpha,
 \description{
 Estimate the nonhomgogenous poisson process intensity function from grouped data with fixed concentration parameters
 }
+\references{
+Gelman, A., Carlin J., Stern H. and Rubin D. (2004). \emph{Bayesian Data Analysis.} Cambridge University Press,
+  Chapman & Hall/CRC.
+}
+\seealso{
+the normal-inverse Chi-square conjugate parameterization in the reference
+}
