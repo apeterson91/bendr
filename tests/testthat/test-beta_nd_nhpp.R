@@ -13,7 +13,7 @@ n_j <- school_data %>% dplyr::arrange(school_id) %>%
 capture_output(fit <- beta_nd_nhpp(r = r, n_j = n_j,
                                    tau_sd = 1, mu_sd = 1,
                                    L = 2, K = 2,
-                                   iter_max = 10,
+                                   iter_max = 30,
                                    warm_up = 5,
                                    thin = 1,
                                    seed = 34143))

@@ -11,7 +11,7 @@ n_j <- school_data %>% dplyr::arrange(school_id) %>%
     dplyr::select(start,go) %>% as.matrix()
 capture.output(fit <- nd_nhpp_fixed(r = r, n_j = n_j,
                      L = 2, K = 2,
-                     iter_max = 10,
+                     iter_max = 30,
                      warm_up = 5,
                      thin = 1,
                      seed = 34143))
