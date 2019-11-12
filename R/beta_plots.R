@@ -99,7 +99,7 @@ plot_cluster_densities.bndp <- function(x, p = .9,pi_threshold = .1, switch = "f
 	xlabel  <- "Distance"
 
 
-    p <- x$if_df %>% 
+    plot <- x$if_df %>% 
 		dplyr::mutate(Intensity_Function = factor(Intensity_Function),
 					  Distance = Distance)   %>% 
 		dplyr::filter(Intensity_Function %in% ks_to_keep) %>%
@@ -113,18 +113,18 @@ plot_cluster_densities.bndp <- function(x, p = .9,pi_threshold = .1, switch = "f
     ggplot2::theme(strip.background = ggplot2::element_blank())
     
 	if(switch == "color"){
-		p <- p + ggplot2::geom_line(aes(color=`Intensity Function`)) + 
+		plot <- plot + ggplot2::geom_line(aes(color=`Intensity Function`)) + 
 			ggplot2::labs(title = "Cluster Intensity Functions", y = "Density", x = xlabel)
 	}
 	else{
-		p <-  p + ggplot2::geom_line() + ggplot2::geom_ribbon(aes(ymin= lower,ymax=upper),alpha=0.3) +
+		plot <-  plot + ggplot2::geom_line() + ggplot2::geom_ribbon(aes(ymin= lower,ymax=upper),alpha=0.3) +
 			ggplot2::facet_wrap( ~ `Intensity Function`) + 
 			ggplot2::labs(title = "Cluster Intensity Functions",
-						  subtitle = paste0("Shaded area indicates ",p*100,"% Credible Interval"),
+						  subtitle = paste0("Shaded area indicates ",p * 100,"% Credible Interval"),
 						  y = "Density", x = xlabel)
 	}
     
-    return(p)
+    return(plot)
 }
 
 
@@ -175,7 +175,7 @@ plot_global_density.bndp <- function(x, p = 0.9, r = NULL, transform = TRUE){
 	if(p >= 1 || p <= 0 )
 		stop("p must be in (0,1)")
 
-    p <- x$global_density %>% dplyr::group_by(Chain,Distance) %>%
+    plot <- x$global_density %>% dplyr::group_by(Chain,Distance) %>%
         dplyr::summarise(lower = quantile(Global_Density,.5 - p / 2,na.rm=T),
                          med = median(Global_Density,na.rm=T),
                          upper = quantile(Global_Density,.5 + p /2,na.rm=T)) %>%
@@ -188,11 +188,11 @@ plot_global_density.bndp <- function(x, p = 0.9, r = NULL, transform = TRUE){
          subtitle = paste0("Shaded area indicates ",p,"% Credible Interval"),
          y = "Density")
 	if(is.null(r))
-		return(p)
+		return(plot)
 	else if(is.numeric(r)){
 		p2 <- dplyr::tibble(distances = r) %>%  ggplot2::ggplot(aes(x=distances)) +
 			ggplot2::geom_density() + ggplot2::theme_bw() +
 			ggplot2::labs(title = "Global Kernel Density Estimate")
-		return(gridExtra::grid.arrange(p,p2,nrow=1))
+		return(gridExtra::grid.arrange(plot,p2,nrow=1))
 	}
 }

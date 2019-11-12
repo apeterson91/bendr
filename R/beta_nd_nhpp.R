@@ -33,6 +33,8 @@ beta_nd_nhpp <- function(r, n_j,
     call <- match.call(expand.dots=TRUE)
     J <-  nrow(n_j)
     ## basic checks
+	stopifnot((iter_max > warm_up) && (warm_up > 0))
+	stopifnot(L>0 && K >0)
     if(any(r<=0))
         stop("all r must be positive numbers")
     if(any(r>=1)){

@@ -31,8 +31,9 @@ nd_nhpp <- function(r, n_j,
     call <- match.call(expand.dots=TRUE)
     J <-  nrow(n_j)
     ## basic checks
-    if(iter_max <= warm_up)
-      stop("warm_up must be < iter_max",.call = FALSE)
+    if((iter_max <= warm_up) || warm_up<0)
+      stop("warm_up must be < iter_max and > 0",.call = FALSE)
+	stopifnot(L>0 && K >0)
     if(any(r<=0))
         stop("all r must be positive numbers", .call = FALSE)
     if(any(r>=1)){

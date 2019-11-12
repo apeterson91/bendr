@@ -1,2 +1,6 @@
 R/deprec-*.R
 R/compat-*.R
+R/rnhpp.R
+R/ndp.R
+src/support/auxiliary_functions.hpp
+src/support/NDP_functions.hpp
