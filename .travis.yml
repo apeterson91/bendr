@@ -10,8 +10,6 @@ matrix:
   include:
   - r: devel
   - r: release
-    after_success:
-    - Rscript -e 'covr::codecov()'
   - r: oldrel
   - r: 3.5
 
@@ -24,3 +22,7 @@ notifications:
         on_success: change
         on_failure: change
 
+after_success:
+    - Rscript -e 'covr::codecov()'
+
+CODECOV_TOKEN = 09b54ea9-a049-4ff4-8e1c-25649392594c
