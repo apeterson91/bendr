@@ -6,9 +6,6 @@ cache: packages
 r_github_packages:
     - r-lib/covr
 
-after_sucess:
-    - Rscript -e 'covr::codecov()'
-
 matrix:
   include:
   - r: devel
