@@ -1,7 +1,8 @@
 #' Estimate the nonhomgogenous poisson process intensity function from grouped data using a beta base measure
 #' 
-#' @param r vector of distances  associated with differing groups
-#' @param n_j matrix of integers denoting the start and length of each school's associated BEF distances
+#' @param distances_col name of column in data that contains distances
+#' @param id_col name of column in data  that contains id grouping variable
+#' @param data data.frame object that contains grouped distances
 #' @param mu_sd proposal scale for mus 
 #' @param tau_sd proposal scale for mus 
 #' @param L component truncation number
@@ -19,21 +20,31 @@
 #' @param seed integer with which to initialize random number generator
 #'
 #' @export
-beta_nd_nhpp <- function(r, n_j,
-                    mu_sd, tau_sd, 
-                    L = 4 , K = 4, 
-                    a_0 = 1 , b_0 = 1, 
-                    a_alpha = 1, b_alpha = 1,
-                    a_rho = 1, b_rho = 1, 
-                    iter_max, warm_up, 
-                    thin = 1,
-                    multiple_taus = FALSE,
-                    seed = NULL) {
+beta_nd_nhpp <- function(distances_col,id_col,
+						data = NULL,
+						mu_sd, tau_sd, 
+						L = 4 , K = 4, 
+						a_0 = 1 , b_0 = 1, 
+						a_alpha = 1, b_alpha = 1,
+						a_rho = 1, b_rho = 1, 
+						iter_max, warm_up, 
+						thin = 1,
+						multiple_taus = FALSE,
+						seed = NULL) {
 
     call <- match.call(expand.dots=TRUE)
+	r <- data %>% dplyr::arrange(!! dplyr::sym(id_col)) %>%
+		select(!!!distances_col) %>% pull()
+	n_j <- data %>%  dplyr::arrange(!! dplyr::sym(id_col)) %>%
+		dplyr::group_by(!! dplyr::sym(id_col)) %>% dplyr::count() %>%
+		dplyr::ungroup() %>% dplyr::mutate(start = cumsum(n)) %>%
+		mutate(start_ = replace_na(dplyr::lag(start),0)) %>%
+		dplyr::select(-start) %>% dplyr::rename(start = start_,go = n) %>%
+		dplyr::select(start,go) %>% as.matrix()
     J <-  nrow(n_j)
     ## basic checks
 	stopifnot((iter_max > warm_up) && (warm_up > 0))
+	stopifnot(is.integer(iter_max) && is.integer(warm_up))
 	stopifnot(L>0 && K >0)
     if(any(r<=0))
         stop("all r must be positive numbers")

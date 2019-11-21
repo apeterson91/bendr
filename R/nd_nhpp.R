@@ -1,7 +1,8 @@
 #' Estimate the nonhomgogenous poisson process intensity function from grouped data using a normal kernel
 #'
-#' @param r vector of distances  associated with differing groups
-#' @param n_j matrix of integers denoting the start and length of each school's associated BEF distances in r
+#' @param distances_col name of column in data that contains distances
+#' @param id_col name of column in data  that contains id grouping variable
+#' @param data data.frame object that contains grouped distances
 #' @param L component truncation number
 #' @param K intensity cluster truncation number
 #' @param mu_0 mean hyperparameter for mu normal base measure. Default is 0; Normal(0,1).
@@ -18,7 +19,8 @@
 #' @param seed integer with which to initialize random number generator
 #'
 #' @export
-nd_nhpp <- function(r, n_j,
+nd_nhpp <- function(distances_col,id_col,
+					data = NULL,
                     mu_0 = 0, kappa_0 = 1,
                     nu_0 = 1, sigma_0 = 1,
                     L = 4 , K = 4,
@@ -29,10 +31,18 @@ nd_nhpp <- function(r, n_j,
                     seed = NULL) {
 
     call <- match.call(expand.dots=TRUE)
+	r <- data %>% dplyr::arrange(!! dplyr::sym(id_col)) %>%
+		select(!!!distances_col) %>% pull()
+	n_j <- data %>%  dplyr::arrange(!! dplyr::sym(id_col)) %>%
+		dplyr::group_by(!! dplyr::sym(id_col)) %>% dplyr::count() %>%
+		dplyr::ungroup() %>% dplyr::mutate(start = cumsum(n)) %>%
+		mutate(start_ = replace_na(dplyr::lag(start),0)) %>%
+		dplyr::select(-start) %>% dplyr::rename(start = start_,go = n) %>%
+		dplyr::select(start,go) %>% as.matrix()
     J <-  nrow(n_j)
     ## basic checks
-    if((iter_max <= warm_up) || warm_up<0)
-      stop("warm_up must be < iter_max and > 0",.call = FALSE)
+	stopifnot((iter_max > warm_up) && (warm_up > 0))
+	stopifnot(is.integer(iter_max) && is.integer(warm_up))
 	stopifnot(L>0 && K >0)
     if(any(r<=0))
         stop("all r must be positive numbers", .call = FALSE)

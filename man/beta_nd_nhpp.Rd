@@ -4,14 +4,17 @@
 \alias{beta_nd_nhpp}
 \title{Estimate the nonhomgogenous poisson process intensity function from grouped data using a beta base measure}
 \usage{
-beta_nd_nhpp(r, n_j, mu_sd, tau_sd, L = 4, K = 4, a_0 = 1, b_0 = 1,
-  a_alpha = 1, b_alpha = 1, a_rho = 1, b_rho = 1, iter_max,
-  warm_up, thin = 1, multiple_taus = FALSE, seed = NULL)
+beta_nd_nhpp(distances_col, id_col, data = NULL, mu_sd, tau_sd, L = 4,
+  K = 4, a_0 = 1, b_0 = 1, a_alpha = 1, b_alpha = 1, a_rho = 1,
+  b_rho = 1, iter_max, warm_up, thin = 1, multiple_taus = FALSE,
+  seed = NULL)
 }
 \arguments{
-\item{r}{vector of distances  associated with differing groups}
+\item{distances_col}{name of column in data that contains distances}
 
-\item{n_j}{matrix of integers denoting the start and length of each school's associated BEF distances}
+\item{id_col}{name of column in data  that contains id grouping variable}
+
+\item{data}{data.frame object that contains grouped distances}
 
 \item{mu_sd}{proposal scale for mus}
 

@@ -130,24 +130,13 @@ G_j \sim Q = \sum_{k=1}^{K} \pi_k^*\delta_{G^*_j(\cdot)}(\cdot)\\
 G_j = \sum_{l=1}^{L} w_{lk}^*\delta_{(\mu,\sigma^2)^*}(\cdot)
 $$
 
-With all of this work out of the way, lets take the distances, calculate the $n_j$ above, keeping track of our position in the distances vector (see code below). Note that nothing we create here involves covariates used to estimate $\gamma_j$. That will come later.
 
-```{r create_r}
-## school_data available in the rndpp package
-r <- school_data %>% arrange(school_id) %>%  ## sort to ensure correspondence with n_j
-    select(distances) %>% pull()
-
-n_j <- school_data %>% arrange(school_id) %>%
-    group_by(school_id) %>% count() %>% 
-    ungroup() %>% mutate(start = (cumsum(n) ) ) %>% 
-    mutate(start_ = replace_na(dplyr::lag(start),0) ) %>% select(-start) %>% 
-    rename(start=start_,go =n) %>% 
-    select(start,go) %>% as.matrix()
-```
 
 We can use a smaller number of $L$ and $K$ stick components for computational convenience and since we know the true number of clusters - in a real data analysis you would want to use more. We'll set $\alpha=\rho=1$ to encourage a small number of clusters, set non-informative conjugate priors and fit the model as follows.
 ```{r modelfit1}
-fit <- nd_nhpp_fixed(r = r, n_j = n_j,
+fit <- nd_nhpp_fixed(distances_col = "distances",
+                     id_col = "school_id",
+                     data = school_data,
                      L = 5, K = 5,
                      alpha = 1, rho = 1,
                      mu_0 = 0, kappa_0 = 1, ## Normal Mean Base Measure Hyperparameters
