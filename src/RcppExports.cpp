@@ -8,7 +8,7 @@ using namespace Rcpp;
 
 // nd_nhpp_fit
 Rcpp::List nd_nhpp_fit(const Eigen::ArrayXd& r, const Eigen::MatrixXi& n_j, const Eigen::ArrayXd& d, const int& L, const int& K, const int& J, const double& mu_0, const double& kappa_0, const int& nu_0, const double& sigma_0, const double& a_alpha, const double& b_alpha, const double& a_rho, const double& b_rho, const int& iter_max, const int& warm_up, const int& thin, const int& seed, const int& chain, const int& num_posterior_samples);
-RcppExport SEXP _rndpp_nd_nhpp_fit(SEXP rSEXP, SEXP n_jSEXP, SEXP dSEXP, SEXP LSEXP, SEXP KSEXP, SEXP JSEXP, SEXP mu_0SEXP, SEXP kappa_0SEXP, SEXP nu_0SEXP, SEXP sigma_0SEXP, SEXP a_alphaSEXP, SEXP b_alphaSEXP, SEXP a_rhoSEXP, SEXP b_rhoSEXP, SEXP iter_maxSEXP, SEXP warm_upSEXP, SEXP thinSEXP, SEXP seedSEXP, SEXP chainSEXP, SEXP num_posterior_samplesSEXP) {
+RcppExport SEXP _bendr_nd_nhpp_fit(SEXP rSEXP, SEXP n_jSEXP, SEXP dSEXP, SEXP LSEXP, SEXP KSEXP, SEXP JSEXP, SEXP mu_0SEXP, SEXP kappa_0SEXP, SEXP nu_0SEXP, SEXP sigma_0SEXP, SEXP a_alphaSEXP, SEXP b_alphaSEXP, SEXP a_rhoSEXP, SEXP b_rhoSEXP, SEXP iter_maxSEXP, SEXP warm_upSEXP, SEXP thinSEXP, SEXP seedSEXP, SEXP chainSEXP, SEXP num_posterior_samplesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -38,7 +38,7 @@ END_RCPP
 }
 // nd_nhpp_fixed_fit
 Rcpp::List nd_nhpp_fixed_fit(const Eigen::ArrayXd& r, const Eigen::MatrixXi& n_j, const Eigen::ArrayXd& d, const int& L, const int& K, const int& J, const double& mu_0, const double& kappa_0, const int& nu_0, const double& sigma_0, const double& alpha, const double& rho, const int& iter_max, const int& warm_up, const int& thin, const int& seed, const int& chain, const int& num_posterior_samples);
-RcppExport SEXP _rndpp_nd_nhpp_fixed_fit(SEXP rSEXP, SEXP n_jSEXP, SEXP dSEXP, SEXP LSEXP, SEXP KSEXP, SEXP JSEXP, SEXP mu_0SEXP, SEXP kappa_0SEXP, SEXP nu_0SEXP, SEXP sigma_0SEXP, SEXP alphaSEXP, SEXP rhoSEXP, SEXP iter_maxSEXP, SEXP warm_upSEXP, SEXP thinSEXP, SEXP seedSEXP, SEXP chainSEXP, SEXP num_posterior_samplesSEXP) {
+RcppExport SEXP _bendr_nd_nhpp_fixed_fit(SEXP rSEXP, SEXP n_jSEXP, SEXP dSEXP, SEXP LSEXP, SEXP KSEXP, SEXP JSEXP, SEXP mu_0SEXP, SEXP kappa_0SEXP, SEXP nu_0SEXP, SEXP sigma_0SEXP, SEXP alphaSEXP, SEXP rhoSEXP, SEXP iter_maxSEXP, SEXP warm_upSEXP, SEXP thinSEXP, SEXP seedSEXP, SEXP chainSEXP, SEXP num_posterior_samplesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -66,7 +66,7 @@ END_RCPP
 }
 // beta_nd_nhpp_fit
 Rcpp::List beta_nd_nhpp_fit(const Eigen::ArrayXd& r, const Eigen::MatrixXi& n_j, const Eigen::VectorXd& d, double& mu_sd, double& tau_sd, const int& L, const int& K, const int& J, const double& a_0, const double& b_0, const double& a_alpha, const double& b_alpha, const double& a_rho, const double& b_rho, const int& iter_max, const int& warm_up, const int& thin, const int& seed, const int& chain);
-RcppExport SEXP _rndpp_beta_nd_nhpp_fit(SEXP rSEXP, SEXP n_jSEXP, SEXP dSEXP, SEXP mu_sdSEXP, SEXP tau_sdSEXP, SEXP LSEXP, SEXP KSEXP, SEXP JSEXP, SEXP a_0SEXP, SEXP b_0SEXP, SEXP a_alphaSEXP, SEXP b_alphaSEXP, SEXP a_rhoSEXP, SEXP b_rhoSEXP, SEXP iter_maxSEXP, SEXP warm_upSEXP, SEXP thinSEXP, SEXP seedSEXP, SEXP chainSEXP) {
+RcppExport SEXP _bendr_beta_nd_nhpp_fit(SEXP rSEXP, SEXP n_jSEXP, SEXP dSEXP, SEXP mu_sdSEXP, SEXP tau_sdSEXP, SEXP LSEXP, SEXP KSEXP, SEXP JSEXP, SEXP a_0SEXP, SEXP b_0SEXP, SEXP a_alphaSEXP, SEXP b_alphaSEXP, SEXP a_rhoSEXP, SEXP b_rhoSEXP, SEXP iter_maxSEXP, SEXP warm_upSEXP, SEXP thinSEXP, SEXP seedSEXP, SEXP chainSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -95,7 +95,7 @@ END_RCPP
 }
 // beta_nd_nhpp_fit_multiple_taus
 Rcpp::List beta_nd_nhpp_fit_multiple_taus(const Eigen::VectorXd& r, const Eigen::MatrixXi& n_j, const Eigen::VectorXd& d, double& mu_sd, double& tau_sd, const int& L, const int& K, const int& J, const double& a_0, const double& b_0, const double& a_alpha, const double& b_alpha, const double& a_rho, const double& b_rho, const int& iter_max, const int& warm_up, const int& thin, const int& seed, const int& chain);
-RcppExport SEXP _rndpp_beta_nd_nhpp_fit_multiple_taus(SEXP rSEXP, SEXP n_jSEXP, SEXP dSEXP, SEXP mu_sdSEXP, SEXP tau_sdSEXP, SEXP LSEXP, SEXP KSEXP, SEXP JSEXP, SEXP a_0SEXP, SEXP b_0SEXP, SEXP a_alphaSEXP, SEXP b_alphaSEXP, SEXP a_rhoSEXP, SEXP b_rhoSEXP, SEXP iter_maxSEXP, SEXP warm_upSEXP, SEXP thinSEXP, SEXP seedSEXP, SEXP chainSEXP) {
+RcppExport SEXP _bendr_beta_nd_nhpp_fit_multiple_taus(SEXP rSEXP, SEXP n_jSEXP, SEXP dSEXP, SEXP mu_sdSEXP, SEXP tau_sdSEXP, SEXP LSEXP, SEXP KSEXP, SEXP JSEXP, SEXP a_0SEXP, SEXP b_0SEXP, SEXP a_alphaSEXP, SEXP b_alphaSEXP, SEXP a_rhoSEXP, SEXP b_rhoSEXP, SEXP iter_maxSEXP, SEXP warm_upSEXP, SEXP thinSEXP, SEXP seedSEXP, SEXP chainSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -124,7 +124,7 @@ END_RCPP
 }
 // nhpp_gamma
 Rcpp::List nhpp_gamma(const int& warm_up, const int& iter_max, Eigen::ArrayXXd& input_X, Eigen::ArrayXd& input_n_j, const double adapt_delta, const int& seed);
-RcppExport SEXP _rndpp_nhpp_gamma(SEXP warm_upSEXP, SEXP iter_maxSEXP, SEXP input_XSEXP, SEXP input_n_jSEXP, SEXP adapt_deltaSEXP, SEXP seedSEXP) {
+RcppExport SEXP _bendr_nhpp_gamma(SEXP warm_upSEXP, SEXP iter_maxSEXP, SEXP input_XSEXP, SEXP input_n_jSEXP, SEXP adapt_deltaSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -140,7 +140,7 @@ END_RCPP
 }
 // green_loss_unknown
 Eigen::ArrayXd green_loss_unknown(const Eigen::ArrayXXi& cluster_assignment, const Eigen::ArrayXXd& pmat, const double& tau);
-RcppExport SEXP _rndpp_green_loss_unknown(SEXP cluster_assignmentSEXP, SEXP pmatSEXP, SEXP tauSEXP) {
+RcppExport SEXP _bendr_green_loss_unknown(SEXP cluster_assignmentSEXP, SEXP pmatSEXP, SEXP tauSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -153,7 +153,7 @@ END_RCPP
 }
 // green_loss_known
 Eigen::ArrayXd green_loss_known(const Eigen::ArrayXXi& cluster_assignment, const Eigen::ArrayXXd& pmat, const Eigen::ArrayXXi& true_cluster_assignment, const double& a, const double& b);
-RcppExport SEXP _rndpp_green_loss_known(SEXP cluster_assignmentSEXP, SEXP pmatSEXP, SEXP true_cluster_assignmentSEXP, SEXP aSEXP, SEXP bSEXP) {
+RcppExport SEXP _bendr_green_loss_known(SEXP cluster_assignmentSEXP, SEXP pmatSEXP, SEXP true_cluster_assignmentSEXP, SEXP aSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -168,7 +168,7 @@ END_RCPP
 }
 // square_error
 Eigen::ArrayXd square_error(const Eigen::ArrayXXi& cluster_assignment, const Eigen::ArrayXXd& pmat);
-RcppExport SEXP _rndpp_square_error(SEXP cluster_assignmentSEXP, SEXP pmatSEXP) {
+RcppExport SEXP _bendr_square_error(SEXP cluster_assignmentSEXP, SEXP pmatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -180,18 +180,18 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rndpp_nd_nhpp_fit", (DL_FUNC) &_rndpp_nd_nhpp_fit, 20},
-    {"_rndpp_nd_nhpp_fixed_fit", (DL_FUNC) &_rndpp_nd_nhpp_fixed_fit, 18},
-    {"_rndpp_beta_nd_nhpp_fit", (DL_FUNC) &_rndpp_beta_nd_nhpp_fit, 19},
-    {"_rndpp_beta_nd_nhpp_fit_multiple_taus", (DL_FUNC) &_rndpp_beta_nd_nhpp_fit_multiple_taus, 19},
-    {"_rndpp_nhpp_gamma", (DL_FUNC) &_rndpp_nhpp_gamma, 6},
-    {"_rndpp_green_loss_unknown", (DL_FUNC) &_rndpp_green_loss_unknown, 3},
-    {"_rndpp_green_loss_known", (DL_FUNC) &_rndpp_green_loss_known, 5},
-    {"_rndpp_square_error", (DL_FUNC) &_rndpp_square_error, 2},
+    {"_bendr_nd_nhpp_fit", (DL_FUNC) &_bendr_nd_nhpp_fit, 20},
+    {"_bendr_nd_nhpp_fixed_fit", (DL_FUNC) &_bendr_nd_nhpp_fixed_fit, 18},
+    {"_bendr_beta_nd_nhpp_fit", (DL_FUNC) &_bendr_beta_nd_nhpp_fit, 19},
+    {"_bendr_beta_nd_nhpp_fit_multiple_taus", (DL_FUNC) &_bendr_beta_nd_nhpp_fit_multiple_taus, 19},
+    {"_bendr_nhpp_gamma", (DL_FUNC) &_bendr_nhpp_gamma, 6},
+    {"_bendr_green_loss_unknown", (DL_FUNC) &_bendr_green_loss_unknown, 3},
+    {"_bendr_green_loss_known", (DL_FUNC) &_bendr_green_loss_known, 5},
+    {"_bendr_square_error", (DL_FUNC) &_bendr_square_error, 2},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_rndpp(DllInfo *dll) {
+RcppExport void R_init_bendr(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

@@ -1,31 +1,25 @@
 ITER <- 10
 WARM <- 5
-r <- school_data %>% dplyr::arrange(school_id) %>%  ## sort to ensure correspondence with n_j
-    dplyr::select(distances) %>% dplyr::pull()
-
-n_j <- school_data %>% dplyr::arrange(school_id) %>%
-    dplyr::group_by(school_id) %>% dplyr::count() %>%
-    dplyr::ungroup() %>% dplyr::mutate(start = (cumsum(n) ) ) %>%
-    dplyr::mutate(start_ = tidyr::replace_na(dplyr::lag(start),0) ) %>% dplyr::select(-start) %>%
-    dplyr::rename(start=start_,go =n) %>%
-    dplyr::select(start,go) %>% as.matrix()
-capture.output(fit <- nd_nhpp_fixed(r = r, n_j = n_j,
-                     L = 2, K = 2,
-                     iter_max = 30,
-                     warm_up = 5,
-                     thin = 1,
-                     seed = 34143))
+r <- school_data$distances
+capture.output(fit <- nd_nhpp_fixed(distances_col = "distances",
+                                    id_col = "school_id",
+                                    data = school_data,
+                                    L = 2, K = 2,
+                                    iter_max = 30,
+                                    warm_up = 5,
+                                    thin = 1,
+                                    seed = 34143))
 
 test_that("nd_nhpp function errors if given incorrect inputs", {
-    expect_error(nd_nhpp(c(-1,1,1),n_j = matrix(1,2,2),
-                         iter_max = ITER, warm_up = WARM,),
-                         regexp = "must be positive")
-    expect_error(nd_nhpp(c(-1,1,1),n_j = matrix(1,2,2),
-                         iter_max = WARM, warm_up = ITER),
-                 regexp = "must be <")
-    expect_error(nd_nhpp_fixed(c(-1,1,1),n_j = matrix(1,2,2),
-                         iter_max = WARM, warm_up = ITER),
-                 regexp = "must be <")
+    expect_error(nd_nhpp(distances_col =  "distances",
+                         id_col = "school_id",
+                         data = school_data,
+                         iter_max = WARM, warm_up = ITER))
+    expect_error(nd_nhpp_fixed(distances_col =  "distances",
+                               id_col = "school_id",
+                               data = school_data,
+                               iter_max = WARM,
+                               warm_up = ITER))
 })
 
 test_that("nd_nhpp plotting methods work",{

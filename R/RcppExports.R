@@ -28,7 +28,7 @@
 #' @seealso the conjugate normal parameterization in the reference below
 #'
 nd_nhpp_fit <- function(r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, a_alpha, b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed, chain, num_posterior_samples) {
-    .Call(`_rndpp_nd_nhpp_fit`, r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, a_alpha, b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed, chain, num_posterior_samples)
+    .Call(`_bendr_nd_nhpp_fit`, r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, a_alpha, b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed, chain, num_posterior_samples)
 }
 
 #' Estimate the nonhomgogenous poisson process intensity function from grouped data with fixed concentration parameters
@@ -57,7 +57,7 @@ nd_nhpp_fit <- function(r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, a_alph
 #' @seealso the normal-inverse Chi-square conjugate parameterization in the reference
 #'
 nd_nhpp_fixed_fit <- function(r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, alpha, rho, iter_max, warm_up, thin, seed, chain, num_posterior_samples) {
-    .Call(`_rndpp_nd_nhpp_fixed_fit`, r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, alpha, rho, iter_max, warm_up, thin, seed, chain, num_posterior_samples)
+    .Call(`_bendr_nd_nhpp_fixed_fit`, r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, alpha, rho, iter_max, warm_up, thin, seed, chain, num_posterior_samples)
 }
 
 #' Estimate the nonhomgogenous poisson process intensity function from grouped data  
@@ -83,7 +83,7 @@ nd_nhpp_fixed_fit <- function(r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, 
 #' @param chain integer chain label
 #'
 beta_nd_nhpp_fit <- function(r, n_j, d, mu_sd, tau_sd, L, K, J, a_0, b_0, a_alpha, b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed, chain) {
-    .Call(`_rndpp_beta_nd_nhpp_fit`, r, n_j, d, mu_sd, tau_sd, L, K, J, a_0, b_0, a_alpha, b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed, chain)
+    .Call(`_bendr_beta_nd_nhpp_fit`, r, n_j, d, mu_sd, tau_sd, L, K, J, a_0, b_0, a_alpha, b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed, chain)
 }
 
 #' Estimate the nonhomgogenous poisson process intensity function from grouped data using multiple taus 
@@ -109,7 +109,7 @@ beta_nd_nhpp_fit <- function(r, n_j, d, mu_sd, tau_sd, L, K, J, a_0, b_0, a_alph
 #' @param chain integer chain label
 #'
 beta_nd_nhpp_fit_multiple_taus <- function(r, n_j, d, mu_sd, tau_sd, L, K, J, a_0, b_0, a_alpha, b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed, chain) {
-    .Call(`_rndpp_beta_nd_nhpp_fit_multiple_taus`, r, n_j, d, mu_sd, tau_sd, L, K, J, a_0, b_0, a_alpha, b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed, chain)
+    .Call(`_bendr_beta_nd_nhpp_fit_multiple_taus`, r, n_j, d, mu_sd, tau_sd, L, K, J, a_0, b_0, a_alpha, b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed, chain)
 }
 
 #' Returns draw of beta regression coefficients from posterior distribution via No U-Turn Sampler
@@ -124,7 +124,7 @@ beta_nd_nhpp_fit_multiple_taus <- function(r, n_j, d, mu_sd, tau_sd, L, K, J, a_
 #' @seealso the reference linked
 #'
 nhpp_gamma <- function(warm_up, iter_max, input_X, input_n_j, adapt_delta, seed) {
-    .Call(`_rndpp_nhpp_gamma`, warm_up, iter_max, input_X, input_n_j, adapt_delta, seed)
+    .Call(`_bendr_nhpp_gamma`, warm_up, iter_max, input_X, input_n_j, adapt_delta, seed)
 }
 
 #' Computes Green and Lau loss function with unknown classification
@@ -133,7 +133,7 @@ nhpp_gamma <- function(warm_up, iter_max, input_X, input_n_j, adapt_delta, seed)
 #' @param pmat J x J pairwise probability of co-clustering matrix
 #' @param tau penalty parameter 
 green_loss_unknown <- function(cluster_assignment, pmat, tau) {
-    .Call(`_rndpp_green_loss_unknown`, cluster_assignment, pmat, tau)
+    .Call(`_bendr_green_loss_unknown`, cluster_assignment, pmat, tau)
 }
 
 #' Computes Green and Lau Loss function with known classification
@@ -144,7 +144,7 @@ green_loss_unknown <- function(cluster_assignment, pmat, tau) {
 #' @param a mis-classification penalty parameter
 #' @param b classification penalty parameter
 green_loss_known <- function(cluster_assignment, pmat, true_cluster_assignment, a, b) {
-    .Call(`_rndpp_green_loss_known`, cluster_assignment, pmat, true_cluster_assignment, a, b)
+    .Call(`_bendr_green_loss_known`, cluster_assignment, pmat, true_cluster_assignment, a, b)
 }
 
 #' Computes Square loss with unknown classification
@@ -152,6 +152,6 @@ green_loss_known <- function(cluster_assignment, pmat, true_cluster_assignment, 
 #' @param cluster_assignment iter_total x J cluster assignment matrix
 #' @param pmat J x J pairwise probability of co-clustering matrix
 square_error <- function(cluster_assignment, pmat) {
-    .Call(`_rndpp_square_error`, cluster_assignment, pmat)
+    .Call(`_bendr_square_error`, cluster_assignment, pmat)
 }
 

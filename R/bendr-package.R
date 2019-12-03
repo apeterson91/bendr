@@ -1,5 +1,5 @@
 ## usethis namespace: start
-#' @useDynLib rndpp, .registration = TRUE
+#' @useDynLib bendr, .registration = TRUE
 ## usethis namespace: end
 NULL
 

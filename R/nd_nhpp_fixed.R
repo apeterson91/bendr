@@ -29,17 +29,16 @@ nd_nhpp_fixed <- function(distances_col,id_col,
 
     call <- match.call(expand.dots=TRUE)
 	r <- data %>% dplyr::arrange(!! dplyr::sym(id_col)) %>%
-		select(!!!distances_col) %>% pull()
+		dplyr::select(!!!distances_col) %>% dplyr::pull()
 	n_j <- data %>%  dplyr::arrange(!! dplyr::sym(id_col)) %>%
 		dplyr::group_by(!! dplyr::sym(id_col)) %>% dplyr::count() %>%
 		dplyr::ungroup() %>% dplyr::mutate(start = cumsum(n)) %>%
-		mutate(start_ = replace_na(dplyr::lag(start),0)) %>%
+		dplyr::mutate(start_ = tidyr::replace_na(dplyr::lag(start),0)) %>%
 		dplyr::select(-start) %>% dplyr::rename(start = start_,go = n) %>%
 		dplyr::select(start,go) %>% as.matrix()
     J <-  nrow(n_j)
     ## basic checks
 	stopifnot((iter_max > warm_up) && (warm_up > 0))
-	stopifnot(is.integer(iter_max) && is.integer(warm_up))
 	stopifnot(L>0 && K >0)
     if(any(r<=0))
         stop("all r must be positive numbers", .call = FALSE)

@@ -1,16 +1,9 @@
 ITER <- 10
 WARM_UP <- 5
-r <- school_data %>% dplyr::arrange(school_id) %>%  ## sort to ensure correspondence with n_j
-    dplyr::select(distances) %>% dplyr::pull()
-
-n_j <- school_data %>% dplyr::arrange(school_id) %>%
-    dplyr::group_by(school_id) %>% dplyr::count() %>%
-    dplyr::ungroup() %>% dplyr::mutate(start = (cumsum(n) ) ) %>%
-    dplyr::mutate(start_ = tidyr::replace_na(dplyr::lag(start),0) ) %>% dplyr::select(-start) %>%
-    dplyr::rename(start=start_,go =n) %>%
-    dplyr::select(start,go) %>% as.matrix()
-
-capture_output(fit <- beta_nd_nhpp(r = r, n_j = n_j,
+r <- school_data$distances
+capture_output(fit <- beta_nd_nhpp(distances_col = "distances",
+                                   id_col = "school_id",
+                                   data = school_data,
                                    tau_sd = 1, mu_sd = 1,
                                    L = 2, K = 2,
                                    iter_max = 30,
@@ -19,13 +12,9 @@ capture_output(fit <- beta_nd_nhpp(r = r, n_j = n_j,
                                    seed = 34143))
 
 test_that("beta_nd_nhpp errors appropriately", {
-    expect_error(beta_nd_nhpp(c(-1,1,1),n_j = matrix(1,2,2),
-                         iter_max = ITER, warm_up = WARM_UP),
-                 regexp = "must be positive")
-    expect_error(beta_nd_nhpp(c(-1,1,0),n_j = matrix(1,2,2),
-                              iter_max = ITER, warm_up = WARM_UP),
-                 regexp = "must be positive")
-    expect_error(beta_nd_nhpp(c(-1,1,1),n_j = matrix(1,2,2),
+    expect_error(beta_nd_nhpp(distances_col =  "distances",
+                              id_col = "school_id",
+                              data = school_data,
                               iter_max = WARM_UP, warm_up = ITER))
 })
 

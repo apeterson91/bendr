@@ -1,8 +1,8 @@
-#' Datasets for rndpp examples
+#' Datasets for bendr examples
 #' 
-#' Small datasets for use in \pkg{rndpp} examples and vignettes.
+#' Small datasets for use in \pkg{bendr} examples and vignettes.
 #'
-#' @name rndpp-datasets 
+#' @name bendr-datasets 
 #' @aliases school_data
 #'
 #' @format 

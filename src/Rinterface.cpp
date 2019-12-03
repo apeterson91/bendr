@@ -1532,3 +1532,5 @@ Eigen::ArrayXd square_error(const Eigen::ArrayXXi &cluster_assignment,
 
 	return(loss);
 }
+
+
