@@ -1,4 +1,4 @@
-# BENDR: Built Environment Nested Dirichlet Processes in R 
+# bendr: Built Environment Nested Dirichlet Processes in R 
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.org/apeterson91/bendr.svg?branch=master)](https://travis-ci.org/apeterson91/bendr)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
