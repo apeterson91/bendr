@@ -178,6 +178,36 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// nd_nhpp_multivariate_fit
+Rcpp::List nd_nhpp_multivariate_fit(const Eigen::ArrayXXd& r, const Eigen::MatrixXi& n_j, const Eigen::ArrayXd& d, const int& L, const int& K, const int& J, const double& mu_0, const double& kappa_0, const int& nu_0, const double& sigma_0, const double& a_alpha, const double& b_alpha, const double& a_rho, const double& b_rho, const int& iter_max, const int& warm_up, const int& thin, const int& seed, const int& chain, const int& num_posterior_samples);
+RcppExport SEXP _bendr_nd_nhpp_multivariate_fit(SEXP rSEXP, SEXP n_jSEXP, SEXP dSEXP, SEXP LSEXP, SEXP KSEXP, SEXP JSEXP, SEXP mu_0SEXP, SEXP kappa_0SEXP, SEXP nu_0SEXP, SEXP sigma_0SEXP, SEXP a_alphaSEXP, SEXP b_alphaSEXP, SEXP a_rhoSEXP, SEXP b_rhoSEXP, SEXP iter_maxSEXP, SEXP warm_upSEXP, SEXP thinSEXP, SEXP seedSEXP, SEXP chainSEXP, SEXP num_posterior_samplesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::ArrayXXd& >::type r(rSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXi& >::type n_j(n_jSEXP);
+    Rcpp::traits::input_parameter< const Eigen::ArrayXd& >::type d(dSEXP);
+    Rcpp::traits::input_parameter< const int& >::type L(LSEXP);
+    Rcpp::traits::input_parameter< const int& >::type K(KSEXP);
+    Rcpp::traits::input_parameter< const int& >::type J(JSEXP);
+    Rcpp::traits::input_parameter< const double& >::type mu_0(mu_0SEXP);
+    Rcpp::traits::input_parameter< const double& >::type kappa_0(kappa_0SEXP);
+    Rcpp::traits::input_parameter< const int& >::type nu_0(nu_0SEXP);
+    Rcpp::traits::input_parameter< const double& >::type sigma_0(sigma_0SEXP);
+    Rcpp::traits::input_parameter< const double& >::type a_alpha(a_alphaSEXP);
+    Rcpp::traits::input_parameter< const double& >::type b_alpha(b_alphaSEXP);
+    Rcpp::traits::input_parameter< const double& >::type a_rho(a_rhoSEXP);
+    Rcpp::traits::input_parameter< const double& >::type b_rho(b_rhoSEXP);
+    Rcpp::traits::input_parameter< const int& >::type iter_max(iter_maxSEXP);
+    Rcpp::traits::input_parameter< const int& >::type warm_up(warm_upSEXP);
+    Rcpp::traits::input_parameter< const int& >::type thin(thinSEXP);
+    Rcpp::traits::input_parameter< const int& >::type seed(seedSEXP);
+    Rcpp::traits::input_parameter< const int& >::type chain(chainSEXP);
+    Rcpp::traits::input_parameter< const int& >::type num_posterior_samples(num_posterior_samplesSEXP);
+    rcpp_result_gen = Rcpp::wrap(nd_nhpp_multivariate_fit(r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, a_alpha, b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed, chain, num_posterior_samples));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_bendr_nd_nhpp_fit", (DL_FUNC) &_bendr_nd_nhpp_fit, 20},
@@ -188,6 +218,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_bendr_green_loss_unknown", (DL_FUNC) &_bendr_green_loss_unknown, 3},
     {"_bendr_green_loss_known", (DL_FUNC) &_bendr_green_loss_known, 5},
     {"_bendr_square_error", (DL_FUNC) &_bendr_square_error, 2},
+    {"_bendr_nd_nhpp_multivariate_fit", (DL_FUNC) &_bendr_nd_nhpp_multivariate_fit, 20},
     {NULL, NULL, 0}
 };
 

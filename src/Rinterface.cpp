@@ -1534,3 +1534,247 @@ Eigen::ArrayXd square_error(const Eigen::ArrayXXi &cluster_assignment,
 }
 
 
+//' Estimate the Multivariate nonhomgogenous poisson process intensity function from grouped data via Nested Dirichlet Process
+//' 
+//' @template bda 
+//'
+//' @param r matrix of distances associatd with different BEFs
+//' @param n_j matrix of integers denoting the start and length of each observations associated BEF distances
+//' @param d a 1D grid of positive real values over which the differing intensities are evaluated
+//' @param L component truncation number
+//' @param K intensity cluster truncation number
+//' @param J number of rows in r matrix; number of groups
+//' @param mu_0 normal base measure prior mean
+//' @param kappa_0 normal base measure prior variance scale 
+//' @param nu_0 inverse chi sqaure base measure prior degrees of freedom
+//' @param sigma_0 inverse chi square base measure prior scale  
+//' @param a_alpha hyperparameter for alpha gamma prior
+//' @param b_alpha scale hyperparameter for alpha gamma prior
+//' @param a_rho hyperparameter for rho gamma prior
+//' @param b_rho scale hyperparameter for rho gamma prior
+//' @param iter_max total number of iterations for which to run sampler
+//' @param warm_up number of iterations for which to burn-in or "warm-up" sampler
+//' @param thin number of iterations to thin by
+//' @param seed integer with which to initialize random number generator
+//' @param chain integer chain label
+//' @param num_posterior_samples the total number of posterior samples after burn in 
+//' @seealso the conjugate normal parameterization in the reference below
+//'
+// [[Rcpp::export]]
+Rcpp::List nd_nhpp_multivariate_fit(
+        const Eigen::ArrayXXd& r,
+        const Eigen::MatrixXi& n_j,
+        const Eigen::ArrayXd& d,
+        const int& L,
+        const int& K,
+        const int& J,
+        const double& mu_0,
+        const double& kappa_0,
+        const int& nu_0,
+        const double& sigma_0,
+        const double& a_alpha,
+        const double& b_alpha,
+        const double& a_rho,
+        const double& b_rho,
+        const int& iter_max,
+        const int& warm_up,
+        const int& thin,
+        const int& seed,
+        const int& chain,
+        const int& num_posterior_samples
+        )
+{
+	/*
+    // set seed
+    std::mt19937 rng;
+    rng = std::mt19937(seed);
+
+	const int dim_BEF = r.cols();
+
+    //create sample containers
+#include "support/create_mvsample_containers.hpp"
+
+#include "support/during_sampling_containers.hpp"
+
+    // create rng's
+    std::gamma_distribution<double> rgam_alpha(a_alpha,b_alpha);
+    std::gamma_distribution<double> rgam_rho(a_rho,b_rho);
+    std::uniform_real_distribution<double> runif(0,1);
+    std::normal_distribution<double> rnorm(0,1);
+
+    //initialize concentration parameters
+    alpha = rgam_alpha(rng);
+    rho = rgam_rho(rng);
+	// sample priors
+#include "support/sample_concentration_priors.hpp"
+
+    // initialize component weights
+    u = stick_break(L,K,alpha,rng);
+    v = stick_break(K,rho,rng);
+    w = stick_break_weights(u);
+    pi = stick_break_weights(v);
+
+    mu = initialize_mu(L,K,mu_0,kappa_0,rng);
+    tau = initialize_tau(L,K,sigma_0,nu_0);
+
+
+    Rcpp::Rcout << "Beginning Sampling" << std::endl;
+    Rcpp::Rcout << "----------------------------------------------------------------------" << std::endl;
+    for(int iter_ix = 1; iter_ix <= iter_max; iter_ix ++){
+      print_progress(iter_ix,warm_up,iter_max,chain);
+
+      //calculate cluster probabilities
+	  // sampler.calculate_q()
+      q = dmvnorm(J,r,n_j,pi,w,mu,tau);
+
+	  // sampler.assign_clusters();
+      for(int j = 0; j < J; j ++){
+            probs = q.row(j);
+            std::discrete_distribution<int> d(probs.data(),probs.data()+probs.size());
+            iter_cluster_assignment(j) = d(rng);
+        }
+
+	  // sampler.calculate_b();
+      // calculate w/in cluster component probabilities
+        b = dnorm(r,n_j,w,mu,tau,iter_cluster_assignment);
+
+		// sampler.assign_components(rng);
+        // assign distances to components within clusters
+        component_count = Eigen::ArrayXXi::Zero(L,K);
+        for(int j = 0 ; j < J; j ++){
+            for(int i = 0 ; i < n_j(j,1) ; i++){
+                for(int l = 0 ; l< L; l++)
+                    prob(l) = b(n_j(j,0) + i,l);
+                std::discrete_distribution<int> d(prob.data(),prob.data() + prob.size());
+                iter_component_assignment(n_j(j,0) +i) = d(rng);
+                component_count(iter_component_assignment(n_j(j,0)+i),iter_cluster_assignment(j)) += 1;
+            }
+        }
+
+        // draw samples from intensity cluster parameters
+		// sampler.count_clusters();
+
+        for(int k = 0; k < K; k++)
+            cluster_count(k) = (iter_cluster_assignment == k).count();
+
+		// sampler.update_cluster_stick_posterior()
+        for(int k = 0; k < K; k++){
+            v_posterior_beta_alpha(k) = 1 + cluster_count(k);
+            v_posterior_beta_beta(k) = alpha + cluster_count.tail(K-k-1).sum();
+        }
+
+        v = stick_break(K, v_posterior_beta_alpha,v_posterior_beta_beta,rng);
+        pi = stick_break_weights(v);
+
+
+
+		// sampler.update_componentr_stick_posterior()
+        for(int l = 0; l < L; l ++){
+            for(int k = 0; k < K; k++){
+                u_posterior_beta_alpha(l,k) = 1 + component_count(l,k);
+                u_posterior_beta_beta(l,k) = rho + ((component_count.col(k)).tail(K-k-1)).sum();
+            }
+        }
+
+        u = stick_break(u_posterior_beta_alpha,u_posterior_beta_beta,rng);
+        w = stick_break_weights(u);
+
+        // calculate mu hat (sq) sums
+		// sampler.update_mu();
+
+        ycount = Eigen::ArrayXXd::Zero(L,K);
+        ycount_sq = Eigen::ArrayXXd::Zero(L,K);
+        for(int l = 0 ; l < L; l ++){
+          for(int k = 0; k < K; k++){
+            for(int j = 0; j < J; j++){
+              for(int i = 0; i < n_j(j,1); i ++){
+                if(iter_cluster_assignment(j) == k && iter_component_assignment(n_j(j,0)+i) == l){
+                  ycount(l,k) += r(n_j(j,0)+i);
+                  ycount_sq(l,k) += pow(r(n_j(j,0)+i),2);
+                }
+              }
+            }
+          }
+        }
+
+
+        //sample mu via conjugacy
+
+        for(int l = 0; l < L; l ++){
+         for(int k = 0; k < K; k++){
+           if(component_count(l,k) == 0){
+             tau(l,k) = nu_0 * sigma_0 / R::rchisq(nu_0);
+             mu(l,k) = rnorm(rng) * sqrt(tau(l,k) / kappa_0 ) + mu_0;
+           }
+           else{
+             s_n  = nu_0 * sigma_0 + (ycount_sq(l,k) - (pow(ycount(l,k),2) / component_count(l,k) ) ) + (kappa_0 * component_count(l,k) / (kappa_0 + component_count(l,k))) * pow( (ycount(l,k) / component_count(l,k) - mu_0 ),2);
+             tau(l,k) = s_n / R::rchisq(nu_0 + component_count(l,k));
+             mu_n = ( (kappa_0  / tau(l,k)) * mu_0   + ycount(l,k) / tau(l,k)  ) / ( kappa_0 / tau(l,k) + component_count(l,k) / tau(l,k));
+             s_n = 1.0 /( (kappa_0 /tau(l,k)) + (component_count(l,k) / tau(l,k)) ) ;
+             mu(l,k) =  rnorm(rng) * sqrt(s_n) + mu_n;
+           }
+         }
+       }
+		// sampler.update_concentration_parameters()
+
+        // sample concentration parameters
+        posterior_b_alpha = 1.0 / b_alpha - (log(1-v.array())).head(K-1).sum();
+        posterior_b_rho =  1.0 / b_rho - log(1-u.block(0,0,L-1,K).array()).matrix().colwise().sum().sum();
+        std::gamma_distribution<double> rgam_alpha(posterior_a_alpha, 1.0 / posterior_b_alpha);
+        std::gamma_distribution<double> rgam_rho(posterior_a_rho, 1.0 / posterior_b_rho);
+        alpha = rgam_alpha(rng);
+        rho = rgam_rho(rng);
+
+		// sampler.update_psi();)
+		
+		// sampler.calculate_adjacency_matrix()
+		// sampler.store_samples(iter_ix);
+
+        // calculate adjacency matrix and store samples
+        if((iter_ix > warm_up) && (iter_ix % thin ==0)){
+          for(int j = 0; j < J; j++){
+            for(int j_ = 0; j_ < j; j_++)
+              cluster_matrix(j,j_) += (iter_cluster_assignment(j) == iter_cluster_assignment(j_)) ? 1: 0;
+          }
+          for(int k =0; k < K; k++){
+             for(int d_ix = 0; d_ix < d_length; d_ix ++){
+               for(int l = 0; l < L; l++){
+                 intensities(sample_ix, k*d_length + d_ix) += w(l,k) * R::dnorm(d(d_ix),mu(l,k),sqrt(tau(l,k)),false);
+			   }
+				 global_intensity(sample_ix,d_ix) += pi(k) *  intensities(sample_ix,k*d_length+d_ix);
+             }
+          }
+
+          cluster_assignment.row(sample_ix) = iter_cluster_assignment;
+          cluster_component_assignment.row(sample_ix) = iter_component_assignment;
+          pi_samps.row(sample_ix) = pi;
+          Eigen::Map<Eigen::RowVectorXd> mu_samp(mu.data(),mu.size());
+          Eigen::Map<Eigen::RowVectorXd> w_samp(w.data(),w.size());
+          Eigen::Map<Eigen::RowVectorXd> tau_samp(tau.data(),tau.size());
+          w_samps.row(sample_ix) = w_samp; // stored in column order
+          mu_samps.row(sample_ix) = mu_samp;
+          tau_samps.row(sample_ix) = tau_samp;
+          alpha_samps(sample_ix,0) = alpha;
+          rho_samps(sample_ix,0) = rho;
+          sample_ix += 1;
+        }
+    }
+
+    cluster_matrix = cluster_matrix / num_posterior_samples;
+
+    return(Rcpp::List::create(Rcpp::Named("cluster_assignment") = cluster_assignment,
+                              Rcpp::Named("component_assignment") =  cluster_component_assignment,
+                              Rcpp::Named("cluster_pair_probability") =  cluster_matrix,
+                              Rcpp::Named("pi_samples") = pi_samps,
+                              Rcpp::Named("w_samples") =  w_samps,
+                              Rcpp::Named("intensities") = intensities,
+							  Rcpp::Named("global_intensity") = global_intensity,
+                              Rcpp::Named("mu_samples") =  mu_samps,
+                              Rcpp::Named("tau_samples") = tau_samps,
+                              Rcpp::Named("alpha_samples") = alpha_samps,
+                              Rcpp::Named("rho_samples") = rho_samps,
+							  Rcpp::Named("alpha_prior") = alpha_prior,
+							  Rcpp::Named("rho_prior") = rho_prior
+    ));
+	*/
+}

@@ -85,6 +85,7 @@ Eigen::ArrayXXd stick_break(const int& rows, const int& cols, const double& beta
 
     return(out);
 }
+
 //' stick breaking
 Eigen::ArrayXXd stick_break(Eigen::ArrayXXd& alpha, Eigen::ArrayXXd& beta, std::mt19937& rng){
 
