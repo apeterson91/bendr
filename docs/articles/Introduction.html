@@ -61,7 +61,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/apeterson91/rndpp">
+  <a href="https://github.com/apeterson91/bendr">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -82,7 +82,7 @@
       <h1>Introduction</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/apeterson91/rndpp/blob/master/vignettes/Introduction.Rmd"><code>vignettes/Introduction.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/apeterson91/bendr/blob/master/vignettes/Introduction.Rmd"><code>vignettes/Introduction.Rmd</code></a></small>
       <div class="hidden name"><code>Introduction.Rmd</code></div>
 
     </div>
@@ -146,24 +146,24 @@ G_j = \sum_{l=1}^{L} w_{lk}^*\delta_{(\mu,\sigma^2)^*}(\cdot)
 <a class="sourceLine" id="cb2-5" data-line-number="5">                     <span class="dt">alpha =</span> <span class="dv">1</span>, <span class="dt">rho =</span> <span class="dv">1</span>,</a>
 <a class="sourceLine" id="cb2-6" data-line-number="6">                     <span class="dt">mu_0 =</span> <span class="dv">0</span>, <span class="dt">kappa_0 =</span> <span class="dv">1</span>, <span class="co">## Normal Mean Base Measure Hyperparameters</span></a>
 <a class="sourceLine" id="cb2-7" data-line-number="7">                     <span class="dt">sigma_0 =</span> <span class="dv">1</span>, <span class="dt">nu_0 =</span> <span class="dv">1</span>, <span class="co">## Inverse Chi square prior Hyperparameters</span></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8">                     <span class="dt">iter_max =</span> <span class="fl">1.5E5</span>L, <span class="co">## To get good resolution, could possibly use more or less depending on convergence</span></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9">                     <span class="dt">warm_up =</span> <span class="fl">1.4E5</span>L,</a>
+<a class="sourceLine" id="cb2-8" data-line-number="8">                     <span class="dt">iter_max =</span> <span class="fl">5E4</span>, <span class="co">## To get good resolution, could possibly use more or less depending on convergence</span></a>
+<a class="sourceLine" id="cb2-9" data-line-number="9">                     <span class="dt">warm_up =</span> <span class="fl">4E4</span>,</a>
 <a class="sourceLine" id="cb2-10" data-line-number="10">                     <span class="dt">thin =</span> <span class="dv">1</span>,</a>
 <a class="sourceLine" id="cb2-11" data-line-number="11">                     <span class="dt">seed =</span> <span class="dv">34143</span>)</a>
 <a class="sourceLine" id="cb2-12" data-line-number="12"><span class="co">#&gt; Beginning Sampling</span></a>
 <a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co">#&gt; ----------------------------------------------------------------------</span></a>
-<a class="sourceLine" id="cb2-14" data-line-number="14"><span class="co">#&gt; [Chain 1] Beginning of iteration: 1 / 150000 (0%)     [Warmup]</span></a>
-<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="co">#&gt; [Chain 1] Beginning of iteration: 15000 / 150000 (10%)    [Warmup]</span></a>
-<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="co">#&gt; [Chain 1] Beginning of iteration: 30000 / 150000 (20%)    [Warmup]</span></a>
-<a class="sourceLine" id="cb2-17" data-line-number="17"><span class="co">#&gt; [Chain 1] Beginning of iteration: 45000 / 150000 (30%)    [Warmup]</span></a>
-<a class="sourceLine" id="cb2-18" data-line-number="18"><span class="co">#&gt; [Chain 1] Beginning of iteration: 60000 / 150000 (40%)    [Warmup]</span></a>
-<a class="sourceLine" id="cb2-19" data-line-number="19"><span class="co">#&gt; [Chain 1] Beginning of iteration: 75000 / 150000 (50%)    [Warmup]</span></a>
-<a class="sourceLine" id="cb2-20" data-line-number="20"><span class="co">#&gt; [Chain 1] Beginning of iteration: 90000 / 150000 (60%)    [Warmup]</span></a>
-<a class="sourceLine" id="cb2-21" data-line-number="21"><span class="co">#&gt; [Chain 1] Beginning of iteration: 105000 / 150000 (70%)   [Warmup]</span></a>
-<a class="sourceLine" id="cb2-22" data-line-number="22"><span class="co">#&gt; [Chain 1] Beginning of iteration: 120000 / 150000 (80%)   [Warmup]</span></a>
-<a class="sourceLine" id="cb2-23" data-line-number="23"><span class="co">#&gt; [Chain 1] Beginning of iteration: 135000 / 150000 (90%)   [Warmup]</span></a>
-<a class="sourceLine" id="cb2-24" data-line-number="24"><span class="co">#&gt; [Chain 1] Beginning of iteration: 140001 / 150000 (93%)   [Sampling]</span></a>
-<a class="sourceLine" id="cb2-25" data-line-number="25"><span class="co">#&gt; [Chain 1] Beginning of iteration: 150000 / 150000 (100%)  [Sampling]</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-14" data-line-number="14"><span class="co">#&gt; [Chain 1] Beginning of iteration: 1 / 50000 (0%)  [Warmup]</span></a>
+<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="co">#&gt; [Chain 1] Beginning of iteration: 5000 / 50000 (10%)  [Warmup]</span></a>
+<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="co">#&gt; [Chain 1] Beginning of iteration: 10000 / 50000 (20%)     [Warmup]</span></a>
+<a class="sourceLine" id="cb2-17" data-line-number="17"><span class="co">#&gt; [Chain 1] Beginning of iteration: 15000 / 50000 (30%)     [Warmup]</span></a>
+<a class="sourceLine" id="cb2-18" data-line-number="18"><span class="co">#&gt; [Chain 1] Beginning of iteration: 20000 / 50000 (40%)     [Warmup]</span></a>
+<a class="sourceLine" id="cb2-19" data-line-number="19"><span class="co">#&gt; [Chain 1] Beginning of iteration: 25000 / 50000 (50%)     [Warmup]</span></a>
+<a class="sourceLine" id="cb2-20" data-line-number="20"><span class="co">#&gt; [Chain 1] Beginning of iteration: 30000 / 50000 (60%)     [Warmup]</span></a>
+<a class="sourceLine" id="cb2-21" data-line-number="21"><span class="co">#&gt; [Chain 1] Beginning of iteration: 35000 / 50000 (70%)     [Warmup]</span></a>
+<a class="sourceLine" id="cb2-22" data-line-number="22"><span class="co">#&gt; [Chain 1] Beginning of iteration: 40000 / 50000 (80%)     [Warmup]</span></a>
+<a class="sourceLine" id="cb2-23" data-line-number="23"><span class="co">#&gt; [Chain 1] Beginning of iteration: 40001 / 50000 (80%)     [Sampling]</span></a>
+<a class="sourceLine" id="cb2-24" data-line-number="24"><span class="co">#&gt; [Chain 1] Beginning of iteration: 45000 / 50000 (90%)     [Sampling]</span></a>
+<a class="sourceLine" id="cb2-25" data-line-number="25"><span class="co">#&gt; [Chain 1] Beginning of iteration: 50000 / 50000 (100%)    [Sampling]</span></a></code></pre></div>
 <p>The ndp model object returned by <code>nd_nhpp</code> contains the parameters of interest as <code><a href="https://rdrr.io/pkg/coda/man/mcmc.html">coda::mcmc</a></code> objects, so that the coda functions can be called on them easily. For example, we can look at the <span class="math inline">\(\pi_k\)</span> parameters that denote the probability of a school being assigned to the <span class="math inline">\(k\)</span>th cluster.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(fit<span class="op">$</span>pi)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; </span></a>
@@ -176,20 +176,20 @@ G_j = \sum_{l=1}^{L} w_{lk}^*\delta_{(\mu,\sigma^2)^*}(\cdot)
 <a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt;    plus standard error of the mean:</span></a>
 <a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt;            Mean      SD  Naive SE Time-series SE</span></a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; pi k: 1 0.35825 0.04809 0.0004809      0.0008428</span></a>
-<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; pi k: 2 0.32957 0.07404 0.0007404      0.0117443</span></a>
-<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt; pi k: 3 0.25108 0.10335 0.0010335      0.0193425</span></a>
-<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt; pi k: 4 0.03487 0.06916 0.0006916      0.0108821</span></a>
-<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt; pi k: 5 0.02623 0.05358 0.0005358      0.0079547</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; pi k: 1 0.35792 0.04725 0.0004725      0.0008328</span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; pi k: 2 0.34085 0.07665 0.0007665      0.0082088</span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt; pi k: 3 0.17393 0.11691 0.0011691      0.0257276</span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt; pi k: 4 0.08646 0.11359 0.0011359      0.0224056</span></a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt; pi k: 5 0.04085 0.07303 0.0007303      0.0099824</span></a>
 <a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt; 2. Quantiles for each variable:</span></a>
 <a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="co">#&gt;              2.5%      25%      50%     75%  97.5%</span></a>
-<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">#&gt; pi k: 1 2.669e-01 0.325638 0.357296 0.39006 0.4559</span></a>
-<a class="sourceLine" id="cb3-22" data-line-number="22"><span class="co">#&gt; pi k: 2 1.361e-01 0.301660 0.342776 0.37597 0.4355</span></a>
-<a class="sourceLine" id="cb3-23" data-line-number="23"><span class="co">#&gt; pi k: 3 5.249e-03 0.215624 0.267112 0.31572 0.4151</span></a>
-<a class="sourceLine" id="cb3-24" data-line-number="24"><span class="co">#&gt; pi k: 4 8.219e-05 0.001783 0.006557 0.02430 0.2612</span></a>
-<a class="sourceLine" id="cb3-25" data-line-number="25"><span class="co">#&gt; pi k: 5 7.817e-05 0.001826 0.006722 0.02373 0.2330</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="co">#&gt;              2.5%      25%     50%     75%  97.5%</span></a>
+<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">#&gt; pi k: 1 0.2682407 0.325072 0.35698 0.38972 0.4530</span></a>
+<a class="sourceLine" id="cb3-22" data-line-number="22"><span class="co">#&gt; pi k: 2 0.0881584 0.317389 0.35155 0.38437 0.4473</span></a>
+<a class="sourceLine" id="cb3-23" data-line-number="23"><span class="co">#&gt; pi k: 3 0.0017461 0.039976 0.21255 0.27000 0.3482</span></a>
+<a class="sourceLine" id="cb3-24" data-line-number="24"><span class="co">#&gt; pi k: 4 0.0001307 0.003152 0.01643 0.19049 0.3357</span></a>
+<a class="sourceLine" id="cb3-25" data-line-number="25"><span class="co">#&gt; pi k: 5 0.0001101 0.002627 0.01076 0.03857 0.2794</span></a></code></pre></div>
 <p>We can also call <code>rndpp</code> specific functions that will help us check whether our model is correctly estimating the densities. To begin with, we can look at an estimate of the global density estimate (averaging over all clusters’ densities):</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="../reference/plot_global_density.html">plot_global_density</a></span>(fit,<span class="dt">r =</span> school_data<span class="op">$</span>distances)</a></code></pre></div>
 <p><img src="Introduction_files/figure-html/plot_global-1.png" width="700"> The above plot looks similar to the empirical estimate. This is a good sign! While the height might not be the same, we have to remember that since we’re using a normal mixing measure, we’re likely to see less accuracy in the density estimation near the boundaries. This might be a good reason to try the beta mixing measure instead, though it should be noted that since the beta mixing measure is not conjugate, its sampling is typically less efficient.</p>
@@ -236,18 +236,18 @@ G_j = \sum_{l=1}^{L} w_{lk}^*\delta_{(\mu,\sigma^2)^*}(\cdot)
 <a class="sourceLine" id="cb9-28" data-line-number="28"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb9-29" data-line-number="29"><span class="co">#&gt; ------</span></a></code></pre></div>
 <p>To provide a point of reference, this model can be replicated in standard libraries, e.g. <code><a href="https://rdrr.io/r/stats/glm.html">stats::glm</a></code>.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">reg_fit2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(y<span class="op">~</span><span class="dv">1</span>,<span class="dt">data=</span>df,<span class="dt">family=</span><span class="kw"><a href="https://rdrr.io/r/stats/family.html">Gamma</a></span>(<span class="dt">link=</span><span class="st">'log'</span>))</a>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">reg_fit2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(y<span class="op">~</span><span class="dv">1</span>,<span class="dt">data=</span>df,<span class="dt">family=</span><span class="kw"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span>(<span class="dt">link=</span><span class="st">'log'</span>))</a>
 <a class="sourceLine" id="cb10-2" data-line-number="2">reg_fit2</a>
 <a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; Call:  glm(formula = y ~ 1, family = Gamma(link = "log"), data = df)</span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; Call:  glm(formula = y ~ 1, family = poisson(link = "log"), data = df)</span></a>
 <a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt; Coefficients:</span></a>
 <a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt; (Intercept)  </span></a>
 <a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt;       2.286  </span></a>
 <a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt; Degrees of Freedom: 149 Total (i.e. Null);  149 Residual</span></a>
-<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt; Null Deviance:       15.6 </span></a>
-<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt; Residual Deviance: 15.6  AIC: 763.1</span></a></code></pre></div>
+<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt; Null Deviance:       142.8 </span></a>
+<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt; Residual Deviance: 142.8     AIC: 758.4</span></a></code></pre></div>
 </div>
 </div>
   </div>
