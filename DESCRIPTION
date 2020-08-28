@@ -25,7 +25,8 @@ Imports:
     tidyr,
     purrr,
     dplyr,
-    ggmcmc
+    ggmcmc,
+    formula.tools
 LinkingTo: 
     Rcpp (>= 0.12.16),
     RcppEigen(>= 0.3.3.3.0)

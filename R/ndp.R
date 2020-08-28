@@ -1,17 +1,18 @@
 #' Create a ndp object
 #'
-#' @param object A list provided by the nd_nhpp function
-#' @param chains number of chains
-#' @param J number of groups
+#' @param object A list provided by the \code{\link{bend}} function
 #' @return An ndp object
 #'
-ndp <- function(object,chains, J){
+ndp <- function(object){
 
 
 	### To pass R CMD Check
 	column_names <- NULL
 	###
 	
+
+	## TODO: Fix  parameter data frames below into more consistent format
+	chains <- object$chains
 
     d <- object$d 
     offset <- 5 
