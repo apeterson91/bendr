@@ -7,8 +7,7 @@
 \usage{
 \method{summary}{ndp}(object, digits = 1, ...)
 
-\method{print}{summary.ndp}(x, digits = max(1, attr(x, "print.digits")),
-  ...)
+\method{print}{summary.ndp}(x, digits = max(1, attr(x, "print.digits")), ...)
 }
 \arguments{
 \item{object}{an ndp object}

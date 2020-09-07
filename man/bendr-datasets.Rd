@@ -4,7 +4,8 @@
 \alias{bendr-datasets}
 \alias{school_data}
 \title{Datasets for bendr examples}
-\format{\describe{
+\format{
+\describe{
 \item{\code{school_data}}{
 Simulated data school data
 \itemize{
@@ -14,7 +15,8 @@ Simulated data school data
 }
 }
 
-}}
+}
+}
 \description{
 Small datasets for use in \pkg{bendr} examples and vignettes.
 }

@@ -4,8 +4,7 @@
 \alias{green_loss.ndp}
 \title{Lau and Green posterior loss function}
 \usage{
-\method{green_loss}{ndp}(object, truth = NULL, tau = 0.5, a = 1,
-  b = 1)
+\method{green_loss}{ndp}(object, truth = NULL, tau = 0.5, a = 1, b = 1)
 }
 \arguments{
 \item{object}{a ndp object}

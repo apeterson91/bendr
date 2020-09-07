@@ -4,8 +4,7 @@
 \alias{plot_global_density.ndp}
 \title{Plots global density function}
 \usage{
-\method{plot_global_density}{ndp}(x, p = 0.9, r = NULL,
-  transform = FALSE)
+\method{plot_global_density}{ndp}(x, p = 0.9, r = NULL, transform = FALSE)
 }
 \arguments{
 \item{x}{ndp object}

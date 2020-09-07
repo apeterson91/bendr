@@ -1,9 +1,8 @@
 
 # Libraries ---------------------------------------------------------------
 
-require(rndpp)
-require(dplyr)
-require(magrittr)
+library(bendr)
+library(dplyr)
 
 # Data Generation ---------------------------------------------------------
 
@@ -26,6 +25,14 @@ school_data <- rbind(school_data,as_tibble(schools_2) %>%
     rename(distances=event_times) %>%
         select(-sim_id)) %>%
     mutate(density = ifelse(school_id<=num_schools,1,2))
+
+school_data <- rbenvo::benvo(subject_data = school_data %>%
+                  select(-distances) %>%
+                  mutate(school_id=as.integer(school_id)),
+              bef_data = list(FFR=school_data %>%
+                                  mutate(school_id=as.integer(school_id)) %>%
+                                  rename(Distance=distances) %>%
+                                  select(-density)))
 
 
 # Write Data --------------------------------------------------------------

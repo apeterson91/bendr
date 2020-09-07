@@ -17,14 +17,6 @@ assign_mode.ndp <- function(x){
 
 }
 
-#' @export
-assign_mode.bndp <- function(x){
-
-	error <- get_square_error(x)
-	return(x$cluster_assignment[[1]][which.min(error)])
-
-}
-
 #' Calculates Error Distribution under square loss function
 #'
 #' @export
@@ -44,11 +36,3 @@ get_square_error.ndp <- function(x){
 	return(error)
 }
 
-#' @export
-#'
-get_square_error.bndp <- function(x){
-
-	error <- square_error(x$cluster_assignment[[1]],x$pmat)
-
-	return(error)
-}

@@ -1,7 +1,7 @@
 #' Estimate Clustered Inhomgogenous poisson process intensity functions from grouped data using a normal kernel
 #'
 #' @param formula bendr formula see the details
-#' @param benvo  \code{\link[rBenvo]{Benvo}} object 
+#' @param benvo  \code{\link[rBenvo]{Benvo}} object
 #' @param base_measure one of c("Normal","Beta") indicating which base measure to use.
 #' @param L component truncation number
 #' @param K intensity cluster truncation number
@@ -30,20 +30,20 @@ bend <- function(formula,
 				 iter_max = 5E3,
 				 burn_in = floor(iter_max/2),
 				 thin = 1,
-				 seed = NULL) 
+				 seed = NULL)
 {
 
     call <- match.call(expand.dots=TRUE)
 	dt <- groupvo(benvo,formula)
     ## basic checks
-	stopifnot((iter_max > warm_up) && (warm_up > 0))
+	stopifnot((iter_max > burn_in) && (burn_in > 0))
 	stopifnot(L>0 && K >0)
 
     if(is.null(seed))
         seed <- 134143L
 
     d <- seq(from = 0, to = 1, by = 0.01) ## distance grid
-    num_posterior_samples <- sum(seq(from=warm_up+1,to = iter_max,by=1) %% thin == 0 )
+    num_posterior_samples <- sum(seq(from=burn_in+1,to = iter_max,by=1) %% thin == 0 )
 	stopifnot(num_posterior_samples >0 )
 
 
@@ -53,7 +53,7 @@ bend <- function(formula,
 					   nu_0 = nu_0, sigma_0 = sigma_0,
 					   a_alpha = a_alpha, b_alpha = b_alpha,
 					   a_rho = a_rho, b_rho = b_rho,
-					   iter_max = iter_max, warm_up = warm_up,
+					   iter_max = iter_max, warm_up = burn_in,
 					   thin = thin, seed = seed, chain = 1,
 					   num_posterior_samples = num_posterior_samples)
 
@@ -61,11 +61,11 @@ bend <- function(formula,
     d <- stats::pnorm(d)
 
 	obj <- list(fit = fit,
-				J = J,
+				J = dt$J,
 				d = dt$R*d,
 				call = call,
-				K = K, L = L,
-				chains = 1)
+				K = K,
+				L = L)
 
     out <- ndp(obj)
 }

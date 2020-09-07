@@ -1560,7 +1560,6 @@ Eigen::ArrayXd square_error(const Eigen::ArrayXXi &cluster_assignment,
 //' @param num_posterior_samples the total number of posterior samples after burn in 
 //' @seealso the conjugate normal parameterization in the reference below
 //'
-// [[Rcpp::export]]
 Rcpp::List nd_nhpp_multivariate_fit(
         const Eigen::ArrayXXd& r,
         const Eigen::MatrixXi& n_j,

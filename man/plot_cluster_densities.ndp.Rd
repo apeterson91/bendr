@@ -4,8 +4,13 @@
 \alias{plot_cluster_densities.ndp}
 \title{Plots cluster intensity function densities}
 \usage{
-\method{plot_cluster_densities}{ndp}(x, p = 0.9, pi_threshold = 0.1,
-  switch = "facet", transform = FALSE)
+\method{plot_cluster_densities}{ndp}(
+  x,
+  p = 0.9,
+  pi_threshold = 0.1,
+  switch = "facet",
+  transform = FALSE
+)
 }
 \arguments{
 \item{x}{ndp object}

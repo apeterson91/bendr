@@ -2,20 +2,16 @@
 % Please edit documentation in R/ndp.R
 \name{ndp}
 \alias{ndp}
-\title{Create a ndp object}
+\title{ndp objects}
 \usage{
-ndp(object, chains, J)
+ndp(object)
 }
 \arguments{
-\item{object}{A list provided by the nd_nhpp function}
-
-\item{chains}{number of chains}
-
-\item{J}{number of groups}
+\item{object}{A list provided by the \code{\link{bend}} function}
 }
 \value{
-An ndp object
+An ndp object for easy model interrogation
 }
 \description{
-Create a ndp object
+ndp objects
 }

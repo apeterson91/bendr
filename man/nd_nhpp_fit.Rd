@@ -4,9 +4,28 @@
 \alias{nd_nhpp_fit}
 \title{Estimate the nonhomgogenous poisson process intensity function from grouped data}
 \usage{
-nd_nhpp_fit(r, n_j, d, L, K, J, mu_0, kappa_0, nu_0, sigma_0, a_alpha,
-  b_alpha, a_rho, b_rho, iter_max, warm_up, thin, seed, chain,
-  num_posterior_samples)
+nd_nhpp_fit(
+  r,
+  n_j,
+  d,
+  L,
+  K,
+  J,
+  mu_0,
+  kappa_0,
+  nu_0,
+  sigma_0,
+  a_alpha,
+  b_alpha,
+  a_rho,
+  b_rho,
+  iter_max,
+  warm_up,
+  thin,
+  seed,
+  chain,
+  num_posterior_samples
+)
 }
 \arguments{
 \item{r}{vector of distances associatd with different BEFs}

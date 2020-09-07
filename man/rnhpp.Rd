@@ -4,8 +4,13 @@
 \alias{rnhpp}
 \title{Random nonhomogenous poisson process generator}
 \usage{
-rnhpp(nsim = 1, lambda = function(x) x^2, max = NULL,
-  interval = c(0, 1), seed = NULL)
+rnhpp(
+  nsim = 1,
+  lambda = function(x) x^2,
+  max = NULL,
+  interval = c(0, 1),
+  seed = NULL
+)
 }
 \arguments{
 \item{nsim}{number of processes to simulate}
