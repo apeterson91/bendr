@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -53,7 +57,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-index">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -67,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bendr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -97,7 +101,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/apeterson91/rndpp">
+  <a href="https://github.com/apeterson91/bendr/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -133,12 +137,41 @@
           <p class="section-desc"></p>
         </th>
       </tr>
+      
+      
+    </tbody><tbody>
+      
+      
       <tr>
+        
+        <td>
+          <p><code><a href="as.array.stapDP.html">as.array(<i>&lt;stapDP&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Retrieve NDP parameter samples in Array Form</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="as.matrix.ndp.html">as.matrix(<i>&lt;ndp&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Retrieve Parameter Samples in Matrix Form</p></td>
+      </tr><tr>
         
         <td>
           <p><code><a href="assign_mode.html">assign_mode()</a></code> </p>
         </td>
         <td><p>Estimates Posterior Mode Cluster Assignment</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="base-measure.html">base-measure</a></code> </p>
+        </td>
+        <td><p>Base Measures</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="bend.html">bend()</a></code> </p>
+        </td>
+        <td><p>Estimate the distribution of (B)uilt (E)nvironment amenities via the (N)ested (D)irichlet Process</p></td>
       </tr><tr>
         
         <td>
@@ -148,21 +181,15 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="beta_nd_nhpp.html">beta_nd_nhpp()</a></code> </p>
+          <p><code><a href="beta_measure.html">beta_measure()</a></code> </p>
         </td>
-        <td><p>Estimate the nonhomgogenous poisson process intensity function from grouped data using a beta base measure</p></td>
+        <td><p>Beta base measure</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="beta_nd_nhpp_fit.html">beta_nd_nhpp_fit()</a></code> </p>
         </td>
         <td><p>Estimate the nonhomgogenous poisson process intensity function from grouped data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="beta_nd_nhpp_fit_multiple_taus.html">beta_nd_nhpp_fit_multiple_taus()</a></code> </p>
-        </td>
-        <td><p>Estimate the nonhomgogenous poisson process intensity function from grouped data using multiple taus</p></td>
       </tr><tr>
         
         <td>
@@ -179,12 +206,6 @@
         
         <td>
           <p><code><a href="green_loss.html">green_loss()</a></code> </p>
-        </td>
-        <td><p>Lau and Green posterior loss function</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="green_loss.bndp.html">green_loss(<i>&lt;bndp&gt;</i>)</a></code> </p>
         </td>
         <td><p>Lau and Green posterior loss function</p></td>
       </tr><tr>
@@ -208,15 +229,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="hmc.html">hmc()</a></code> </p>
+          <p><code><a href="groupvo.html">groupvo()</a></code> </p>
         </td>
-        <td><p>Create a HMC model object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="nd_nhpp.html">nd_nhpp()</a></code> </p>
-        </td>
-        <td><p>Estimate the nonhomgogenous poisson process intensity function from grouped data using a normal kernel</p></td>
+        <td><p>Retrieve Grouped Data Structure</p></td>
       </tr><tr>
         
         <td>
@@ -226,21 +241,21 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="nd_nhpp_fixed.html">nd_nhpp_fixed()</a></code> </p>
-        </td>
-        <td><p>Estimate the nonhomgogenous poisson process intensity function from grouped data using a normal kernel</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="nd_nhpp_fixed_fit.html">nd_nhpp_fixed_fit()</a></code> </p>
         </td>
         <td><p>Estimate the nonhomgogenous poisson process intensity function from grouped data with fixed concentration parameters</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="ndp-methods.html">nsamples(<i>&lt;ndp&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Methods for ndp objects</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="ndp.html">ndp()</a></code> </p>
         </td>
-        <td><p>Create a ndp object</p></td>
+        <td><p>ndp objects</p></td>
       </tr><tr>
         
         <td>
@@ -250,21 +265,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="nhpp_gamma.html">nhpp_gamma()</a></code> </p>
+          <p><code><a href="normal_measure.html">normal_measure()</a></code> </p>
         </td>
-        <td><p>Returns draw of beta regression coefficients from posterior distribution via No U-Turn Sampler</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="nhpp_hmc.html">nhpp_hmc()</a></code> </p>
-        </td>
-        <td><p>Estimates the mean number of observations in an Inhomogenous Poisson Process</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="plot.bndp.html">plot(<i>&lt;bndp&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Plot method for bndp objects</p></td>
+        <td><p>Normal Base Measure</p></td>
       </tr><tr>
         
         <td>
@@ -280,51 +283,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="plot_cluster_densities.bndp.html">plot_cluster_densities(<i>&lt;bndp&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Plots cluster intensity function densities</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="plot_cluster_densities.ndp.html">plot_cluster_densities(<i>&lt;ndp&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Plots cluster intensity function densities</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="plot_global_density.html">plot_global_density()</a></code> </p>
         </td>
         <td><p>Plots global density function</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="plot_global_density.bndp.html">plot_global_density(<i>&lt;bndp&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Plots global density function</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="plot_global_density.ndp.html">plot_global_density(<i>&lt;ndp&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Plots global density function</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="plot_network.html">plot_network()</a></code> </p>
-        </td>
-        <td><p>Network Cluster Plot</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="plot_network.bndp.html">plot_network(<i>&lt;bndp&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Network Cluster Plot</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="plot_network.ndp.html">plot_network(<i>&lt;ndp&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Network Cluster Plot</p></td>
       </tr><tr>
         
         <td>
@@ -334,51 +295,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="plot_pairs.bndp.html">plot_pairs(<i>&lt;bndp&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>plots pairwise probability clustering plot</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="plot_pairs.ndp.html">plot_pairs(<i>&lt;ndp&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>plots pairwise probability clustering plot</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="plot_traceplots.html">plot_traceplots()</a></code> </p>
-        </td>
-        <td><p>Traceplots of various NDP-NHPP parameters</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="plot_traceplots.bndp.html">plot_traceplots(<i>&lt;bndp&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Traceplots of various NDP-NHPP parameters</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="plot_traceplots.ndp.html">plot_traceplots(<i>&lt;ndp&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Traceplots of various NDP-NHPP parameters</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="print.bndp.html">print(<i>&lt;bndp&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Print method for bndp objects</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="print.ndp.html">print(<i>&lt;ndp&gt;</i>)</a></code> </p>
         </td>
         <td><p>Print method for ndp objects</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="print.summary.bndp.html">print(<i>&lt;summary.bndp&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Printing NDP Beta Measure Summaries</p></td>
       </tr><tr>
         
         <td>
@@ -394,25 +313,30 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="summary.bndp.html">summary(<i>&lt;bndp&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Summary method for bndp objects</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="summary.ndp.html">summary(<i>&lt;ndp&gt;</i>)</a></code> <code><a href="summary.ndp.html">print(<i>&lt;summary.ndp&gt;</i>)</a></code> </p>
         </td>
         <td><p>Summary method for ndp objects</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="traceplot.html">traceplot()</a></code> </p>
+        </td>
+        <td><p>Traceplots of various NDP-NHPP parameters</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="transform_distances.html">transform_distances()</a></code> </p>
+        </td>
+        <td><p>Transform Distances</p></td>
       </tr>
     </tbody>
     </table>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
-    </ul>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -423,7 +347,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

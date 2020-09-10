@@ -23,7 +23,8 @@ beta_nd_nhpp_fit(
   warm_up,
   thin,
   seed,
-  chain
+  chain,
+  num_posterior_samples
 )
 }
 \arguments{
@@ -64,6 +65,8 @@ beta_nd_nhpp_fit(
 \item{seed}{integer with which to initialize random number generator}
 
 \item{chain}{integer chain label}
+
+\item{num_posterior_samples}{the total number of posterior samples after burn in}
 }
 \description{
 Estimate the nonhomgogenous poisson process intensity function from grouped data

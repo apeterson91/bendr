@@ -230,7 +230,7 @@ Rcpp::List nd_nhpp_fit(
                               Rcpp::Named("pi_samples") = pi_samps,
                               Rcpp::Named("w_samples") =  w_samps,
                               Rcpp::Named("intensities") = intensities,
-							  Rcpp::Named("global_intensity") = global_intensity,
+							  Rcpp::Named("global_density") = global_intensity,
                               Rcpp::Named("mu_samples") =  mu_samps,
                               Rcpp::Named("tau_samples") = tau_samps,
                               Rcpp::Named("alpha_samples") = alpha_samps,
@@ -440,7 +440,9 @@ Rcpp::List nd_nhpp_fixed_fit(
                               Rcpp::Named("pi_samples") = pi_samps,
                               Rcpp::Named("w_samples") =  w_samps,
                               Rcpp::Named("intensities") = intensities,
-							  Rcpp::Named("global_intensity") = global_intensity,
+							  Rcpp::Named("global_density") = global_intensity,
+                              Rcpp::Named("alpha_samples") = alpha_samps,
+                              Rcpp::Named("rho_samples") = rho_samps,
                               Rcpp::Named("mu_samples") =  mu_samps,
                               Rcpp::Named("tau_samples") = tau_samps
     ));
@@ -648,6 +650,7 @@ Eigen::MatrixXd dbeta(const Eigen::VectorXd& r, const Eigen::MatrixXi& n_j, Eige
 //' @param thin number of iterations to thin by
 //' @param seed integer with which to initialize random number generator
 //' @param chain integer chain label
+//' @param num_posterior_samples the total number of posterior samples after burn in 
 //'
 // [[Rcpp::export]]
 Rcpp::List beta_nd_nhpp_fit(
@@ -669,14 +672,14 @@ Rcpp::List beta_nd_nhpp_fit(
         const int& warm_up,
         const int& thin,
         const int& seed,
-        const int& chain)
+        const int& chain,
+		const int num_posterior_samples)
 {
     // set seed
     std::mt19937 rng;
     rng = std::mt19937(seed);
     
     // create vector containers
-    int num_posterior_samples = floor((double)((double)(iter_max - warm_up) / (double)thin));
     
     // post sampling
     Eigen::MatrixXd w_samps(num_posterior_samples,L*K);
@@ -961,7 +964,6 @@ Rcpp::List beta_nd_nhpp_fit(
 //' @param seed integer with which to initialize random number generator
 //' @param chain integer chain label
 //'
-// [[Rcpp::export]]
 Rcpp::List beta_nd_nhpp_fit_multiple_taus(
         const Eigen::VectorXd& r,
         const Eigen::MatrixXi& n_j,
@@ -1350,7 +1352,7 @@ class NHPP
 //' @param seed random number generator seed
 //' @seealso the reference linked
 //'
-//[[Rcpp::export]]
+//
 Rcpp::List nhpp_gamma(
 		const int &warm_up,
 		const int &iter_max,
@@ -1560,6 +1562,7 @@ Eigen::ArrayXd square_error(const Eigen::ArrayXXi &cluster_assignment,
 //' @param num_posterior_samples the total number of posterior samples after burn in 
 //' @seealso the conjugate normal parameterization in the reference below
 //'
+/*
 Rcpp::List nd_nhpp_multivariate_fit(
         const Eigen::ArrayXXd& r,
         const Eigen::MatrixXi& n_j,
@@ -1583,6 +1586,7 @@ Rcpp::List nd_nhpp_multivariate_fit(
         const int& num_posterior_samples
         )
 {
+*/
 	/*
     // set seed
     std::mt19937 rng;
@@ -1776,4 +1780,4 @@ Rcpp::List nd_nhpp_multivariate_fit(
 							  Rcpp::Named("rho_prior") = rho_prior
     ));
 	*/
-}
+//}

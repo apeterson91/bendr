@@ -2,14 +2,23 @@
 % Please edit documentation in R/plots.R
 \name{plot_cluster_densities}
 \alias{plot_cluster_densities}
+\alias{plot_cluster_densities.ndp}
 \title{Plots cluster intensity function densities}
 \usage{
 plot_cluster_densities(
   x,
   p = 0.9,
   pi_threshold = 0.1,
-  switch = "facet",
+  style = "facet",
   transform = TRUE
+)
+
+\method{plot_cluster_densities}{ndp}(
+  x,
+  p = 0.9,
+  pi_threshold = 0.1,
+  style = "facet",
+  transform = FALSE
 )
 }
 \arguments{
@@ -20,7 +29,7 @@ plot_cluster_densities(
 \item{pi_threshold}{intensities with probability of assignment greater than pi_threshold are plotted
 default is zero}
 
-\item{switch}{one of two character values "facet" or "color" denoting whether to separate clusters by facet or by color}
+\item{style}{one of two character values "facet" or "color" denoting whether to separate clusters by facet or by color}
 
 \item{transform}{boolean denoting whether or not to transform distances}
 }
@@ -30,3 +39,8 @@ ggplot plot object
 \description{
 Plots cluster intensity function densities
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{ndp}: cluster density estimates
+}}
+

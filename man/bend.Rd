@@ -2,16 +2,12 @@
 % Please edit documentation in R/bend.R
 \name{bend}
 \alias{bend}
-\title{Estimate Clustered Inhomgogenous poisson process intensity functions from grouped data using a normal kernel}
+\title{Estimate the distribution of (B)uilt (E)nvironment amenities via the (N)ested (D)irichlet Process}
 \usage{
 bend(
   formula,
   benvo,
-  base_measure = "Normal",
-  mu_0 = 0,
-  kappa_0 = 1,
-  nu_0 = 1,
-  sigma_0 = 1,
+  base_measure = normal_measure(),
   L = 4,
   K = 4,
   a_alpha = 1,
@@ -21,33 +17,26 @@ bend(
   iter_max = 5000,
   burn_in = floor(iter_max/2),
   thin = 1,
+  fix_concentration = FALSE,
   seed = NULL
 )
 }
 \arguments{
 \item{formula}{bendr formula see the details}
 
-\item{benvo}{\code{\link[rBenvo]{Benvo}} object}
+\item{benvo}{\href{https://apeterson91.github.io/rbenvo}{\code{Benvo}} object}
 
-\item{base_measure}{one of c("Normal","Beta") indicating which base measure to use.}
-
-\item{mu_0}{mean hyperparameter for mu normal base measure. Default is 0; Normal(0,1).}
-
-\item{kappa_0}{variance hyperparameter for mu normal base measure. Default is 1; Normal(0,1).}
-
-\item{nu_0}{df hyperparameter for sigma inv chisq base measure. Default is 1; InvChisq(1,1);}
-
-\item{sigma_0}{scale hyperparameter for sigma inv chisq base measure. Default is 1; InvChisq(1,1);}
+\item{base_measure}{"bm" object from one of the base measure functions. See \link{measures}.}
 
 \item{L}{component truncation number}
 
 \item{K}{intensity cluster truncation number}
 
-\item{a_alpha}{shape hyperparameter for alpha gamma prior}
+\item{a_alpha}{shape hyperparameter for alpha gamma prior. Fixed alpha if fix_concentration = TRUE.}
 
 \item{b_alpha}{scale hyperparameter for alpha gamma prior}
 
-\item{a_rho}{shape hyperparameter for rho gamma prior}
+\item{a_rho}{shape hyperparameter for rho gamma prior. Fixed rho if fix_concentration = TRUE.}
 
 \item{b_rho}{scale hyperparameter for rho gamma prior}
 
@@ -57,8 +46,17 @@ bend(
 
 \item{thin}{number of iterations to thin by}
 
+\item{fix_concentration}{boolean value indicating whether or not concentration parameters should be kept fixed. Currently only implimented for alpha base measure}
+
 \item{seed}{integer with which to initialize random number generator}
 }
 \description{
-Estimate Clustered Inhomgogenous poisson process intensity functions from grouped data using a normal kernel
+Estimate the distribution of (B)uilt (E)nvironment amenities via the (N)ested (D)irichlet Process
+}
+\details{
+Fits the Nested Dirichlet Process to data as specified in the formula and hyperparameter settings. Note that a 'bendr formula' simply has the grouping id on the left side of the tilde and the built environment feature name on the right hand side. 
+No intercepts, or other terms are accepted or needed.
+}
+\seealso{
+The introductory \href{https://apeterson91.github.io/bendr/articles/Introduction.html}{vignette} for an example on how this function is used.
 }

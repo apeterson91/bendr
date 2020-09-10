@@ -1,16 +1,16 @@
 #' Print method for ndp objects
-#' 
+#'
 #' The \code{print} method for ndp objects displays a compact summary of the
 #' fitted model. See the \strong{Details} section below for descriptions of the
 #' different components of the printed output. For additional summary statistics
 #' and diagnostics use the \code{\link[=summary.ndp]{summary}} method.
-#' 
+#'
 #' @export
 #' @param x a ndp object
 #' @param digits Number of digits to use for formatting numbers.
 #' @param ... Ignored.
-#' @return Returns \code{x}, invisibly. 
-#' @details 
+#' @return Returns \code{x}, invisibly.
+#' @details
 #' \subsection{Point Estimates}{
 #' Point estimates are medians computed from simulations.
 #' }
@@ -21,10 +21,12 @@
 #' Compared to the raw posterior standard deviation, the MAD_SD will be
 #' more robust for long-tailed distributions. These are the same as the values
 #' }
-#' 
+#'
 #' @seealso \code{\link{summary.ndp}}
-#' 
+#'
 print.ndp <- function(x, digits = 2, ...) {
+  cat("\n Base Measure:", x$base_measure$measure)
+  cat("\n formula:", formula_string(formula(x$call)))
   cat("\n observations:", x$n)
   cat("\n groups:", x$J)
 
@@ -32,116 +34,69 @@ print.ndp <- function(x, digits = 2, ...) {
   cat("Cluster Statistics")
   cat("\n------\n")
 
-  pi_stats <- rbind(Median = apply(as.matrix(x$pi),2,stats::median),
-                    MAD = apply(as.matrix(x$pi),2,stats::mad))
+  pi_stats <- rbind(Median = apply(x$p,2,stats::median),
+                    MAD = apply(x$p,2,stats::mad))
 
   .printfr(pi_stats,digits)
 
-  if(all(as.matrix(x$alpha) == 0 ))
-      cat("alpha collapsed at 0 \n")
-  else{
-      .printfr(cbind(Median = apply(as.matrix(x$alpha),2,stats::median),
-                MAD = apply(as.matrix(x$alpha),2,mad)), digits)
-      cat("\n")
-      }
-  if(all(as.matrix(x$rho) == 0 ))
-      cat("rho collapsed at 0 " )
-  else{
-      .printfr(cbind(Median = apply(as.matrix(x$rho),2,stats::median),
-                MAD = apply(as.matrix(x$rho),2,mad)),digits)
-      cat("\n")
-  }    
 
-  cat(" \n---\n ") 
+  cat(" \n---\n ")
+  nc <- num_clusters(x$cluster_assignment)
 
-  mat <- cbind(min = min(sapply(x$num_clusters,min)),
-            median = stats::median(sapply(x$num_clusters,stats::median)),
-            max = max(sapply(x$num_clusters,max)))
+  mat <- cbind(min = min(nc),
+			   median = median(nc),
+			   max = max(nc))
   rownames(mat) <- "# of Clusters"
 
   .printfr(mat,digits)
   cat("\n------\n")
 
-  w_stats <- rbind(Median = apply(as.matrix(x$w),2,stats::median),
-                    MAD = apply(as.matrix(x$w),2,mad))
-  mu_stats <- rbind(Median = apply(as.matrix(x$mu),2,stats::median),
-                    MAD = apply(as.matrix(x$mu),2,mad))
-  tau_stats <- rbind(Median = apply(as.matrix(x$tau),2,stats::median),
-                     MAD = apply(as.matrix(x$tau),2,mad))
 
-  tau_switch <- all(dim(tau_stats) == dim(mu_stats))
-
-  K <- max(x$if_df$Intensity_Function)
-  L <- ncol(w_stats)/K
-
-  for(k in 1:K){
-      start <- (1 + L*(k-1))
-      end <- (L + L*(k-1))
-      if(pi_stats["Median",k]>.01){
-          .printfr(w_stats[,start:end],digits)
-          .printfr(mu_stats[,start:end],digits)
-          if(tau_switch)
-              .printfr(tau_stats[,start:end],digits)
-      }
-      cat("\n")
-  }
-  if(!tau_switch)
-      .printfr(tau_stats,digits)
-
-  
-  cat("\n------\n")
-  cat("* For help interpreting the printed output see ?print.ndp\n")
-  
   invisible(x)
 }
 
 
 #' Summary method for ndp objects
-#' 
-#' Summaries of parameter estimates and MCMC convergence diagnostics 
+#'
+#' Summaries of parameter estimates and MCMC convergence diagnostics
 #' (Monte Carlo error, effective sample size, Rhat).
-#' 
+#'
 #' @export
-#' 
-#' 
+#'
+#'
 #' @param object  an ndp object
 #' @param ... Currently ignored.
-#' @param digits Number of digits to use for formatting numbers when printing. 
-#'   When calling \code{summary}, the value of digits is stored as the 
+#' @param digits Number of digits to use for formatting numbers when printing.
+#'   When calling \code{summary}, the value of digits is stored as the
 #'   \code{"print.digits"} attribute of the returned object.
-#'   
-#' @return The \code{summary} method returns an object of class 
+#'
+#' @return The \code{summary} method returns an object of class
 #'   \code{"summary.ndp"}.
-#' 
-#' 
-#' @importFrom coda effectiveSize 
+#'
+#'
 #' @importFrom stats sd quantile
 summary.ndp <- function(object,digits = 1, ...) {
 
-
-    summ <- function(x,y){ 
-        out <- t(apply(as.matrix(x[[y]]),2,function(a) c("Mean"=mean(a),"SD" = sd(a), quantile(a),"Geweke" = unname(coda::geweke.diag(a)$z) )))
-        out <- cbind(out,"ESS"=effectiveSize(x[[y]]))
-        if(length(x[[y]])>1)
-            out <- cbind(out,"Rhat" = coda::gelman.diag(x[[y]],multivariate = FALSE,autoburnin=FALSE)$psrf[,1] )
-        return(out)
-        }
-    # alpha and rho
-    out <- rbind(alpha = summ(object,"alpha"),
-                 rho = summ(object,"rho"))
-    out <- rbind(out,summ(object,"pi"),summ(object,"w"),summ(object,"mu"),summ(object,"tau"))
+	parmat <- as.matrix(object)
+	mean <- colMeans(parmat)
+	sd <- apply(parmat,2,sd)
+	qs <- t(apply(parmat,2,function(x) quantile(x,c(0.1,.25,.5,.75,.9),na.rm=T)))
+	n_eff <- apply(parmat,2,rstan::ess_tail)
+	Rhat <- apply(parmat,2,rstan::Rhat)
+	out <- cbind(mean,sd,qs,n_eff,Rhat)
 
 
   structure(
     out,
     nobs = object$n,
+	bm = object$base_measure,
     groups = object$J,
-    posterior_sample_size = nrow(as.matrix(object$alpha)),
+    posterior_sample_size = nrow((object$alpha)),
+	formula = formula(object$call),
     call = object$call,
     print.digits = digits,
     class = "summary.ndp"
   )
-
 }
 
 
@@ -150,59 +105,60 @@ summary.ndp <- function(object,digits = 1, ...) {
 #' @method print summary.ndp
 #'
 #' @param x An object of class \code{"summary.ndp"}.
-print.summary.ndp <- function(x, digits = max(1, attr(x, "print.digits")), 
-                                  ...) {
-    atts <- attributes(x)
-    cat("\nModel Info:\n")
+print.summary.ndp <- function(x,
+							  digits = max(1, attr(x, "print.digits")),
+							  ...) {
+  atts <- attributes(x)
+  cat("\nModel Info:\n")
+  cat("\n Base Measure:", atts$bm$measure)
   cat("\n sample:      ", atts$posterior_sample_size, "(posterior sample size)")
   cat("\n observations:", atts$nobs)
   cat("\n groups:", atts$groups)
 
-  cat("\n\nEstimates:\n")
-    .printfr(x,digits)
+	hat <- "Rhat"
+	str_diag <- "MCMC diagnostics"
+	str1 <- "and Rhat is the potential scale reduction factor on split chains"
+	str2 <- " (at convergence Rhat=1).\n"
+
+	sel <- setdiff(colnames(x),c("n_eff","Rhat"))
+	xtmp <- x[,sel]
+	cat("\n\n")
+
+    # print table of parameter stats
+    .printfr(xtmp, digits)
+
+	cat("\n", str_diag, "\n", sep = '')
+	mcse_hat <- format(round(x[, c(hat), drop = FALSE], digits),
+					  nsmall = digits)
+	n_eff <- format(x[, "n_eff", drop = FALSE], drop0trailing = TRUE)
+	print(cbind(mcse_hat, n_eff), quote = FALSE)
+	cat("\n n_eff is a crude measure of effective sample size, ",
+	  str1,
+	  str2, sep = '')
 
     invisible(x)
-}
-
-#' @export
-print.hmc <- function(x, digits = 2, ...) {
-  cat("\n groups:", x$J)
-
-  cat("\n------\n")
-  cat("Regression Statistics")
-  cat("\n------\n")
-
-
-  if(dim(x$beta)[2]==1){
-      meds <- summary(x$beta)$quantile["50%"]
-      sd <- summary(x$beta)$statistics["SD"]
-    }
-  if(dim(x$beta)[2]>1){
-      meds <- summary(x$beta)$quantile[,"50%"]
-      sd <- summary(x$beta)$statistics[,"SD"]
-    }
-
-  mat <- cbind(Median = meds, SD = sd)
-  rownames(mat) <- colnames(x$X)
-
-    .printfr(mat, digits, ...)
-
-  cat("--- \n") 
-
-  ppd <- coda::as.mcmc(apply(x$beta,1,function(beta) mean(exp((x$X %*% beta) )) ))
-  mat <- cbind(Median = summary(ppd)$quantile["50%"],
-               SD = summary(ppd)$statistics["SD"])
-  rownames(mat) <- "mean_PPD"
-  cat("\nSample avg. posterior predictive distribution of y:\n")
-  .printfr(mat,digits,...)
-  
-  cat("\n------\n")
-  
-  invisible(x)
 }
 
 
 # internal ----------------------------------------------------------------
 .printfr <- function(x, digits, ...) {
   print(format(round(x, digits), nsmall = digits), quote = FALSE, ...)
+}
+
+num_clusters <- function(cluster_mat){
+
+	  apply(cluster_mat,1,function(x) length(unique(x)))
+
+}
+
+formula_string <- function(formula, break_and_indent = TRUE) {
+  coll <- if (break_and_indent) "--MARK--" else " "
+  char <- gsub("\\s+", " ", paste(deparse(formula), collapse = coll))
+  if (!break_and_indent)
+    return(char)
+  gsub("--MARK--", "\n\t  ", char, fixed = TRUE)
+}
+
+.median_and_madsd <- function(x) {
+  cbind(Median = apply(x, 2, median), MAD_SD = apply(x, 2, mad))
 }

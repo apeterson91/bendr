@@ -1,4 +1,4 @@
 library(testthat)
-library(rndpp)
+library(bendr)
 
-test_check("rndpp")
+test_check("bendr")

@@ -14,24 +14,26 @@ setGeneric("groupvo",function(x,formula) standardGeneric("groupvo"))
 #'
 setMethod("groupvo","Benvo",function(x,formula){
 
+
+	start_ <- start <- Distance <- go <- NULL
 	id <- formula.tools::lhs(formula)
 	vars <- formula.tools::rhs.vars(formula)
-	if(length(vars)>1){
+
+	if(length(vars)>1)
 		stop("This function only takes 1 BEF as an argument")
-	}
+
 	ix <- which(x@bef_names == vars)
+	
 	if(!length(ix)){
 		st <- glue::glue("{vars} is not included as a member of this Benvo")
 		stop(st)
 	}
-	
 
-	R <- max(x@bef_data[[ix]]$Distance)
+	R <- ceiling(max(x@bef_data[[ix]]$Distance))
 
 	r <- x@bef_data[[ix]] %>% 
 		dplyr::arrange({{id}}) %>% 
 		dplyr::select(Distance) %>%  ## return scaled distances
-		dplyr::mutate(Distance = qnorm(Distance/max(Distance))) %>%
 			dplyr::pull()
 
 	n <- x@bef_data[[ix]] %>% 

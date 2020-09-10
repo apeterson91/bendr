@@ -2,12 +2,17 @@
 % Please edit documentation in R/plots.R
 \name{plot_pairs}
 \alias{plot_pairs}
+\alias{plot_pairs.ndp}
 \title{plots pairwise probability clustering plot}
 \usage{
-plot_pairs(x, sort = FALSE)
+plot_pairs(x, sample = NULL, sort = FALSE)
+
+\method{plot_pairs}{ndp}(x, sample = NULL, sort = FALSE)
 }
 \arguments{
 \item{x}{ndp object}
+
+\item{sample}{positive integer denoting size of random sample for which the pairwise graph can be subset - useful for speeding up graphing}
 
 \item{sort}{boolean asking whether sorting algorithm should be used to sort
 pairwise probablity}
@@ -17,7 +22,14 @@ ggplot plot object
 }
 \description{
 plots pairwise probability clustering plot
+
+plots pairwise probability clustering plot
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{ndp}: 
+}}
+
 \references{
 Rodriguez A., Dunson D, and Gelfand A. \emph{The Nested Dirichlet Process}
 Journal of the American Statistical Association 103 (1131-1154).

@@ -12,8 +12,8 @@
 \arguments{
 \item{object}{an ndp object}
 
-\item{digits}{Number of digits to use for formatting numbers when printing. 
-When calling \code{summary}, the value of digits is stored as the 
+\item{digits}{Number of digits to use for formatting numbers when printing.
+When calling \code{summary}, the value of digits is stored as the
 \code{"print.digits"} attribute of the returned object.}
 
 \item{...}{Currently ignored.}
@@ -21,10 +21,10 @@ When calling \code{summary}, the value of digits is stored as the
 \item{x}{An object of class \code{"summary.ndp"}.}
 }
 \value{
-The \code{summary} method returns an object of class 
+The \code{summary} method returns an object of class
   \code{"summary.ndp"}.
 }
 \description{
-Summaries of parameter estimates and MCMC convergence diagnostics 
+Summaries of parameter estimates and MCMC convergence diagnostics
 (Monte Carlo error, effective sample size, Rhat).
 }

@@ -2,16 +2,17 @@
 % Please edit documentation in R/plots.R
 \name{plot_global_density}
 \alias{plot_global_density}
+\alias{plot_global_density.ndp}
 \title{Plots global density function}
 \usage{
-plot_global_density(x, p = 0.9, r = NULL, transform = TRUE)
+plot_global_density(x, p = 0.9, transform = TRUE)
+
+\method{plot_global_density}{ndp}(x, p = 0.9, transform = FALSE)
 }
 \arguments{
 \item{x}{ndp object}
 
 \item{p}{probability mass contained in uncertainty interval}
-
-\item{r}{optional vector of observed distances}
 
 \item{transform}{boolean denoting whether or not to transform distances}
 }
@@ -20,4 +21,11 @@ ggplot plot object
 }
 \description{
 Plots global density function
+
+Plots global density function
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{ndp}: plots global density estimate
+}}
+
