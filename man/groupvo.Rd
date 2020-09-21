@@ -2,12 +2,12 @@
 % Please edit documentation in R/AllMethods.R
 \name{groupvo}
 \alias{groupvo}
-\alias{groupvo,Benvo-method}
+\alias{groupvo.benvo}
 \title{Retrieve Grouped Data Structure}
 \usage{
 groupvo(x, formula)
 
-\S4method{groupvo}{Benvo}(x, formula)
+\method{groupvo}{benvo}(x, formula)
 }
 \arguments{
 \item{x}{benvo object}
@@ -16,11 +16,9 @@ groupvo(x, formula)
 }
 \description{
 Retrieve Grouped Data Structure
-
-Grouped
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{Benvo}: return list of grouped data structures
+\item \code{benvo}: return list of grouped data structures
 }}
 

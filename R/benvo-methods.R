@@ -3,16 +3,12 @@
 #' @export
 #' @param x benvo object
 #' @param formula bendr formula
-#' @importClassesFrom rbenvo Benvo
-setGeneric("groupvo",function(x,formula) standardGeneric("groupvo")) 
+groupvo <- function(x,formula) UseMethod("groupvo")
 
 
-#' Grouped
-#' 
 #' @describeIn groupvo return list of grouped data structures 
 #' @export
-#'
-setMethod("groupvo","Benvo",function(x,formula){
+groupvo.benvo <- function(x,formula){
 
 
 	start_ <- start <- Distance <- go <- NULL
@@ -22,21 +18,21 @@ setMethod("groupvo","Benvo",function(x,formula){
 	if(length(vars)>1)
 		stop("This function only takes 1 BEF as an argument")
 
-	ix <- which(x@bef_names == vars)
+	ix <- which(rbenvo::bef_names(x) == vars)
 	
 	if(!length(ix)){
 		st <- glue::glue("{vars} is not included as a member of this Benvo")
 		stop(st)
 	}
 
-	R <- ceiling(max(x@bef_data[[ix]]$Distance))
+	R <- ceiling(max(x$bef_data[[ix]]$Distance))
 
-	r <- x@bef_data[[ix]] %>% 
+	r <- x$bef_data[[ix]] %>% 
 		dplyr::arrange({{id}}) %>% 
 		dplyr::select(Distance) %>%  ## return scaled distances
 			dplyr::pull()
 
-	n <- x@bef_data[[ix]] %>% 
+	n <- x$bef_data[[ix]] %>% 
 		dplyr::arrange({{id}}) %>%
 		dplyr::group_by({{id}}) %>%
 		dplyr::count() %>% 
@@ -48,12 +44,5 @@ setMethod("groupvo","Benvo",function(x,formula){
 
 	return(list(r = r,n = n, J = J, R = R))
 
-})
-
-
-# for internal use ----------------------------------------------------------------------------
-
-
-
-
+}
 

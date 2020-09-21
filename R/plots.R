@@ -38,7 +38,7 @@ plot_cluster_densities <- function(x, p = .9, pi_threshold = .1, style = "facet"
 #' @param transform boolean denoting whether or not to transform distances
 #' @return ggplot plot object
 #'
-plot_global_density <- function(x, p = .9, transform = TRUE)
+plot_global_density <- function(x, p = .9, transform = TRUE )
 	UseMethod("plot_global_density")
 
 #' Traceplots of various NDP-NHPP parameters
@@ -66,7 +66,8 @@ plot_pairs.ndp <- function(x,sample = NULL, sort = FALSE){
 	else if(is.integer(sample) && sample>0){
 		ics <- sample(1:nrow(x$pmat),sample)
 		P <- x$pmat[ics,ics]
-	}
+	}else
+		stop("sample is not an integer")
 
 	makeSymm <- function(m) {
 	  m[upper.tri(m)] <- t(m)[upper.tri(m)]
