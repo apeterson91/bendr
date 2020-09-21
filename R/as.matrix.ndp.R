@@ -21,7 +21,7 @@ as.matrix.ndp <- function(x,...){
 #' @export
 #' @seealso as.matrix.ndp for a matrix container of *all* parameters
 #' 
-as.array.stapDP <- function(x,...){
+as.array.ndp <- function(x,...){
 
 	mu <- abind::abind(lapply(1:x$K,function(k) x$mu[,grep(x = colnames(mu),paste("K:",k),value=T)]),along=3)
 }

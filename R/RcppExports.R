@@ -154,6 +154,7 @@ beta_nd_nhpp_fit <- function(r, n_j, d, mu_sd, tau_sd, L, K, J, a_0, b_0, a_alph
 
 #' Computes Green and Lau loss function with unknown classification
 #'
+#' @export
 #' @param cluster_assignment iter_total x J cluster assignment matrix
 #' @param pmat J x J pairwise probability of co-clustering matrix
 #' @param tau penalty parameter 
@@ -174,6 +175,7 @@ green_loss_known <- function(cluster_assignment, pmat, true_cluster_assignment, 
 
 #' Computes Square loss with unknown classification
 #'
+#' @export
 #' @param cluster_assignment iter_total x J cluster assignment matrix
 #' @param pmat J x J pairwise probability of co-clustering matrix
 square_error <- function(cluster_assignment, pmat) {

@@ -1,6 +1,6 @@
 #' Lau and Green posterior loss function
 #'
-#' @param object an ndp or bndp object
+#' @param object an ndp  object
 #' @param truth True adjacency matrix
 #' @param tau loss function tuning parameter
 #' @param a misclassification penalty parameter

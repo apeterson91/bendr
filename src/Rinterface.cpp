@@ -1458,6 +1458,7 @@ Rcpp::List nhpp_gamma(
 
 //' Computes Green and Lau loss function with unknown classification
 //'
+//' @export
 //' @param cluster_assignment iter_total x J cluster assignment matrix
 //' @param pmat J x J pairwise probability of co-clustering matrix
 //' @param tau penalty parameter 
@@ -1515,6 +1516,7 @@ Eigen::ArrayXd green_loss_known(const Eigen::ArrayXXi &cluster_assignment,
 
 //' Computes Square loss with unknown classification
 //'
+//' @export
 //' @param cluster_assignment iter_total x J cluster assignment matrix
 //' @param pmat J x J pairwise probability of co-clustering matrix
 // [[Rcpp::export]]
