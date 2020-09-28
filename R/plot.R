@@ -8,7 +8,6 @@
 #' @param  x an ndp object
 #' @param plotfun one of c("cluster","pairs","global","trace" )
 #' @param ... optional arguments for plot function 
-#' @importFrom ggplot2 ggplot aes_string xlab %+replace% theme
 #' @seealso \code{\link{plot_cluster_densities}} \code{\link{plot_pairs}} \code{\link{plot_global_density}} \code{\link{traceplot}}
 #'
 plot.ndp <- function(x, plotfun = "cluster",...) {

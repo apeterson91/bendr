@@ -8,7 +8,7 @@
 #' @param sample positive integer denoting size of random sample for which the pairwise graph can be subset - useful for speeding up graphing
 #' @param sort boolean asking whether sorting algorithm should be used to sort
 #' pairwise probablity
-#' @importFrom ggplot2 ggplot aes geom_tile scale_fill_gradientn
+#' @importFrom ggplot2 ggplot aes geom_tile scale_fill_gradientn theme xlab ylab
 #' @importFrom stringr str_replace
 #' @return ggplot plot object
 #' @seealso the supplementary section of the reference for the sorting algorithm.

@@ -4,6 +4,10 @@ output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Introduction}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteDepends{patchwork}
+  %\VignetteDepends{tidyr}
+  %\VignetteDepends{ggplot2}
+  %\VignetteDepends{dplyr}
   %\VignetteEncoding{UTF-8}
 ---
 
@@ -134,7 +138,7 @@ It looks like there may be some mild convergence problems in $\pi_3$, or it coul
 
 One way to assess label switching would be to check the density estimates, beginning with an estimate of the global density estimate (averaging over all clusters' densities):
 ```{r,echo=F}
-raw_global_dens_estimate <- ggplot(aes(x=Distance),data=school_data@bef_data$FFR) +
+raw_global_dens_estimate <- ggplot(aes(x=Distance),data=school_data$sub_bef_data$FFR) +
   geom_density() + ggtitle("Empirical Estimate") + ylab("")
 ```
 ```{r plot_global}
@@ -143,8 +147,7 @@ plot(fit,'global') + raw_global_dens_estimate
 
 The above plot looks similar to the empirical estimate -  a good sign. While the height might not be the same,
 we have to remember that since we're using a normal mixing measure, our density estimates are only proportional to the real density
-unless we explicitly correct for them. This might be a good reason to try the beta mixing measure instead, though it should be noted that since
-the beta mixing measure is not conjugate, its sampling is typically less efficient.
+unless we explicitly correct for them. This might be a good reason to try the beta mixing measure instead, though it should be noted that since the beta mixing measure is not conjugate, its sampling is typically less efficient.
 
 Let's now see what our estimates of the different plots look like. As you can see from the summary of the pi's there are nonzero means for all five probabilities, but the medians of the 4th and 5th cluster are pretty small. We only want to look at the clusters that have a meaningful $\pi_k$. 
 We can use the  `plot_cluster_densities`, accessible as the default `plot` method. This function has the argument `pi_threshold` to allow users to only look at clusters with a certain probability of assignment. The default is 0.1, which should be sufficient in this case.

@@ -1,7 +1,7 @@
 Package: bendr
 Type: Package
 Title: Nested Dirichlet Process Mixture Models for Built Environment Data
-Version: 1.0.1
+Version: 1.0.2
 Authors@R: person("Adam", "Peterson", , "atpvyc@umich.edu", c("aut", "cre"))
 Description: Motivated by the need to identify different kinds of built environments,
   the bendr package estimates the spatial intensity function for different clusters
@@ -28,7 +28,7 @@ Imports:
     ggmcmc,
     formula.tools,
     glue,
-    rbenvo,
+    rbenvo (>= 1.0.1),
     rstantools,
     abind,
     bayesplot,
@@ -38,9 +38,12 @@ LinkingTo:
     Rcpp (>= 0.12.16),
     RcppEigen(>= 0.3.3.3.0)
 Suggests: 
+	patchwork,
     knitr,
     rmarkdown,
     testthat (>= 2.1.0),
     covr
 VignetteBuilder: knitr
 URL: https://github.com/apeterson91/bendr
+Remotes:  
+    apeterson91/rbenvo

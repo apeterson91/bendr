@@ -42,6 +42,8 @@ bend <- function(formula,
 	stopifnot((iter_max > burn_in) && (burn_in > 0))
 	stopifnot(L>0 && K >0)
 	stopifnot(base_measure$measure %in% c("normal","beta"))
+	if(base_measure$measure == "beta")
+		stop("beta base measure currently not working")
 
     if(is.null(seed))
         seed <- 134143L

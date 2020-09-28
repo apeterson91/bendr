@@ -25,14 +25,14 @@ groupvo.benvo <- function(x,formula){
 		stop(st)
 	}
 
-	R <- ceiling(max(x$bef_data[[ix]]$Distance))
+	R <- ceiling(max(x$sub_bef_data[[ix]]$Distance))
 
-	r <- x$bef_data[[ix]] %>% 
+	r <- x$sub_bef_data[[ix]] %>% 
 		dplyr::arrange({{id}}) %>% 
 		dplyr::select(Distance) %>%  ## return scaled distances
 			dplyr::pull()
 
-	n <- x$bef_data[[ix]] %>% 
+	n <- x$sub_bef_data[[ix]] %>% 
 		dplyr::arrange({{id}}) %>%
 		dplyr::group_by({{id}}) %>%
 		dplyr::count() %>% 

@@ -2,6 +2,7 @@
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.org/apeterson91/bendr.svg?branch=master)](https://travis-ci.org/apeterson91/bendr)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![R build status](https://github.com/apeterson91/rndpp/workflows/R-CMD-check/badge.svg)](https://github.com/apeterson91/rndpp/actions)
 <!-- badges: end -->
 
 ## About

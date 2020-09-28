@@ -49,7 +49,7 @@ school_data <- rbenvo::benvo(subject_data = school_data %>%
                   select(-distances) %>%
                   mutate(school_id=as.integer(school_id)) %>%
                       distinct(school_id),
-              bef_data = list(FFR=school_data %>%
+              sub_bef_data = list(FFR=school_data %>%
                                   mutate(school_id=as.integer(school_id)) %>%
                                   rename(Distance=distances)))
 
