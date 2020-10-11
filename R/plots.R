@@ -56,7 +56,7 @@ traceplot <- function(x, par="alpha")
 #' @describeIn plot_pairs 
 #' @export
 #'
-plot_pairs.ndp <- function(x,sample = NULL, sort = FALSE){
+plot_pairs.default <- function(x,sample = NULL, sort = FALSE){
 
 	### To pass R CMD Check
 	Group_2 <- Group_1 <- index <- Probability <- NULL
@@ -101,14 +101,14 @@ plot_pairs.ndp <- function(x,sample = NULL, sort = FALSE){
 
 
 
-	p <- dplyr::as_tibble(P) %>%
-		dplyr::mutate(index = 1:dplyr::n()) %>%
-		tidyr::gather(dplyr::contains("Group_"), key = "Group_2", value = "Probability") %>%
-		dplyr::mutate(Group_2 = as.numeric(stringr::str_replace(Group_2,"Group_",""))) %>%
-		ggplot(aes(x=index,y=Group_2,fill=Probability)) +
+	p <- suppressMessages(dplyr::as_tibble(P[A,A])) %>% 
+		dplyr::mutate(Group_1 = 1:dplyr::n()) %>%
+		tidyr::gather(dplyr::contains("V"), key = "Group_2", value = "Probability") %>%
+		dplyr::mutate("Group_2" = as.numeric(stringr::str_replace(Group_2,"V",""))) %>%
+		ggplot(aes(x=Group_1,y=Group_2,fill=Probability)) +
 		geom_tile() + scale_fill_gradientn(colours=c("white","grey","black"),limits=c(0,1)) +
 		ggplot2::theme_bw() + ggplot2::labs(title = "Pairwise Probability of Function Clustering",
-											x="Group 1", y = "Group 2") +
+										  x="Subject 1", y = "Subject 2") +
 		ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
 					   panel.grid.minor = ggplot2::element_blank())
 

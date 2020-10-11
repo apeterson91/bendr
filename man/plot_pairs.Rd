@@ -2,12 +2,12 @@
 % Please edit documentation in R/plots.R
 \name{plot_pairs}
 \alias{plot_pairs}
-\alias{plot_pairs.ndp}
+\alias{plot_pairs.default}
 \title{plots pairwise probability clustering plot}
 \usage{
 plot_pairs(x, sample = NULL, sort = FALSE)
 
-\method{plot_pairs}{ndp}(x, sample = NULL, sort = FALSE)
+\method{plot_pairs}{default}(x, sample = NULL, sort = FALSE)
 }
 \arguments{
 \item{x}{ndp object}
@@ -27,7 +27,7 @@ plots pairwise probability clustering plot
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{ndp}: 
+\item \code{default}: 
 }}
 
 \references{

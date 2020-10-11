@@ -4,10 +4,12 @@
 \alias{assign_mode}
 \title{Estimates Posterior Mode Cluster Assignment}
 \usage{
-assign_mode(x)
+assign_mode(x, ...)
 }
 \arguments{
 \item{x}{ndp object}
+
+\item{...}{optional arguments}
 }
 \value{
 vector of cluster assignments
