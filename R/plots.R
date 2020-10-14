@@ -4,7 +4,7 @@
 #' @template rodriguez
 #'
 #' @export
-#' @param x ndp object
+#' @param x object with upper triangle pairwise probability matrix list entry
 #' @param sample positive integer denoting size of random sample for which the pairwise graph can be subset - useful for speeding up graphing
 #' @param sort boolean asking whether sorting algorithm should be used to sort
 #' pairwise probablity
@@ -53,7 +53,7 @@ traceplot <- function(x, par="alpha")
 
 #' plots pairwise probability clustering plot
 #'
-#' @describeIn plot_pairs
+#' @describeIn plot_pairs constructs pairwise probability heat map
 #' @export
 #'
 plot_pairs.default <- function(x,sample = NULL, sort = FALSE){

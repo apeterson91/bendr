@@ -10,7 +10,7 @@ plot_pairs(x, sample = NULL, sort = FALSE)
 \method{plot_pairs}{default}(x, sample = NULL, sort = FALSE)
 }
 \arguments{
-\item{x}{ndp object}
+\item{x}{object with upper triangle pairwise probability matrix list entry}
 
 \item{sample}{positive integer denoting size of random sample for which the pairwise graph can be subset - useful for speeding up graphing}
 
@@ -27,7 +27,7 @@ plots pairwise probability clustering plot
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{default}: 
+\item \code{default}: constructs pairwise probability heat map
 }}
 
 \references{
