@@ -53,7 +53,7 @@ traceplot <- function(x, par="alpha")
 
 #' plots pairwise probability clustering plot
 #'
-#' @describeIn plot_pairs 
+#' @describeIn plot_pairs
 #' @export
 #'
 plot_pairs.default <- function(x,sample = NULL, sort = FALSE){
@@ -92,19 +92,18 @@ plot_pairs.default <- function(x,sample = NULL, sort = FALSE){
 		  A_c <- setdiff(Omega,A)
 		}
 		P <- P[A,A]
-		colnames(P) <- paste0("Group_",1:ncol(P))
 	}
 	else{
 		A <- 1:nrow(P)
 		P <- P[A,A]
 	}
+	colnames(P) <- paste0("ID_",1:ncol(P))
 
 
-
-	p <- suppressMessages(dplyr::as_tibble(P[A,A])) %>% 
+	p <- suppressMessages(dplyr::as_tibble(P)) %>%
 		dplyr::mutate(Group_1 = 1:dplyr::n()) %>%
-		tidyr::gather(dplyr::contains("V"), key = "Group_2", value = "Probability") %>%
-		dplyr::mutate("Group_2" = as.numeric(stringr::str_replace(Group_2,"V",""))) %>%
+		tidyr::gather(dplyr::contains("ID_"), key = "Group_2", value = "Probability") %>%
+		dplyr::mutate("Group_2" = as.numeric(stringr::str_replace(Group_2,"ID_",""))) %>%
 		ggplot(aes(x=Group_1,y=Group_2,fill=Probability)) +
 		geom_tile() + scale_fill_gradientn(colours=c("white","grey","black"),limits=c(0,1)) +
 		ggplot2::theme_bw() + ggplot2::labs(title = "Pairwise Probability of Function Clustering",
@@ -133,7 +132,7 @@ plot_cluster_densities.ndp <- function(x, p = .9, pi_threshold = .1, style = "fa
 	u <- .5 + p/2
 
     ks_to_keep <- which(apply(x$p,2,median)>pi_threshold)
-	tfun <- function(y) y 
+	tfun <- function(y) y
 	xlabel  <- "Distance"
 	if(transform){
 		if(x$base_measure$measure == "Normal")
@@ -144,7 +143,7 @@ plot_cluster_densities.ndp <- function(x, p = .9, pi_threshold = .1, style = "fa
 	}
 
 	x$kdensity %>%
-		dplyr::filter(K %in% ks_to_keep) %>% 
+		dplyr::filter(K %in% ks_to_keep) %>%
 		dplyr::mutate(Distance = tfun(Distance),
 					  K = factor(K)) %>%
 		dplyr::group_by(K,Distance) %>%
@@ -196,7 +195,7 @@ traceplot.ndp <- function(x,par="alpha"){
 #'
 #' @export
 #' @describeIn plot_global_density plots global density estimate
-#' 
+#'
 #'
 plot_global_density.ndp <- function(x, p = 0.9, transform = FALSE){
 
