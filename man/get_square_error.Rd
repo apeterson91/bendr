@@ -7,7 +7,7 @@
 get_square_error(x)
 }
 \arguments{
-\item{x}{ndp object}
+\item{x}{list object  with n x K cluster assignment matrix entry and n x n pairwise probability matrix}
 }
 \value{
 vector of error corresponding to specific iteration's cluster configuration

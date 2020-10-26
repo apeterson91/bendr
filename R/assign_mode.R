@@ -21,7 +21,7 @@ assign_mode.ndp <- function(x,...){
 #' Calculates Error Distribution under square loss function
 #'
 #' @export
-#' @param x ndp object
+#' @param x list object  with n x K cluster assignment matrix entry and n x n pairwise probability matrix
 #' @return vector of error corresponding to specific iteration's cluster configuration
 #'
 get_square_error <- function(x)
@@ -30,7 +30,7 @@ get_square_error <- function(x)
 
 #' @export
 #'
-get_square_error.ndp <- function(x){
+get_square_error.default <- function(x){
 
 	error <- square_error(x$cluster_assignment,x$pmat)
 

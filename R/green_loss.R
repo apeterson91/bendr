@@ -1,6 +1,6 @@
 #' Lau and Green posterior loss function
 #'
-#' @param object an ndp  object
+#' @param object an  object with N X N cluster pairwise probability matrix and N X K cluster matrix list entries
 #' @param truth True adjacency matrix
 #' @param tau loss function tuning parameter
 #' @param a misclassification penalty parameter
@@ -26,7 +26,7 @@ green_loss <- function(object, truth = NULL, tau = 0.5, a = 1, b = 1)
 #'
 #' @export
 #' 
-green_loss.ndp <- function(object, truth = NULL, tau = 0.5, a = 1, b = 1){
+green_loss.default <- function(object, truth = NULL, tau = 0.5, a = 1, b = 1){
 
 	if(is.null(truth)){
 		loss <- green_loss_unknown(object$cluster_assignment,object$pmat,tau)

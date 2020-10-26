@@ -1,8 +1,13 @@
 Package: bendr
 Type: Package
 Title: Nested Dirichlet Process Mixture Models for Built Environment Data
-Version: 1.0.4
-Authors@R: person("Adam", "Peterson", , "atpvyc@umich.edu", c("aut", "cre"))
+Version: 1.0.4.9000
+Date: 2020-10-16
+Authors@R: person(given = "Adam", 
+				  family = "Peterson", 
+				  email ="atpvyc@umich.edu", 
+				  role = c("aut", "cre"),
+				  comment = c(ORCID = 0000-0001-7071-7873))
 Description: Motivated by the need to identify different kinds of built environments,
   the bendr package estimates the spatial intensity function for different clusters
   of Inhomogenous Poisson Processes.
