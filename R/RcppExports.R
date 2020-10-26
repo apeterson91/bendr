@@ -123,6 +123,7 @@ green_loss_unknown <- function(cluster_assignment, pmat, tau) {
 
 #' Computes Green and Lau Loss function with known classification
 #'
+#' @export
 #' @param cluster_assignment iter_total x J cluster assignment matrix
 #' @param pmat J x J pairwise probability of co-clustering matrix
 #' @param true_cluster_assignment J x J true Adjacency Matrix

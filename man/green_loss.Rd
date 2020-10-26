@@ -2,12 +2,15 @@
 % Please edit documentation in R/green_loss.R
 \name{green_loss}
 \alias{green_loss}
+\alias{green_loss.default}
 \title{Lau and Green posterior loss function}
 \usage{
 green_loss(object, truth = NULL, tau = 0.5, a = 1, b = 1)
+
+\method{green_loss}{default}(object, truth = NULL, tau = 0.5, a = 1, b = 1)
 }
 \arguments{
-\item{object}{an ndp  object}
+\item{object}{an  object with N X N cluster pairwise probability matrix and N X K cluster matrix list entries}
 
 \item{truth}{True adjacency matrix}
 
@@ -25,3 +28,8 @@ and (3) mode: the best partition itself
 \description{
 Lau and Green posterior loss function
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{default}: classification loss function
+}}
+

@@ -13,19 +13,8 @@ green_loss <- function(object, truth = NULL, tau = 0.5, a = 1, b = 1)
 	UseMethod("green_loss")
 
 
-#' Lau and Green posterior loss function
-#'
-#' @param object a ndp object
-#' @param truth True adjacency matrix
-#' @param tau loss function tuning parameter
-#' @param a misclassification penalty parameter
-#' @param b misclassification penalty parameter - see Green and Lau for details
-#' @return list of three objects (1)loss:  the loss corresponding to each clustering 
-#' configuration, (2) best_loss_ix:  The index corresponding to the "best" partition,
-#' and (3) mode: the best partition itself
-#'
+#' @describeIn green_loss classification loss function
 #' @export
-#' 
 green_loss.default <- function(object, truth = NULL, tau = 0.5, a = 1, b = 1){
 
 	if(is.null(truth)){
