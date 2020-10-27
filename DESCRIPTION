@@ -1,7 +1,7 @@
 Package: bendr
 Type: Package
 Title: Nested Dirichlet Process Mixture Models for Built Environment Data
-Version: 1.0.4.9000
+Version: 1.0.4
 Date: 2020-10-16
 Authors@R: person(given = "Adam", 
 				  family = "Peterson", 

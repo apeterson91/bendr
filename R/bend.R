@@ -17,10 +17,14 @@
 #'
 #' @details Fits the Nested Dirichlet Process to data as specified in the formula and hyperparameter settings. Note that a 'bendr formula' simply has the grouping id on the left side of the tilde and the built environment feature name on the right hand side. 
 #' No intercepts, or other terms are accepted or needed. 
-#' @seealso The introductory \href{https://apeterson91.github.io/bendr/articles/Introduction.html}{vignette} for an example on how this function is used.
+#' @seealso The introductory \href{https://apeterson91.github.io/bendr/articles/Introduction.html}{vignette} for an example on how this function is used and the \href{https://arxiv.org/abs/2010.07348}{preprint article}.
 #'
 #' @importFrom stats median quantile formula mad pnorm qnorm
 #' @importFrom utils tail
+#' @examples 
+#' fit <- bend(school_id ~ FFR,benvo = school_data, 
+#'			   iter_max = 5E2 ## for demonstration purposes only
+#'            )
 #'
 #' @export
 bend <- function(formula,
@@ -42,8 +46,6 @@ bend <- function(formula,
 	stopifnot((iter_max > burn_in) && (burn_in > 0))
 	stopifnot(L>0 && K >0)
 	stopifnot(base_measure$measure %in% c("normal","beta"))
-	if(base_measure$measure == "beta")
-		stop("beta base measure currently not working")
 
     if(is.null(seed))
         seed <- 134143L

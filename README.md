@@ -40,7 +40,28 @@ Please note that `bendr` is released with a [Contributor Code of Conduct](https:
 
 ## How to cite this package
 
- A citation is in progress. Check back soon.
+The software can be cited using the first citation. If looking for an application of the software see the second citation.
+```
+@manual{Peterson2013bendr,
+		author = {Peterson, Adam},
+		title = { {bendr}: Built Environment Nested Dirichlet Processes},
+		year = {2020},
+		howpublished = {\url{https://github.com/apeterson91/bendr}},
+		note = {{R} package version 1.0.4}
+}
+```
+
+
+```
+@misc{peterson2020close,
+	  title={How Close and How Much? Linking Health Outcomes to Built Environment Spatial Distributions}, 
+	  author={Adam Peterson and Veronica Berrocal and Emma Sanchez-Vaznaugh and Brisa Sanchez},
+	  year={2020},
+	  eprint={2010.07348},
+	  archivePrefix={arXiv},
+	  primaryClass={stat.AP}
+}
+```
 
 ## Acknowledgments
 

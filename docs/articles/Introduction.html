@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bendr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
       </span>
     </div>
 
@@ -187,11 +187,10 @@ G_j = \sum_{l=1}^{L} w_{lk}^*\delta_{(\mu,\sigma^2)^*}(\cdot)
 <p>Let’s now see what our estimates of the different plots look like. As you can see from the summary of the pi’s there are nonzero means for all five probabilities, but the medians of the 4th and 5th cluster are pretty small. We only want to look at the clusters that have a meaningful <span class="math inline">\(\pi_k\)</span>. We can use the <code>plot_cluster_densities</code>, accessible as the default <code>plot</code> method. This function has the argument <code>pi_threshold</code> to allow users to only look at clusters with a certain probability of assignment. The default is 0.1, which should be sufficient in this case.</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit</span>,<span class="kw">style</span> <span class="kw">=</span> <span class="st">'color'</span>)</pre></body></html></div>
 <p><img src="Introduction_files/figure-html/plot_cluster-1.png" width="700"></p>
-<p>This looks good! Both the u shaped intensity functions are well defined and we can tell that even though the monotonicaly increasing intensity function has a decay at the end of the boundary, likely because of the edge effect, the model is still able to capture the general pattern. </p>
+<p>This looks good! Both the u shaped intensity functions are well defined and we can tell that even though the monotonicaly increasing intensity function has a decay at the end of the boundary, likely because of the edge effect, the model is still able to capture the general pattern. We can also see some of the label switching mentioned earlier showing up in the credible intervals. If we wanted to try and remove that completely, we could try running the model for longer, or running a <a href="https://cran.r-project.org/web/packages/label.switching/label.switching.pdf">label switching algorithm</a> on the output.</p>
 <p>It is important to note that since we transformed the distances, the previous plot of the densities does not show the “true” densities, but only densities that are proportional on the domain. The true densities can be plotted using the same function with the argument <code>transform = TRUE</code> as listed below.</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit</span>,<span class="kw">style</span><span class="kw">=</span><span class="st">'facet'</span>,<span class="kw">transform</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
 <p><img src="Introduction_files/figure-html/plot_cluster_fac-1.png" width="700"></p>
-<p>Here we can see some of the label switching mentioned earlier showing up in the credible intervals. If we wanted to try and remove that completely, we could try running the model for longer, or running a <a href="https://cran.r-project.org/web/packages/label.switching/label.switching.pdf">label switching algorithm</a> on the output. </p>
 <p>In order to determine how well the model is able to discriminate between the differing clusters, we can plot the pairwise probability of each school being assigned to the same cluster as another school. Since we simulated fifty schools from each intensity function we would expect to see fifty by fifty blocks of high probability along the diagonal.</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="../reference/plot_pairs.html">plot_pairs</a></span>(<span class="no">fit</span>,<span class="kw">sort</span> <span class="kw">=</span> <span class="no">F</span>)</pre></body></html></div>
 <p><img src="Introduction_files/figure-html/plot_unsorted_pairs-1.png" width="700"></p>

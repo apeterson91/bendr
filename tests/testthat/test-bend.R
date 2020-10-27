@@ -18,16 +18,15 @@ capture_output(fit2  <- bend(school_id ~ FFR,
                             thin = 1,
                             fix_concentration = FALSE,
                             seed = 34143))
-# TODO: Need to find out why suddenly causing an error
-# capture_output(
-#     fit2 <- bend(school_id ~ FFR,
-#                  benvo = school_data,
-#                  L = 5, K = 5,
-#                  base_measure = beta_measure(),
-#                  iter_max = ITER, ## To get good resolution, could possibly use more or less depending on convergence
-#                  thin = 1,
-#                  seed = 34143)
-# )
+capture_output(
+    fit2 <- bend(school_id ~ FFR,
+                 benvo = school_data,
+                 L = 5, K = 5,
+                 base_measure = beta_measure(),
+                 iter_max = ITER, ## To get good resolution, could possibly use more or less depending on convergence
+                 thin = 1,
+                 seed = 34143)
+)
 
 
 

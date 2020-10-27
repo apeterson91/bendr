@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bendr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
       </span>
     </div>
 
@@ -129,14 +129,17 @@
     <p>Lau and Green posterior loss function</p>
     </div>
 
-    <pre class="usage"><span class='fu'>green_loss</span>(<span class='no'>object</span>, <span class='kw'>truth</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>tau</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
+    <pre class="usage"><span class='fu'>green_loss</span>(<span class='no'>object</span>, <span class='kw'>truth</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>tau</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+
+<span class='co'># S3 method for default</span>
+<span class='fu'>green_loss</span>(<span class='no'>object</span>, <span class='kw'>truth</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>tau</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>object</th>
-      <td><p>an ndp or bndp object</p></td>
+      <td><p>an  object with N X N cluster pairwise probability matrix and N X K cluster matrix list entries</p></td>
     </tr>
     <tr>
       <th>truth</th>
@@ -161,6 +164,12 @@
     <p>list of three objects (1)loss:  the loss corresponding to each clustering 
 configuration, (2) best_loss_ix:  The index corresponding to the "best" partition,
 and (3) mode: the best partition itself</p>
+    <h2 class="hasAnchor" id="methods-by-class-"><a class="anchor" href="#methods-by-class-"></a>Methods (by class)</h2>
+
+    
+<ul>
+<li><p><code>default</code>: classification loss function</p></li>
+</ul>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

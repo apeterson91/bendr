@@ -848,8 +848,6 @@ Rcpp::List beta_nd_nhpp_fit(
             }
         }
 
-        //sort mu 
-        //mu = sort_columns(mu);
         
         
         // sample concentration parameters
@@ -921,8 +919,8 @@ Rcpp::List beta_nd_nhpp_fit(
             alpha_samps(sample_ix,0) = alpha;
             rho_samps(sample_ix,0) = rho;
             sample_ix += 1;
-        }
     }
+        }
     
     cluster_matrix = cluster_matrix / (num_posterior_samples);
     
