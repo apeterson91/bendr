@@ -102,7 +102,7 @@ plot_pairs.default <- function(x,sample = NULL, sort = FALSE){
 
 	p <- suppressMessages(dplyr::as_tibble(P)) %>%
 		dplyr::mutate(Group_1 = 1:dplyr::n()) %>%
-		tidyr::gather(dplyr::contains("ID_"), key = "Group_2", value = "Probability") %>%
+		tidyr::pivot_longer(dplyr::contains("ID_"), names_to = "Group_2", values_to = "Probability") %>%
 		dplyr::mutate("Group_2" = as.numeric(stringr::str_replace(Group_2,"ID_",""))) %>%
 		ggplot(aes(x=Group_1,y=Group_2,fill=Probability)) +
 		geom_tile() + scale_fill_gradientn(colours=c("white","grey","black"),limits=c(0,1)) +
