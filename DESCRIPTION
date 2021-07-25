@@ -46,6 +46,7 @@ Suggests:
 	patchwork,
     knitr,
     rmarkdown,
+	mcclust.ext,
     testthat (>= 2.1.0),
     covr
 VignetteBuilder: knitr

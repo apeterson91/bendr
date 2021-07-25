@@ -69,11 +69,6 @@ plot_pairs.default <- function(x,sample = NULL, sort = FALSE){
 	}else
 		stop("sample is not an integer")
 
-	makeSymm <- function(m) {
-	  m[upper.tri(m)] <- t(m)[upper.tri(m)]
-	  return(m)
-	}
-
 	P <- makeSymm(P)
 	if(sort){
 	    colnames(P) <- NULL
